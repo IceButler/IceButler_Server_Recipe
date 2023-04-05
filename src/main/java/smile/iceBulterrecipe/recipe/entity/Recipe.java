@@ -17,7 +17,7 @@ public class Recipe extends BaseEntity {
     @Column(nullable = false)
     private Long recipeIdx;
     private String recipeName;
-    private String recipeImg;
+    private String recipeImgKey;
     private Integer quantity;
     @Enumerated(EnumType.STRING)
     private FoodCategory foodCategory;
