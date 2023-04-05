@@ -15,7 +15,7 @@ public class Cookery extends BaseEntity {
     @Column(nullable = false)
     private Long cookeryIdx;
 
-    private int nextIdx;
+    private Long nextIdx;
     private String cookeryImg;
     private String description;
 

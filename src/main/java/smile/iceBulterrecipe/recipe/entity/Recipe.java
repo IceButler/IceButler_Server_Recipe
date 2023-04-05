@@ -21,7 +21,7 @@ public class Recipe extends BaseEntity {
     private Integer quantity;
     @Enumerated(EnumType.STRING)
     private FoodCategory foodCategory;
-    private Integer leadTime;
+    private Long leadTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userIdx")

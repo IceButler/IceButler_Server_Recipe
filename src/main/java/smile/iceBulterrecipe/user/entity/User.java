@@ -15,5 +15,5 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Long userIdx;
     private String nickname;
-    private String profileImage;
+    private String profileImg;
 }
