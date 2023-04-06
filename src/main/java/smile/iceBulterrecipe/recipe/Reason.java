@@ -1,5 +1,8 @@
 package smile.iceBulterrecipe.recipe;
 
+import lombok.Getter;
+
+@Getter
 public enum Reason {
 
     JUNK("홍보/도배"),
