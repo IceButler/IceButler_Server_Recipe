@@ -1,6 +1,5 @@
 package smile.iceBulterrecipe.recipe.entity;
-
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,11 +1,11 @@
 package smile.iceBulterrecipe.recipe.entity;
 
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import smile.iceBulterrecipe.global.BaseEntity;
-import smile.iceBulterrecipe.user.entity.User;
+
+import javax.persistence.*;
 
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @Getter
