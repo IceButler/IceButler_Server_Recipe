@@ -1,9 +1,10 @@
 package smile.iceBulterrecipe.recipe.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import smile.iceBulterrecipe.recipe.FoodCategory;
 
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
