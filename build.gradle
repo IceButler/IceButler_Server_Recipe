@@ -43,6 +43,10 @@ tasks.named('test') {
 
 def querydslDir = "$buildDir/generated/querydsl"
 
+compileJava.doFirst {
+	delete file("${querydslDir}/smile")
+}
+
 querydsl {
 	jpa = true
 	querydslSourcesDir = querydslDir
@@ -59,7 +63,7 @@ configurations {
 	}
 	querydsl.extendsFrom compileClasspath
 }
-compileQuerydsl.doFirst {
-	if(file(querydslDir).exists() )
-		delete(file(querydslDir))
+
+clean {
+	delete file('src/main/generated')
 }
