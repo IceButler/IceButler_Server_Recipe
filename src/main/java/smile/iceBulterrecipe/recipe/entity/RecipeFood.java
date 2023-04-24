@@ -28,5 +28,5 @@ public class RecipeFood extends BaseEntity {
     @JoinColumn(name="foodIdx")
     private Food food;
 
-    private String ingredientDetail;
+    private String foodDetail;
 }
