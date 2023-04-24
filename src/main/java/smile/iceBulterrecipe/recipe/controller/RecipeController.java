@@ -1,16 +1,30 @@
 package smile.iceBulterrecipe.recipe.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import smile.iceBulterrecipe.global.resolver.IsLogin;
+import smile.iceBulterrecipe.global.resolver.LoginStatus;
+import smile.iceBulterrecipe.global.response.ResponseCustom;
+import smile.iceBulterrecipe.recipe.service.RecipeService;
+
 @RequestMapping("/recipes")
 @RestController
 @RequiredArgsConstructor
 public class RecipeController {
 
+    private final RecipeService recipeService;
+
     @GetMapping("/health")
     public String checkHealth() {
         return "healthy";
+    }
+
+    /**
+     * 메인화면 냉장고 속 레시피 / 인기 레시피
+     */
+    @PostMapping("")
+    public ResponseCustom<?> getRecipeMainLists(@IsLogin LoginStatus loginStatus,
+                                                @RequestParam(name = "category") String recipeListCategory){
+        this.recipeService.getRecipeMainLists(loginStatus.getUserIdx(), recipeListCategory);
     }
 }
