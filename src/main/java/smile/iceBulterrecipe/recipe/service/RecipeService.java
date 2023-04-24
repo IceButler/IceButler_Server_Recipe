@@ -1,4 +1,5 @@
 package smile.iceBulterrecipe.recipe.service;
 
-public class RecipeService {
+public interface RecipeService{
+    void getRecipeMainLists(Long userIdx, String recipeListCategory);
 }

@@ -1,7 +1,7 @@
 package smile.iceBulterrecipe.global.entityListener;
 
 import smile.iceBulterrecipe.global.utils.BeanUtils;
-import smile.iceBulterrecipe.recipe.repository.RecipeLikeRepository;
+import smile.iceBulterrecipe.recipe.repository.recipeLike.RecipeLikeRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeRepository;
 import smile.iceBulterrecipe.user.entity.User;
