@@ -23,4 +23,10 @@ public class UserController {
         this.userService.changeUserProfile(userReq);
         return ResponseCustom.OK();
     }
+
+    @DeleteMapping("")
+    public ResponseCustom<?> deleteUser(@RequestBody UserReq userReq){
+        this.userService.deleteUser(userReq);
+        return ResponseCustom.OK();
+    }
 }

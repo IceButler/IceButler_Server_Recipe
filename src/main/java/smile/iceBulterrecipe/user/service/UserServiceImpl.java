@@ -28,4 +28,12 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository.findByUserIdxAndIsEnable(userReq.getUserIdx(), true).orElseThrow(UserNotFoundException::new);
         user.modifyProfile(userReq.getNickname(), userReq.getProfileImgKey());
     }
+
+
+    @Transactional
+    @Override
+    public void deleteUser(UserReq userReq) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userReq.getUserIdx(), true).orElseThrow(UserNotFoundException::new);
+        this.userRepository.deleteById(userReq.getUserIdx());
+    }
 }

@@ -6,4 +6,6 @@ public interface UserService {
     void addUser(UserReq userReq);
 
     void changeUserProfile(UserReq userReq);
+
+    void deleteUser(UserReq userReq);
 }
