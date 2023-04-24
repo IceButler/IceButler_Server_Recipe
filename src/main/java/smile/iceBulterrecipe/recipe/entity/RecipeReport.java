@@ -4,6 +4,7 @@ import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import smile.iceBulterrecipe.global.BaseEntity;
 import smile.iceBulterrecipe.recipe.Reason;
 import smile.iceBulterrecipe.user.entity.User;
@@ -11,6 +12,7 @@ import smile.iceBulterrecipe.user.entity.User;
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @Getter
 @Entity
+@SQLDelete(sql = "UPDATE recipe_report SET is_enable = false, update_at = current_timestamp WHERE recipe_report_idx = ?")
 public class RecipeReport extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
