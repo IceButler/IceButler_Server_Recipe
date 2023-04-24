@@ -12,7 +12,7 @@ import smile.iceBulterrecipe.global.entityListener.UserEntityListener;
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @Getter
 @Entity
-@SQLDelete(sql = "UPDATE user SET is_enable = false, last_modified_date = current_timestamp WHERE user_idx = ?")
+@SQLDelete(sql = "UPDATE user SET is_enable = false, update_at = current_timestamp WHERE user_idx = ?")
 @EntityListeners(UserEntityListener.class)
 public class User extends BaseEntity {
     @Id
