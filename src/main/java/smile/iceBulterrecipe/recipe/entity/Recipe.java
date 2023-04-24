@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import smile.iceBulterrecipe.global.BaseEntity;
-import smile.iceBulterrecipe.recipe.FoodCategory;
+import smile.iceBulterrecipe.food.entity.FoodCategory;
 import smile.iceBulterrecipe.user.entity.User;
 
 @NoArgsConstructor(access= AccessLevel.PROTECTED)

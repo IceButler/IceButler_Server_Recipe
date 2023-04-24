@@ -1,6 +1,9 @@
-package smile.iceBulterrecipe.recipe;
+package smile.iceBulterrecipe.food.entity;
 
 import lombok.Getter;
+import smile.iceBulterrecipe.food.exception.FoodCategoryNotFoundException;
+
+import java.util.Arrays;
 
 @Getter
 public enum FoodCategory {
@@ -19,5 +22,11 @@ public enum FoodCategory {
 
     private FoodCategory(String category) {
         this.category = category;
+    }
+
+    public static FoodCategory getFoodCategoryByName(String name){
+        return Arrays.stream(FoodCategory.values())
+                .filter(r -> r.getCategory().equals(name))
+                .findAny().orElseThrow(FoodCategoryNotFoundException::new);
     }
 }

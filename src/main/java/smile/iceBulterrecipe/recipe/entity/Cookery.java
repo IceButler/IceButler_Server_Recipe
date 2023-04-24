@@ -16,7 +16,7 @@ public class Cookery extends BaseEntity {
     private Long cookeryIdx;
 
     private Long nextIdx;
-    private String cookeryImg;
+    private String cookeryImgKey;
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
