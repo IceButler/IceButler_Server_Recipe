@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.user.dto.assembler.UserAssembler;
-import smile.iceBulterrecipe.user.dto.request.AddUserReq;
+import smile.iceBulterrecipe.user.dto.request.UserReq;
+import smile.iceBulterrecipe.user.entity.User;
+import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 import smile.iceBulterrecipe.user.repository.UserRepository;
 
 @RequiredArgsConstructor
@@ -16,7 +18,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void addUser(AddUserReq userInfo) {
-        this.userRepository.save(this.userAssembler.toEntity(userInfo));
+    public void addUser(UserReq userReq) {
+        this.userRepository.save(this.userAssembler.toEntity(userReq));
+    }
+
+    @Transactional
+    @Override
+    public void changeUserProfile(UserReq userReq) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userReq.getUserIdx(), true).orElseThrow(UserNotFoundException::new);
+        user.modifyProfile(userReq.getNickname(), userReq.getProfileImgKey());
     }
 }

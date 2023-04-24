@@ -15,12 +15,18 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Long userIdx;
     private String nickname;
-    private String profileImg;
+    private String profileImgKey;
 
     @Builder
-    public User(Long userIdx, String nickname, String profileImg) {
+    public User(Long userIdx, String nickname, String profileImgKey) {
         this.userIdx = userIdx;
         this.nickname = nickname;
-        this.profileImg = profileImg;
+        this.profileImgKey = profileImgKey;
     }
+
+    public void modifyProfile(String nickname, String profileImgKey) {
+        this.nickname = nickname;
+        this.profileImgKey = profileImgKey;
+    }
+
 }
