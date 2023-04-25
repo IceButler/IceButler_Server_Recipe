@@ -16,7 +16,7 @@ public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
 
     // 인기 레시피 불러오기
     @Override
-    public List<Recipe> popularRecipe() {
+    public List<Recipe> getPopularRecipe() {
         return jpaQueryFactory.select(recipe)
                 .from(recipeLike)
                 .where(recipeLike.isEnable.eq(true))

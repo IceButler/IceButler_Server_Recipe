@@ -30,7 +30,7 @@ public class RecipeServiceImpl implements RecipeService{
             // 일단 ,, 인기부터 하고 고민할래요 .. 허헣.....
             return null;
         }else if(recipeList.equals(Constant.RecipeConstant.POPULAR_FOOD)){
-            List<RecipeMainRes> recipe = this.recipeAssembler.toBasicMainDTO(this.recipeLikeRepository.popularRecipe());
+            List<RecipeMainRes> recipe = this.recipeAssembler.toBasicMainDTO(this.recipeLikeRepository.getPopularRecipe());
             for(RecipeMainRes res : recipe){
                 this.recipeAssembler.toUserLikeStatus(res, this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, res.getRecipeIdx(), true));
             }

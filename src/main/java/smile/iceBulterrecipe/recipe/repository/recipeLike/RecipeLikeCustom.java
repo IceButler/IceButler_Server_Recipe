@@ -5,5 +5,5 @@ import smile.iceBulterrecipe.recipe.entity.Recipe;
 import java.util.List;
 
 public interface RecipeLikeCustom {
-    List<Recipe> popularRecipe();
+    List<Recipe> getPopularRecipe();
 }
