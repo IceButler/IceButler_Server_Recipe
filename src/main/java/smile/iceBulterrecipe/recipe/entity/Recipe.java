@@ -24,7 +24,7 @@ public class Recipe extends BaseEntity {
     private String recipeImgKey;
     private Integer quantity;
     @Enumerated(EnumType.STRING)
-    private FoodCategory foodCategory;
+    private RecipeCategory recipeCategory;
     private Long leadTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
