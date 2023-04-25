@@ -1,14 +1,13 @@
 package smile.iceBulterrecipe.recipe.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import smile.iceBulterrecipe.global.resolver.Auth;
 import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
-import smile.iceBulterrecipe.recipe.service.RecipeService;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
+import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 
 @RequestMapping("/recipes")
 @RestController
@@ -28,7 +27,14 @@ public class RecipeController {
     @Auth
     @GetMapping("")
     public ResponseCustom<?> getRecipeMainLists(@IsLogin LoginStatus loginStatus,
-                                                @RequestParam(name = "category") String recipeListCategory){
-        return ResponseCustom.OK(this.recipeService.getRecipeMainLists(loginStatus.getUserIdx(), recipeListCategory));
+                                                @RequestParam(name = "fridgeIdx", required = false) Long fridgeIdx,
+                                                @RequestParam(name = "multiFridgeIdx", required = false) Long multiFridgeIdx){
+        if(fridgeIdx != null && multiFridgeIdx == null){
+            return ResponseCustom.OK(this.recipeService.getFridgeRecipeLists(loginStatus.getUserIdx(), fridgeIdx));
+        }else if(fridgeIdx == null && multiFridgeIdx != null){
+            return ResponseCustom.OK(this.recipeService.getMultiFridgeRecipeLists(loginStatus.getUserIdx(), multiFridgeIdx));
+        }else {
+            return ResponseCustom.OK(this.recipeService.getPopularRecipeLists(loginStatus.getUserIdx()));
+        }
     }
 }
