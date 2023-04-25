@@ -34,3 +34,7 @@ aws:
     bucket: ice-bulter-iamge-bucket
     cookery: recipe-image/
     recipe: recipe-thumbnail/
+
+server:
+  main:
+    url: https://za8hqdiis4.execute-api.ap-northeast-2.amazonaws.com/dev/dev-ice-bulter-main
