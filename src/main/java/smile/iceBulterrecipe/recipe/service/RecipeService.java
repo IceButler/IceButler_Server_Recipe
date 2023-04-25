@@ -1,5 +1,7 @@
 package smile.iceBulterrecipe.recipe.service;
 
+import smile.iceBulterrecipe.recipe.dto.response.RecipeMainListRes;
+
 public interface RecipeService{
-    void getRecipeMainLists(Long userIdx, String recipeListCategory);
+    RecipeMainListRes getRecipeMainLists(Long userIdx, String recipeListCategory);
 }
