@@ -2,6 +2,7 @@ package smile.iceBulterrecipe.recipe.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListRes;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.response.BookMarkRecipeListRes;
@@ -9,12 +10,14 @@ import smile.iceBulterrecipe.recipe.dto.response.RecipeMainListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeMainRes;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.repository.RecipeRepository;
+import smile.iceBulterrecipe.recipe.repository.recipeFood.RecipeFoodRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeLike.RecipeLikeRepository;
 import smile.iceBulterrecipe.user.entity.User;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 import smile.iceBulterrecipe.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +26,7 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeLikeRepository recipeLikeRepository;
     private final RecipeRepository recipeRepository;
     private final RecipeAssembler recipeAssembler;
+    private final RecipeFoodRepository recipeFoodRepository;
 
     // 인기 레시피
     @Override
@@ -57,8 +61,11 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public BookMarkRecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        List<Long> foodIdxes = fridgeFoodList.getFoodList().stream()
+                .map(RecipeFridgeFoodListRes::getFoodIdx)
+                .collect(Collectors.toList());
         List<Recipe> bookmarkRecipeList = this.recipeLikeRepository.getBookmarkRecipe(user, true);
-        return BookMarkRecipeListRes.toDto(bookmarkRecipeList);
+        return this.recipeFoodRepository.getBookmarkRecipes(bookmarkRecipeList, foodIdxes);
     }
 
 

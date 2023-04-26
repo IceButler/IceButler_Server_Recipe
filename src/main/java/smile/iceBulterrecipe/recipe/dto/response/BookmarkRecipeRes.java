@@ -19,13 +19,13 @@ public class BookmarkRecipeRes {
     private double percentageOfFood;
 
 
-    public static BookmarkRecipeRes toDto(Recipe recipe) {
+    public static BookmarkRecipeRes toDto(Recipe recipe, double percentage) {
         return new BookmarkRecipeRes(
                 recipe.getRecipeIdx(),
                 AwsS3ImageUrlUtils.toUrl(recipe.getRecipeImgKey()),
                 recipe.getRecipeName(),
                 recipe.getRecipeCategory().getCategory(),
-                0.0 // TODO 퍼센트 계산
+                percentage
         );
     }
 }

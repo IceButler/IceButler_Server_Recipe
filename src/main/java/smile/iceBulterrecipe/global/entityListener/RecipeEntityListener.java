@@ -3,7 +3,7 @@ package smile.iceBulterrecipe.global.entityListener;
 import smile.iceBulterrecipe.global.utils.BeanUtils;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
-import smile.iceBulterrecipe.recipe.repository.RecipeFoodRepository;
+import smile.iceBulterrecipe.recipe.repository.recipeFood.RecipeFoodRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeLike.RecipeLikeRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
 
