@@ -2,7 +2,6 @@ package smile.iceBulterrecipe.recipe.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import smile.iceBulterrecipe.global.Constant;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeMainListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeMainRes;
@@ -22,23 +21,32 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeRepository recipeRepository;
     private final RecipeAssembler recipeAssembler;
 
-    // 레시피 메인
+    // 인기 레시피
     @Override
-    public RecipeMainListRes getRecipeMainLists(Long userIdx, String recipeList) {
+    public RecipeMainListRes getPopularRecipeLists(Long userIdx) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        if(recipeList.equals(Constant.RecipeConstant.FRIDGE_FOOD_RECIPE)){
-            // 일단 ,, 인기부터 하고 고민할래요 .. 허헣.....
-            return null;
-        }else if(recipeList.equals(Constant.RecipeConstant.POPULAR_FOOD)){
-            List<RecipeMainRes> recipe = this.recipeAssembler.toBasicMainDTO(this.recipeLikeRepository.getPopularRecipe());
-            for(RecipeMainRes res : recipe){
-                this.recipeAssembler.toUserLikeStatus(res, this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, res.getRecipeIdx(), true));
-            }
-
-            // todo: 퍼센트 이전
-            return RecipeMainListRes.toDto(recipe);
-        }else{
-            throw new UserNotFoundException(); // todo: 에러 처리 다시 해야 함.
+        List<RecipeMainRes> recipe = this.recipeAssembler.toBasicMainDTO(this.recipeLikeRepository.getPopularRecipe());
+        for (RecipeMainRes res : recipe) {
+            this.recipeAssembler.toUserLikeStatus(res, this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, res.getRecipeIdx(), true));
         }
+        // todo: 퍼센트 이전
+        return RecipeMainListRes.toDto(recipe);
+    }
+
+    // 냉장고 레시피
+    @Override
+    public RecipeMainListRes getFridgeRecipeLists(Long userIdx, Long fridgeIdx) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        // food 리스트를 받아서
+        // foodList 객체를 생성한 다음
+        // 레시피 푸드 중에서 foodList의 값을 많이 갖고 잇는 레시피 순으로 불러오고 그 갯수의 결과 값을 return
+        return null;
+    }
+
+    // 멀티 냉장고 레시피
+    @Override
+    public RecipeMainListRes getMultiFridgeRecipeLists(Long userIdx, Long multiFridgeIdx) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        return null;
     }
 }
