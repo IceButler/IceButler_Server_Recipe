@@ -37,4 +37,22 @@ public class RecipeController {
             return ResponseCustom.OK(this.recipeService.getPopularRecipeLists(loginStatus.getUserIdx()));
         }
     }
+
+    // 레시피 상세
+
+    // 레시피 신고
+
+    // 레시피 추가
+
+    // 레시피 검색
+
+    // 레시피 즐겨찾기
+
+    // 레시피 즐겨찾기 모음
+
+    // 마이 레시피 조회
+
+    // 마이 레시피 삭제
+
+    // 마이 레시피 수정
 }
