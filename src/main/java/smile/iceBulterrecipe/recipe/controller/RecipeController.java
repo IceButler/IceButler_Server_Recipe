@@ -2,12 +2,13 @@ package smile.iceBulterrecipe.recipe.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
+import smile.iceBulterrecipe.global.feign.feignClient.MainServerClient;
 import smile.iceBulterrecipe.global.resolver.Auth;
 import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
-import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 
 @RequestMapping("/recipes")
 @RestController
@@ -15,6 +16,7 @@ import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 public class RecipeController {
 
     private final RecipeServiceImpl recipeService;
+    private final MainServerClient mainServerClient;
 
     @GetMapping("/health")
     public String checkHealth() {
@@ -38,21 +40,12 @@ public class RecipeController {
         }
     }
 
-    // 레시피 상세
-
-    // 레시피 신고
-
-    // 레시피 추가
-
-    // 레시피 검색
-
-    // 레시피 즐겨찾기
-
-    // 레시피 즐겨찾기 모음
-
-    // 마이 레시피 조회
-
-    // 마이 레시피 삭제
-
-    // 마이 레시피 수정
+    @Auth
+    @GetMapping("/bookmark")
+    public ResponseCustom<?> getBookmarkRecipes(@IsLogin LoginStatus loginStatus) {
+        Long userIdx = loginStatus.getUserIdx();
+        ResponseCustom<RecipeFridgeFoodListsRes> fridgeFoodLists = mainServerClient.getFridgeFoodLists(null, null, userIdx);
+        if(fridgeFoodLists.getData()==null) return fridgeFoodLists;
+        return ResponseCustom.OK(this.recipeService.getBookmarkRecipes(userIdx, fridgeFoodLists.getData()));
+    }
 }

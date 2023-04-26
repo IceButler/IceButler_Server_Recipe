@@ -2,9 +2,12 @@ package smile.iceBulterrecipe.recipe.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
+import smile.iceBulterrecipe.recipe.dto.response.BookMarkRecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeMainListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeMainRes;
+import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.repository.RecipeRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeLike.RecipeLikeRepository;
 import smile.iceBulterrecipe.user.entity.User;
@@ -49,4 +52,14 @@ public class RecipeServiceImpl implements RecipeService{
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         return null;
     }
+
+    // 레시피 즐겨찾기 모음
+    @Override
+    public BookMarkRecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        List<Recipe> bookmarkRecipeList = this.recipeLikeRepository.getBookmarkRecipe(user, true);
+        return BookMarkRecipeListRes.toDto(bookmarkRecipeList);
+    }
+
+
 }
