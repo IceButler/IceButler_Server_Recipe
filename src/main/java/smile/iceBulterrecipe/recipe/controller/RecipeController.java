@@ -41,10 +41,11 @@ public class RecipeController {
     }
 
     @Auth
-    @GetMapping("/bookmark")
-    public ResponseCustom<?> getBookmarkRecipes(@IsLogin LoginStatus loginStatus) {
+    @GetMapping("{fridgeIdx}/bookmark")
+    public ResponseCustom<?> getBookmarkRecipes(@PathVariable Long fridgeIdx,
+                                                @IsLogin LoginStatus loginStatus) {
         Long userIdx = loginStatus.getUserIdx();
-        ResponseCustom<RecipeFridgeFoodListsRes> fridgeFoodLists = mainServerClient.getFridgeFoodLists(null, null, userIdx);
+        ResponseCustom<RecipeFridgeFoodListsRes> fridgeFoodLists = mainServerClient.getFridgeFoodLists(fridgeIdx, null, userIdx);
         if(fridgeFoodLists.getData()==null) return fridgeFoodLists;
         return ResponseCustom.OK(this.recipeService.getBookmarkRecipes(userIdx, fridgeFoodLists.getData()));
     }
