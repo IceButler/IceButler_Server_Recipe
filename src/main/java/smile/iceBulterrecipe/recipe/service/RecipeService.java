@@ -8,7 +8,7 @@ public interface RecipeService{
     RecipeMainListRes getPopularRecipeLists(Long userIdx);
     RecipeMainListRes getFridgeRecipeLists(Long userIdx, Long fridgeIdx);
     RecipeMainListRes getMultiFridgeRecipeLists(Long userIdx, Long multiFridgeIdx);
-    RecipeMainListRes getRecipeMainLists(Long userIdx, String recipeListCategory);
+//    RecipeMainListRes getRecipeMainLists(Long userIdx, String recipeListCategory);
 
     BookMarkRecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList);
 }

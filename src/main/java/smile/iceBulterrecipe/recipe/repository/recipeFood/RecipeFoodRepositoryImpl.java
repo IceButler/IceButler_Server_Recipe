@@ -38,7 +38,8 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
 
         // 나누는 수가 0이면 오류로 0 반환
         if(recipeFoodNum==0) return 0;
-        return recipeFridgeFoodNum / recipeFoodNum * 100;
+        double percentageOfFood = recipeFridgeFoodNum / (double) recipeFoodNum * 100;
+        return (long) percentageOfFood;
     }
 
 }
