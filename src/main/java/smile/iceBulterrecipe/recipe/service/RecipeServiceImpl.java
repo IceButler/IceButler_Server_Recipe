@@ -2,10 +2,13 @@ package smile.iceBulterrecipe.recipe.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import smile.iceBulterrecipe.food.entity.Food;
+import smile.iceBulterrecipe.food.repository.FoodRepository;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListRes;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.response.BookMarkRecipeListRes;
+import smile.iceBulterrecipe.recipe.dto.response.BookmarkRecipeRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeMainListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeMainRes;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
@@ -25,34 +28,36 @@ public class RecipeServiceImpl implements RecipeService{
     private final UserRepository userRepository;
     private final RecipeLikeRepository recipeLikeRepository;
     private final RecipeRepository recipeRepository;
-    private final RecipeAssembler recipeAssembler;
     private final RecipeFoodRepository recipeFoodRepository;
+    private final FoodRepository foodRepository;
 
     // 인기 레시피
     @Override
-    public RecipeMainListRes getPopularRecipeLists(Long userIdx) {
+    public RecipeMainListRes getPopularRecipeListsForFridge(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        List<RecipeMainRes> recipe = this.recipeAssembler.toBasicMainDTO(this.recipeLikeRepository.getPopularRecipe());
-        for (RecipeMainRes res : recipe) {
-            this.recipeAssembler.toUserLikeStatus(res, this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, res.getRecipeIdx(), true));
-        }
-        // todo: 퍼센트 이전
-        return RecipeMainListRes.toDto(recipe);
+        List<Long> foodIdxes = fridgeFoodList.getFoodList().stream()
+                .map(RecipeFridgeFoodListRes::getFoodIdx)
+                .collect(Collectors.toList());
+        List<Recipe> recipe = this.recipeLikeRepository.getPopularRecipe();
+
+        return new RecipeMainListRes(recipe.stream()
+                .map(r -> RecipeMainRes.toDto(r, this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes),
+                        this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true)))
+                .collect(Collectors.toList()));
     }
 
     // 냉장고 레시피
     @Override
-    public RecipeMainListRes getFridgeRecipeLists(Long userIdx, Long fridgeIdx) {
+    public RecipeMainListRes getFridgeRecipeLists(Long userIdx, Long fridgeIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        // food 리스트를 받아서
-        // foodList 객체를 생성한 다음
-        // 레시피 푸드 중에서 foodList의 값을 많이 갖고 잇는 레시피 순으로 불러오고 그 갯수의 결과 값을 return
+
         return null;
     }
 
+
     // 멀티 냉장고 레시피
     @Override
-    public RecipeMainListRes getMultiFridgeRecipeLists(Long userIdx, Long multiFridgeIdx) {
+    public RecipeMainListRes getMultiFridgeRecipeLists(Long userIdx, Long multiFridgeIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         return null;
     }

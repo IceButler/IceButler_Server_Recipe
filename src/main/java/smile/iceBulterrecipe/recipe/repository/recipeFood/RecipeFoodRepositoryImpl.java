@@ -24,7 +24,8 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
     }
 
     // 레시피 내 보유한 음식 백분율 계산
-    private long getPercentageOfFood(Recipe recipe, List<Long> foodIdxes) {
+    @Override
+    public long getPercentageOfFood(Recipe recipe, List<Long> foodIdxes) {
         // 레시피 food 중 냉장고에 보유하고 있는 food 수
         long recipeFridgeFoodNum = jpaQueryFactory.selectFrom(recipeFood)
                 .where(recipeFood.recipe.eq(recipe)
