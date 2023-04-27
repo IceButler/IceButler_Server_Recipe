@@ -7,6 +7,8 @@ import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeLike;
 import smile.iceBulterrecipe.user.entity.User;
 
+import java.util.Optional;
+
 @Repository
 public interface RecipeLikeRepository extends JpaRepository<RecipeLike, Long>, RecipeLikeCustom{
 
@@ -15,4 +17,6 @@ public interface RecipeLikeRepository extends JpaRepository<RecipeLike, Long>, R
     void deleteByUser(User user);
 
     Boolean existsByUserAndRecipe_RecipeIdxAndIsEnable(User user, Long recipeIdx, Boolean isEnable);
+
+    Optional<RecipeLike> findByUserAndRecipe(User user, Recipe recipe);
 }
