@@ -7,7 +7,6 @@ import smile.iceBulterrecipe.food.dto.assembler.FoodAssembler;
 import smile.iceBulterrecipe.food.repository.FoodRepository;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeLikeAssembler;
-import smile.iceBulterrecipe.recipe.dto.response.BookMarkRecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
@@ -63,7 +62,7 @@ public class RecipeServiceImpl implements RecipeService{
 
     // 레시피 즐겨찾기 모음
     @Override
-    public BookMarkRecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
+    public RecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
         List<Recipe> bookmarkRecipeList = this.recipeLikeRepository.getBookmarkRecipe(user, true);

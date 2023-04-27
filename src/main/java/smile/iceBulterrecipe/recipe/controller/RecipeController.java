@@ -9,6 +9,7 @@ import smile.iceBulterrecipe.global.resolver.Auth;
 import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
+import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 
@@ -49,7 +50,7 @@ public class RecipeController {
     @Auth
     @GetMapping("{fridgeIdx}/bookmark")
     public ResponseCustom<?> getBookmarkRecipes(@PathVariable Long fridgeIdx,
-                                                @IsLogin LoginStatus loginStatus) {
+                                                            @IsLogin LoginStatus loginStatus) {
         Long userIdx = loginStatus.getUserIdx();
         ResponseCustom<RecipeFridgeFoodListsRes> fridgeFoodLists = mainServerClient.getFridgeFoodLists(fridgeIdx, null, userIdx);
         if(fridgeFoodLists.getData()==null) return fridgeFoodLists;
