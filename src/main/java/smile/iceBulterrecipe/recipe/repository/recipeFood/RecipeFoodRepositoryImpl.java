@@ -9,6 +9,7 @@ import smile.iceBulterrecipe.recipe.entity.Recipe;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static smile.iceBulterrecipe.recipe.entity.QRecipe.recipe;
 import static smile.iceBulterrecipe.recipe.entity.QRecipeFood.recipeFood;
 
 
@@ -24,7 +25,8 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
     }
 
     // 레시피 내 보유한 음식 백분율 계산
-    private long getPercentageOfFood(Recipe recipe, List<Long> foodIdxes) {
+    @Override
+    public long getPercentageOfFood(Recipe recipe, List<Long> foodIdxes) {
         // 레시피 food 중 냉장고에 보유하고 있는 food 수
         long recipeFridgeFoodNum = jpaQueryFactory.selectFrom(recipeFood)
                 .where(recipeFood.recipe.eq(recipe)
@@ -41,5 +43,17 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
         double percentageOfFood = recipeFridgeFoodNum / (double) recipeFoodNum * 100;
         return (long) percentageOfFood;
     }
+
+    // todo: 정렬 필요 아직 order by에 무엇을 넣어야 하는지 모르겠음.
+    @Override
+    public List<Recipe> getRecipeByFridgeFoodList(List<Long> foodIdxes) {
+        return jpaQueryFactory.selectFrom(recipe)
+                .leftJoin(recipeFood).on(recipe.eq(recipeFood.recipe))
+                .where(recipeFood.recipe.eq(recipe).and(recipeFood.isEnable.eq(true))
+                        .and(recipeFood.food.foodIdx.in(foodIdxes)))
+                .groupBy(recipeFood.recipe)
+                .fetch();
+    }
+
 
 }
