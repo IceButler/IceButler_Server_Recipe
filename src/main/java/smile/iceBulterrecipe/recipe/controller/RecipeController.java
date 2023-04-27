@@ -45,6 +45,7 @@ public class RecipeController {
         }
     }
 
+    // 가정용 냉장고 레시피 즐겨찾기 모음
     @Auth
     @GetMapping("{fridgeIdx}/bookmark")
     public ResponseCustom<?> getBookmarkRecipes(@PathVariable Long fridgeIdx,

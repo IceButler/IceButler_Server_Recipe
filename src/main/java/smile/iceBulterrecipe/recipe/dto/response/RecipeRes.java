@@ -4,14 +4,13 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import smile.iceBulterrecipe.global.utils.AwsS3ImageUrlUtils;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeMainRes {
+public class RecipeRes {
     private Long recipeIdx;
     private String recipeImgUrl;
     private String recipeName;
@@ -19,8 +18,8 @@ public class RecipeMainRes {
     private double percentageOfFood;
     private Boolean recipeLikeStatus;
 
-    public static RecipeMainRes toDto(Recipe recipe, double percentage, Boolean recipeLikeStatus) {
-        return new RecipeMainRes(
+    public static RecipeRes toDto(Recipe recipe, double percentage, Boolean recipeLikeStatus) {
+        return new RecipeRes(
                 recipe.getRecipeIdx(),
                 AwsS3ImageUrlUtils.toUrl(recipe.getRecipeImgKey()),
                 recipe.getRecipeName(),
@@ -31,7 +30,7 @@ public class RecipeMainRes {
     }
 
     @QueryProjection
-    public RecipeMainRes(Long recipeIdx, String recipeImgUrl, String recipeName, String recipeCategory, double percentageOfFood) {
+    public RecipeRes(Long recipeIdx, String recipeImgUrl, String recipeName, String recipeCategory, double percentageOfFood) {
         this.recipeIdx = recipeIdx;
         this.recipeImgUrl = recipeImgUrl;
         this.recipeName = recipeName;
