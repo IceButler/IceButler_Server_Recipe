@@ -18,7 +18,7 @@ import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 public class MultiRecipeController {
 
     private final RecipeServiceImpl recipeService;
-    private MainServerClient mainServerClient;
+    private final MainServerClient mainServerClient;
 
     // 레시피 메인 화면
     @Auth

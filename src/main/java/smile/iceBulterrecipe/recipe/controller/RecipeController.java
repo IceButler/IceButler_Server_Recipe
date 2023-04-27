@@ -9,7 +9,6 @@ import smile.iceBulterrecipe.global.resolver.Auth;
 import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
-import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 
@@ -46,10 +45,11 @@ public class RecipeController {
         }
     }
 
+    // 가정용 냉장고 레시피 즐겨찾기 모음
     @Auth
     @GetMapping("{fridgeIdx}/bookmark")
     public ResponseCustom<?> getBookmarkRecipes(@PathVariable Long fridgeIdx,
-                                                @IsLogin LoginStatus loginStatus) {
+                                                            @IsLogin LoginStatus loginStatus) {
         Long userIdx = loginStatus.getUserIdx();
         ResponseCustom<RecipeFridgeFoodListsRes> fridgeFoodLists = mainServerClient.getFridgeFoodLists(fridgeIdx, null, userIdx);
         if(fridgeFoodLists.getData()==null) return fridgeFoodLists;
