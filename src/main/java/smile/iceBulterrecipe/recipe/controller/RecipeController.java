@@ -2,6 +2,7 @@ package smile.iceBulterrecipe.recipe.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import smile.iceBulterrecipe.global.Constant;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.global.feign.feignClient.MainServerClient;
 import smile.iceBulterrecipe.global.resolver.Auth;
@@ -9,6 +10,7 @@ import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
+import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 
 @RequestMapping("/recipes")
 @RestController
@@ -27,16 +29,19 @@ public class RecipeController {
      * 메인화면 냉장고 속 레시피 / 인기 레시피
      */
     @Auth
-    @GetMapping("")
+    @GetMapping("/{fridgeIdx}")
     public ResponseCustom<?> getRecipeMainLists(@IsLogin LoginStatus loginStatus,
-                                                @RequestParam(name = "fridgeIdx", required = false) Long fridgeIdx,
-                                                @RequestParam(name = "multiFridgeIdx", required = false) Long multiFridgeIdx){
-        if(fridgeIdx != null && multiFridgeIdx == null){
-            return ResponseCustom.OK(this.recipeService.getFridgeRecipeLists(loginStatus.getUserIdx(), fridgeIdx));
-        }else if(fridgeIdx == null && multiFridgeIdx != null){
-            return ResponseCustom.OK(this.recipeService.getMultiFridgeRecipeLists(loginStatus.getUserIdx(), multiFridgeIdx));
-        }else {
-            return ResponseCustom.OK(this.recipeService.getPopularRecipeLists(loginStatus.getUserIdx()));
+                                                @PathVariable(name = "fridgeIdx") Long fridgeIdx,
+                                                @RequestParam(name = "category") String category){
+        ResponseCustom<RecipeFridgeFoodListsRes> lists = this.mainServerClient.getFridgeFoodLists(fridgeIdx, null, loginStatus.getUserIdx());
+        if(lists.getData() == null) return lists;
+
+        if(category.equals(Constant.RecipeConstant.FRIDGE_FOOD_RECIPE)){
+            return ResponseCustom.OK(this.recipeService.getFridgeRecipeLists(loginStatus.getUserIdx(), lists.getData()));
+        }else if(category.equals(Constant.RecipeConstant.POPULAR_FOOD)){
+            return ResponseCustom.OK(this.recipeService.getPopularRecipeListsForFridge(loginStatus.getUserIdx(),  lists.getData()));
+        }else{
+            throw new UserNotFoundException(); // todo : 에러 고치기 ;0;
         }
     }
 
