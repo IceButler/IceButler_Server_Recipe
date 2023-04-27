@@ -2,6 +2,7 @@ package smile.iceBulterrecipe.recipe.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import smile.iceBulterrecipe.food.dto.assembler.FoodAssembler;
 import smile.iceBulterrecipe.food.entity.Food;
 import smile.iceBulterrecipe.food.repository.FoodRepository;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListRes;
@@ -30,14 +31,13 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeRepository recipeRepository;
     private final RecipeFoodRepository recipeFoodRepository;
     private final FoodRepository foodRepository;
+    private final FoodAssembler foodAssembler;
 
     // 인기 레시피
     @Override
     public RecipeMainListRes getPopularRecipeListsForFridge(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        List<Long> foodIdxes = fridgeFoodList.getFoodList().stream()
-                .map(RecipeFridgeFoodListRes::getFoodIdx)
-                .collect(Collectors.toList());
+        List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
         List<Recipe> recipe = this.recipeLikeRepository.getPopularRecipe();
 
         return new RecipeMainListRes(recipe.stream()
@@ -66,9 +66,7 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public BookMarkRecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        List<Long> foodIdxes = fridgeFoodList.getFoodList().stream()
-                .map(RecipeFridgeFoodListRes::getFoodIdx)
-                .collect(Collectors.toList());
+        List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
         List<Recipe> bookmarkRecipeList = this.recipeLikeRepository.getBookmarkRecipe(user, true);
         return this.recipeFoodRepository.getBookmarkRecipes(bookmarkRecipeList, foodIdxes);
     }
