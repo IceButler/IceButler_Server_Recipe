@@ -9,6 +9,7 @@ import smile.iceBulterrecipe.global.resolver.Auth;
 import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
+import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 
