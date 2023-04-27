@@ -34,11 +34,10 @@ public class RecipeServiceImpl implements RecipeService{
     private final UserRepository userRepository;
     private final RecipeLikeRepository recipeLikeRepository;
     private final RecipeRepository recipeRepository;
-    private final RecipeAssembler recipeAssembler;
     private final RecipeFoodRepository recipeFoodRepository;
+    private final RecipeLikeAssembler recipeLikeAssembler;
     private final FoodRepository foodRepository;
     private final FoodAssembler foodAssembler;
-    private final RecipeLikeAssembler recipeLikeAssembler;
 
     // 인기 레시피
     @Override
@@ -70,9 +69,7 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public BookMarkRecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        List<Long> foodIdxes = fridgeFoodList.getFoodList().stream()
-                .map(RecipeFridgeFoodListRes::getFoodIdx)
-                .collect(Collectors.toList());
+        List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
         List<Recipe> bookmarkRecipeList = this.recipeLikeRepository.getBookmarkRecipe(user, true);
         return this.recipeFoodRepository.getBookmarkRecipes(bookmarkRecipeList, foodIdxes);
     }
