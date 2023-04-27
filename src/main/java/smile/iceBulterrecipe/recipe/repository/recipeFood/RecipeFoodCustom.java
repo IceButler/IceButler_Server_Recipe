@@ -8,7 +8,7 @@ import java.util.List;
 public interface RecipeFoodCustom {
 
     RecipeListRes getBookmarkRecipes(List<Recipe> bookmarkRecipeList, List<Long> foodIdxes);
-    long getPercentageOfFood(Recipe recipe, List<Long> foodIdxes);
+    Integer getPercentageOfFood(Recipe recipe, List<Long> foodIdxes);
 
     List<Recipe> getRecipeByFridgeFoodList(List<Long> foodIdxes);
 }
