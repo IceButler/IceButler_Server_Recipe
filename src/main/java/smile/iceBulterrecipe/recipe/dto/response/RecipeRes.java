@@ -15,10 +15,10 @@ public class RecipeRes {
     private String recipeImgUrl;
     private String recipeName;
     private String recipeCategory;
-    private double percentageOfFood;
+    private Integer percentageOfFood;
     private Boolean recipeLikeStatus;
 
-    public static RecipeRes toDto(Recipe recipe, double percentage, Boolean recipeLikeStatus) {
+    public static RecipeRes toDto(Recipe recipe, Integer percentage, Boolean recipeLikeStatus) {
         return new RecipeRes(
                 recipe.getRecipeIdx(),
                 AwsS3ImageUrlUtils.toUrl(recipe.getRecipeImgKey()),
@@ -30,7 +30,7 @@ public class RecipeRes {
     }
 
     @QueryProjection
-    public RecipeRes(Long recipeIdx, String recipeImgUrl, String recipeName, String recipeCategory, double percentageOfFood) {
+    public RecipeRes(Long recipeIdx, String recipeImgUrl, String recipeName, String recipeCategory, Integer percentageOfFood) {
         this.recipeIdx = recipeIdx;
         this.recipeImgUrl = recipeImgUrl;
         this.recipeName = recipeName;
@@ -38,7 +38,7 @@ public class RecipeRes {
         this.percentageOfFood = percentageOfFood;
     }
 
-    public static RecipeRes toDto(Recipe recipe, long percentage) {
+    public static RecipeRes toDto(Recipe recipe, Integer percentage) {
         return new RecipeRes(
                 recipe.getRecipeIdx(),
                 AwsS3ImageUrlUtils.toUrl(recipe.getRecipeImgKey()),

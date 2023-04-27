@@ -26,7 +26,7 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
 
     // 레시피 내 보유한 음식 백분율 계산
     @Override
-    public long getPercentageOfFood(Recipe recipe, List<Long> foodIdxes) {
+    public Integer getPercentageOfFood(Recipe recipe, List<Long> foodIdxes) {
         // 레시피 food 중 냉장고에 보유하고 있는 food 수
         long recipeFridgeFoodNum = jpaQueryFactory.selectFrom(recipeFood)
                 .where(recipeFood.recipe.eq(recipe)
@@ -41,7 +41,7 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
         // 나누는 수가 0이면 오류로 0 반환
         if(recipeFoodNum==0) return 0;
         double percentageOfFood = recipeFridgeFoodNum / (double) recipeFoodNum * 100;
-        return (long) percentageOfFood;
+        return (int)Math.round(percentageOfFood);
     }
 
     // todo: 정렬 필요 아직 order by에 무엇을 넣어야 하는지 모르겠음.
