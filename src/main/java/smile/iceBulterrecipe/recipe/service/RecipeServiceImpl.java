@@ -38,9 +38,9 @@ public class RecipeServiceImpl implements RecipeService{
     public RecipeMainListRes getPopularRecipeListsForFridge(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
-        List<Recipe> recipe = this.recipeLikeRepository.getPopularRecipe();
+        List<Recipe> recipeList = this.recipeLikeRepository.getPopularRecipe();
 
-        return new RecipeMainListRes(recipe.stream()
+        return new RecipeMainListRes(recipeList.stream()
                 .map(r -> RecipeMainRes.toDto(r, this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes),
                         this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true)))
                 .collect(Collectors.toList()));
@@ -48,18 +48,15 @@ public class RecipeServiceImpl implements RecipeService{
 
     // 냉장고 레시피
     @Override
-    public RecipeMainListRes getFridgeRecipeLists(Long userIdx, Long fridgeIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
+    public RecipeMainListRes getFridgeRecipeLists(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
+        List<Recipe> recipeList = this.recipeFoodRepository.getRecipeByFridgeFoodList(foodIdxes);
 
-        return null;
-    }
-
-
-    // 멀티 냉장고 레시피
-    @Override
-    public RecipeMainListRes getMultiFridgeRecipeLists(Long userIdx, Long multiFridgeIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
-        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        return null;
+        return new RecipeMainListRes(recipeList.stream()
+                .map(r -> RecipeMainRes.toDto(r, this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes),
+                        this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true)))
+                .collect(Collectors.toList()));
     }
 
     // 레시피 즐겨찾기 모음

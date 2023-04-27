@@ -10,4 +10,6 @@ public interface RecipeFoodCustom {
 
     BookMarkRecipeListRes getBookmarkRecipes(List<Recipe> bookmarkRecipeList, List<Long> foodIdxes);
     long getPercentageOfFood(Recipe recipe, List<Long> foodIdxes);
+
+    List<Recipe> getRecipeByFridgeFoodList(List<Long> foodIdxes);
 }

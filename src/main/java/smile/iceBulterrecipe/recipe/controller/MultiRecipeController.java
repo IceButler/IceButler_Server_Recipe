@@ -30,7 +30,7 @@ public class MultiRecipeController {
         if(lists.getData() == null) return lists;
 
         if(category.equals(Constant.RecipeConstant.FRIDGE_FOOD_RECIPE)){
-            return ResponseCustom.OK(this.recipeService.getMultiFridgeRecipeLists(loginStatus.getUserIdx(), multiFridgeIdx, lists.getData()));
+            return ResponseCustom.OK(this.recipeService.getFridgeRecipeLists(loginStatus.getUserIdx(),lists.getData()));
         }else if(category.equals(Constant.RecipeConstant.POPULAR_FOOD)){
             return ResponseCustom.OK(this.recipeService.getPopularRecipeListsForFridge(loginStatus.getUserIdx(),  lists.getData()));
         }else{

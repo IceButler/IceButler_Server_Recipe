@@ -30,6 +30,14 @@ public class RecipeMainRes {
         );
     }
 
+    @QueryProjection
+    public RecipeMainRes(Long recipeIdx, String recipeImgUrl, String recipeName, String recipeCategory, double percentageOfFood) {
+        this.recipeIdx = recipeIdx;
+        this.recipeImgUrl = recipeImgUrl;
+        this.recipeName = recipeName;
+        this.recipeCategory = recipeCategory;
+        this.percentageOfFood = percentageOfFood;
+    }
 
     public void setRecipeLikeStatus(Boolean recipeLikeStatus) {
         this.recipeLikeStatus = recipeLikeStatus;
