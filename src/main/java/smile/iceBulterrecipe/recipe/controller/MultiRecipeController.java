@@ -1,10 +1,8 @@
 package smile.iceBulterrecipe.recipe.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import smile.iceBulterrecipe.global.Constant;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.global.feign.feignClient.MainServerClient;
 import smile.iceBulterrecipe.global.resolver.Auth;
@@ -12,6 +10,7 @@ import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
+import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 
 @RequestMapping("/multiRecipes")
 @RestController
@@ -22,7 +21,22 @@ public class MultiRecipeController {
     private MainServerClient mainServerClient;
 
     // 레시피 메인 화면
+    @Auth
+    @GetMapping("/{multiFridgeIdx}")
+    public ResponseCustom<?> getRecipeMainLists(@IsLogin LoginStatus loginStatus,
+                                                @PathVariable(name = "multiFridgeIdx") Long multiFridgeIdx,
+                                                @RequestParam(name = "category") String category){
+        ResponseCustom<RecipeFridgeFoodListsRes> lists = this.mainServerClient.getFridgeFoodLists(null, multiFridgeIdx, loginStatus.getUserIdx());
+        if(lists.getData() == null) return lists;
 
+        if(category.equals(Constant.RecipeConstant.FRIDGE_FOOD_RECIPE)){
+            return ResponseCustom.OK(this.recipeService.getFridgeRecipeLists(loginStatus.getUserIdx(),lists.getData()));
+        }else if(category.equals(Constant.RecipeConstant.POPULAR_FOOD)){
+            return ResponseCustom.OK(this.recipeService.getPopularRecipeListsForFridge(loginStatus.getUserIdx(),  lists.getData()));
+        }else{
+            throw  new UserNotFoundException(); // todo : 에러 고치기 ;0;
+        }
+    }
     // 레시피 즐겨찾기 모음
     @Auth
     @GetMapping("{multiFridgeIdx}/bookmark")
