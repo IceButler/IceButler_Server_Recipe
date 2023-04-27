@@ -10,10 +10,7 @@ import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListRes;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeLikeAssembler;
-import smile.iceBulterrecipe.recipe.dto.response.BookMarkRecipeListRes;
-import smile.iceBulterrecipe.recipe.dto.response.BookmarkRecipeRes;
-import smile.iceBulterrecipe.recipe.dto.response.RecipeMainListRes;
-import smile.iceBulterrecipe.recipe.dto.response.RecipeMainRes;
+import smile.iceBulterrecipe.recipe.dto.response.*;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeLike;
 import smile.iceBulterrecipe.recipe.exception.RecipeNotFoundException;
@@ -77,19 +74,21 @@ public class RecipeServiceImpl implements RecipeService{
     // 레시피 즐겨찾기
     @Transactional
     @Override
-    public void bookmarkRecipe(Long recipeIdx, Long userIdx) {
+    public BookmarkRes bookmarkRecipe(Long recipeIdx, Long userIdx) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
         Optional<RecipeLike> optionalRecipeLike = this.recipeLikeRepository.findByUserAndRecipe(user, recipe);
         // RecipeLike가 있다면 isEnable 변겅, 없다면 생성
+        RecipeLike recipeLike;
         if(optionalRecipeLike.isPresent()) {
-            RecipeLike recipeLike = optionalRecipeLike.get();
+            recipeLike = optionalRecipeLike.get();
             recipeLike.setIsEnable(!recipeLike.getIsEnable());
         } else {
-            RecipeLike recipeLike = recipeLikeAssembler.toEntity(user, recipe);
+            recipeLike = recipeLikeAssembler.toEntity(user, recipe);
             recipeLike.setIsEnable(true);
             this.recipeLikeRepository.save(recipeLike);
         }
+        return BookmarkRes.toDto(recipeLike);
     }
 
 
