@@ -54,4 +54,13 @@ public class RecipeController {
         if(fridgeFoodLists.getData()==null) return fridgeFoodLists;
         return ResponseCustom.OK(this.recipeService.getBookmarkRecipes(userIdx, fridgeFoodLists.getData()));
     }
+
+    // 레시피 즐겨찾기
+    @Auth
+    @PostMapping("{recipeIdx}/bookmark")
+    public ResponseCustom<?> bookmarkRecipe(@PathVariable Long recipeIdx,
+                                            @IsLogin LoginStatus loginStatus) {
+        this.recipeService.bookmarkRecipe(recipeIdx, loginStatus.getUserIdx());
+        return ResponseCustom.OK();
+    }
 }
