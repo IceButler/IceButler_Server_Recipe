@@ -1,6 +1,7 @@
 package smile.iceBulterrecipe.recipe.entity;
 
 import lombok.Getter;
+import smile.iceBulterrecipe.food.entity.FoodCategory;
 import smile.iceBulterrecipe.recipe.exception.RecipeCategoryNotFoundException;
 
 import java.util.Arrays;

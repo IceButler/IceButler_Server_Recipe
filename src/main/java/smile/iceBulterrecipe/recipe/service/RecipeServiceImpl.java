@@ -10,9 +10,12 @@ import smile.iceBulterrecipe.recipe.dto.assembler.RecipeLikeAssembler;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.dto.response.*;
+import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
+import smile.iceBulterrecipe.recipe.entity.RecipeFood;
 import smile.iceBulterrecipe.recipe.entity.RecipeLike;
 import smile.iceBulterrecipe.recipe.exception.RecipeNotFoundException;
+import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeFood.RecipeFoodRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeLike.RecipeLikeRepository;
@@ -31,6 +34,7 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeLikeRepository recipeLikeRepository;
     private final RecipeRepository recipeRepository;
     private final RecipeFoodRepository recipeFoodRepository;
+    private final CookeryRepository cookeryRepository;
     private final RecipeLikeAssembler recipeLikeAssembler;
     private final FoodRepository foodRepository;
     private final FoodAssembler foodAssembler;
@@ -90,5 +94,11 @@ public class RecipeServiceImpl implements RecipeService{
         return BookmarkRes.toDto(recipeLike);
     }
 
+    public RecipeDetailsRes getRecipeDetails(Long recipeIdx) {
+        Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
+        List<RecipeFood> recipeFoods = this.recipeFoodRepository.findByRecipeAndIsEnable(recipe, true);
+        List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnable(recipe, true);
+        return RecipeDetailsRes.toDto(recipe, recipeFoods, cookery);
+    }
 
 }
