@@ -5,8 +5,11 @@ import org.springframework.stereotype.Repository;
 import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 
+import java.util.List;
+
 @Repository
 public interface CookeryRepository extends JpaRepository<Cookery, Long> {
 
     void deleteByRecipe(Recipe recipe);
+    List<Cookery> findByRecipeAndIsEnable(Recipe recipe, Boolean status);
 }

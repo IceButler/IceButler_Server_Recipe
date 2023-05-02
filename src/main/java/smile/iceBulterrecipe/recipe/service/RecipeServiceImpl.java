@@ -15,7 +15,9 @@ import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.dto.response.*;
+import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
+import smile.iceBulterrecipe.recipe.entity.RecipeFood;
 import smile.iceBulterrecipe.recipe.entity.RecipeLike;
 import smile.iceBulterrecipe.recipe.exception.RecipeNotFoundException;
 import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
@@ -102,6 +104,13 @@ public class RecipeServiceImpl implements RecipeService{
         return BookmarkRes.toDto(recipeLike);
     }
 
+    public RecipeDetailsRes getRecipeDetails(Long recipeIdx) {
+        Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
+        List<RecipeFood> recipeFoods = this.recipeFoodRepository.findByRecipeAndIsEnable(recipe, true);
+        List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnable(recipe, true);
+        return RecipeDetailsRes.toDto(recipe, recipeFoods, cookery);
+    }
+    
     @Transactional
     @Override
     public void postRecipe(PostRecipeReq recipeReq, Long userIdx) {
