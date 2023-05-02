@@ -31,6 +31,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static smile.iceBulterrecipe.global.Constant.RecipeConstant.GET_RECIPE_PERCENTAGE;
+
 @RequiredArgsConstructor
 @Service
 public class RecipeServiceImpl implements RecipeService{
@@ -55,6 +57,7 @@ public class RecipeServiceImpl implements RecipeService{
         List<Recipe> recipeList = this.recipeLikeRepository.getPopularRecipe();
 
         return new RecipeListRes(recipeList.stream()
+                .filter(r -> this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes) >= GET_RECIPE_PERCENTAGE)
                 .map(r -> RecipeRes.toDto(r, this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes),
                         this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true)))
                 .collect(Collectors.toList()));
@@ -68,6 +71,7 @@ public class RecipeServiceImpl implements RecipeService{
         List<Recipe> recipeList = this.recipeFoodRepository.getRecipeByFridgeFoodList(foodIdxes);
 
         return new RecipeListRes(recipeList.stream()
+                .filter(r -> this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes) >= GET_RECIPE_PERCENTAGE)
                 .map(r -> RecipeRes.toDto(r, this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes),
                         this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true)))
                 .collect(Collectors.toList()));
