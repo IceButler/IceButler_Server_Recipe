@@ -7,6 +7,7 @@ import smile.iceBulterrecipe.food.entity.Food;
 import smile.iceBulterrecipe.food.entity.FoodCategory;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListRes;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
+import smile.iceBulterrecipe.recipe.dto.request.PostRecipeFoodReq;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,14 @@ public class FoodAssembler {
                 .foodName(food.getFoodName())
                 .foodImgKey(food.getFoodImgKey())
                 .foodCategory(FoodCategory.getFoodCategoryByName(food.getFoodName()))
+                .build();
+    }
+
+    public Food toEntity(PostRecipeFoodReq food){
+        return Food.builder()
+                .foodName(food.getFoodName())
+                .foodCategory(FoodCategory.PROCESSED_FOOD) // todo: 변경 필요, 일단 더미로 넣어둠
+                .foodImgKey("food/MEAT.png")
                 .build();
     }
 

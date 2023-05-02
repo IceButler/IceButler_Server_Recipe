@@ -4,9 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.food.dto.assembler.FoodAssembler;
+import smile.iceBulterrecipe.food.entity.Food;
 import smile.iceBulterrecipe.food.repository.FoodRepository;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
+import smile.iceBulterrecipe.recipe.dto.assembler.CookeryAssembler;
+import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
+import smile.iceBulterrecipe.recipe.dto.assembler.RecipeFoodAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeLikeAssembler;
+import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.dto.response.*;
@@ -25,6 +30,7 @@ import smile.iceBulterrecipe.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -35,9 +41,13 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeRepository recipeRepository;
     private final RecipeFoodRepository recipeFoodRepository;
     private final CookeryRepository cookeryRepository;
-    private final RecipeLikeAssembler recipeLikeAssembler;
     private final FoodRepository foodRepository;
+
+    private final RecipeLikeAssembler recipeLikeAssembler;
     private final FoodAssembler foodAssembler;
+    private final RecipeAssembler recipeAssembler;
+    private final RecipeFoodAssembler recipeFoodAssembler;
+    private final CookeryAssembler cookeryAssembler;
 
     // 인기 레시피
     @Override
@@ -100,5 +110,21 @@ public class RecipeServiceImpl implements RecipeService{
         List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnable(recipe, true);
         return RecipeDetailsRes.toDto(recipe, recipeFoods, cookery);
     }
+    
+    @Transactional
+    @Override
+    public void postRecipe(PostRecipeReq recipeReq, Long userIdx) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
 
+        // todo: 사용자의 음식이 없다면? 그럼 새로 만들어야 함 -> queue 로 진행할 것으로 예상이 됨 *^^* 아직 메인에는 저장 안되는 로직임.
+        Recipe recipe = this.recipeRepository.save(this.recipeAssembler.toEntity(recipeReq, user));
+        recipeReq.getFoodList().forEach(food -> {
+            Food foodEntity = this.foodRepository.findByFoodName(food.getFoodName()).orElseGet(() -> this.foodRepository.save(this.foodAssembler.toEntity(food)));
+            this.recipeFoodRepository.save(this.recipeFoodAssembler.toEntity(food, foodEntity, recipe));
+        });
+        AtomicReference<Long> nextIdx = new AtomicReference<>(0L);
+        recipeReq.getCookeryList().forEach(cookery -> {
+            this.cookeryRepository.save(this.cookeryAssembler.toEntity(cookery, recipe, nextIdx.getAndSet(nextIdx.get() + 1))) ;
+        });
+    }
 }

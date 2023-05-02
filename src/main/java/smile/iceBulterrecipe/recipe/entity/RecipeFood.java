@@ -1,6 +1,7 @@
 package smile.iceBulterrecipe.recipe.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -29,4 +30,11 @@ public class RecipeFood extends BaseEntity {
     private Food food;
 
     private String foodDetail;
+
+    @Builder
+    public RecipeFood(Recipe recipe, Food food, String foodDetail) {
+        this.recipe = recipe;
+        this.food = food;
+        this.foodDetail = foodDetail;
+    }
 }

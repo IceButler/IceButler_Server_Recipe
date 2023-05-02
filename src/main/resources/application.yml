@@ -8,9 +8,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8??
-    url: jdbc:mysql://icebulterrecipe.cwkkfphsqxw5.ap-northeast-2.rds.amazonaws.com:3306/icebutler?serverTimezone=Asia/Seoul
-    username: admin # ??????
-    password: ADMIN123! # ??????
+    url: jdbc:mysql://3.34.135.100:3306/icebulter
+    username: root # ??????
+    password: 1111 # ??????
   sql:
     init:
       platform: mysql
