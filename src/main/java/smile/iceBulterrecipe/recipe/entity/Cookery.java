@@ -2,6 +2,7 @@ package smile.iceBulterrecipe.recipe.entity;
 
 import javax.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -24,4 +25,12 @@ public class Cookery extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="recipeIdx")
     private Recipe recipe;
+
+    @Builder
+    public Cookery(Long nextIdx, String cookeryImgKey, String description, Recipe recipe) {
+        this.nextIdx = nextIdx;
+        this.cookeryImgKey = cookeryImgKey;
+        this.description = description;
+        this.recipe = recipe;
+    }
 }

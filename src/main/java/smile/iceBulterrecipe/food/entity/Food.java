@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Food {
     @Id// id 직접 할당
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long foodIdx;
     private String foodName;
@@ -27,4 +28,5 @@ public class Food {
         this.foodImgKey = foodImgKey;
         this.foodCategory = foodCategory;
     }
+
 }

@@ -9,6 +9,7 @@ import smile.iceBulterrecipe.global.resolver.Auth;
 import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
+import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
 import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
@@ -63,5 +64,13 @@ public class RecipeController {
     public ResponseCustom<BookmarkRes> bookmarkRecipe(@PathVariable Long recipeIdx,
                                                       @IsLogin LoginStatus loginStatus) {
         return ResponseCustom.OK(this.recipeService.bookmarkRecipe(recipeIdx, loginStatus.getUserIdx()));
+    }
+
+    // 레시피 추가
+    @Auth
+    @PostMapping("")
+    public ResponseCustom<?> postRecipe(@IsLogin LoginStatus loginStatus, @RequestBody PostRecipeReq recipeReq){
+        this.recipeService.postRecipe(recipeReq, loginStatus.getUserIdx());
+        return ResponseCustom.OK();
     }
 }
