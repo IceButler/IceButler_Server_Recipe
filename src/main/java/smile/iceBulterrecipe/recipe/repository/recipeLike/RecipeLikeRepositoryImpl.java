@@ -30,8 +30,8 @@ public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
         return jpaQueryFactory.selectFrom(recipe)
                 .leftJoin(recipeLike).on(recipe.eq(recipeLike.recipe))
                 .where(recipe.isEnable.eq(true))
-                .groupBy(recipeLike.recipe)
-                .orderBy(recipeLike.recipe.isEnable.eq(true).count().desc())
+                .groupBy(recipe)
+                .orderBy(recipeLike.recipe.isEnable.count().desc())
                 .fetch();
     }
 
