@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
+import smile.iceBulterrecipe.recipe.entity.RecipeLike;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,9 +19,9 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public RecipeListRes getBookmarkRecipes(List<Recipe> bookmarkRecipeList, List<Long> foodIdxes) {
+    public RecipeListRes getBookmarkRecipes(List<RecipeLike> bookmarkRecipeList, List<Long> foodIdxes) {
         return new RecipeListRes(bookmarkRecipeList.stream()
-                .map(recipe -> RecipeRes.toDto(recipe, getPercentageOfFood(recipe, foodIdxes)))
+                .map(recipe -> RecipeRes.toDto(recipe.getRecipe(), getPercentageOfFood(recipe.getRecipe(), foodIdxes), recipe.getIsEnable()))
                 .collect(Collectors.toList()));
     }
 
