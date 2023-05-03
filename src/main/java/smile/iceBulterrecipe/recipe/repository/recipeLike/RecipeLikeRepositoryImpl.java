@@ -15,14 +15,23 @@ import static smile.iceBulterrecipe.recipe.entity.QRecipeLike.recipeLike;
 public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
+    /**
+     * select recipe.recipe_idx, ifnull(sum(rl.is_enable = 1), 0)
+     * from recipe
+     * left join recipe_like rl on recipe.recipe_idx = rl.recipe_idx
+     * where recipe.is_enable = 1
+     * group by recipe.recipe_idx
+     * order by sum(rl.is_enable) desc
+     */
+
     // 인기 레시피 불러오기
     @Override
     public List<Recipe> getPopularRecipe() {
-        return jpaQueryFactory.select(recipe)
-                .from(recipeLike)
-                .where(recipeLike.isEnable.eq(true))
+        return jpaQueryFactory.selectFrom(recipe)
+                .leftJoin(recipeLike).on(recipe.eq(recipeLike.recipe))
+                .where(recipe.isEnable.eq(true))
                 .groupBy(recipeLike.recipe)
-                .orderBy(recipeLike.recipe.count().desc())
+                .orderBy(recipeLike.recipe.isEnable.eq(true).count().desc())
                 .fetch();
     }
 
