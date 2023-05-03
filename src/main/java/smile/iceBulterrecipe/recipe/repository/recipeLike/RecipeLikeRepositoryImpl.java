@@ -3,6 +3,7 @@ package smile.iceBulterrecipe.recipe.repository.recipeLike;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
+import smile.iceBulterrecipe.recipe.entity.RecipeLike;
 import smile.iceBulterrecipe.user.entity.User;
 
 import java.util.List;
@@ -27,13 +28,14 @@ public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
     }
 
     @Override
-    public List<Recipe> getBookmarkRecipe(User user, boolean status) {
-        return jpaQueryFactory.select(recipe)
+    public List<RecipeLike> getBookmarkRecipe(User user, boolean status) {
+        return jpaQueryFactory.select(recipeLike)
                 .from(recipeLike)
                 .where(recipeLike.user.eq(user)
-                .and(recipeLike.isEnable.eq(status)))
-                .groupBy(recipeLike.recipe)
+                .and(recipeLike.isEnable.eq(status))
+                .and(recipe.isEnable.eq(status)))
                 .orderBy(recipeLike.updateAt.desc())
                 .fetch();
     }
+
 }

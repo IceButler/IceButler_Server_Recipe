@@ -38,17 +38,6 @@ public class RecipeRes {
         this.percentageOfFood = percentageOfFood;
     }
 
-    public static RecipeRes toDto(Recipe recipe, Integer percentage) {
-        return new RecipeRes(
-                recipe.getRecipeIdx(),
-                AwsS3ImageUrlUtils.toUrl(recipe.getRecipeImgKey()),
-                recipe.getRecipeName(),
-                recipe.getRecipeCategory().getCategory(),
-                percentage,
-                recipe.getIsEnable()
-        );
-    }
-
     public void setRecipeLikeStatus(Boolean recipeLikeStatus) {
         this.recipeLikeStatus = recipeLikeStatus;
     }
