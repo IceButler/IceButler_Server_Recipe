@@ -1,15 +1,18 @@
 package smile.iceBulterrecipe.recipe.entity;
 
-import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import smile.iceBulterrecipe.global.BaseEntity;
-import smile.iceBulterrecipe.food.entity.FoodCategory;
 import smile.iceBulterrecipe.global.entityListener.RecipeEntityListener;
 import smile.iceBulterrecipe.user.entity.User;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @Getter
@@ -27,10 +30,13 @@ public class Recipe extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RecipeCategory recipeCategory;
     private Long leadTime;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userIdx")
     private User user;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "recipe")
+    @Where(clause = "recipelike0_.is_enable = 1")
+    private List<RecipeLike> recipeLikes = new ArrayList<>();
 
     @Builder
     public Recipe(String recipeName, String recipeImgKey, Integer quantity, RecipeCategory recipeCategory, Long leadTime, User user) {

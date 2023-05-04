@@ -4,11 +4,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
+import smile.iceBulterrecipe.recipe.entity.QRecipe;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.querydsl.jpa.JPAExpressions.selectFrom;
 import static smile.iceBulterrecipe.recipe.entity.QRecipe.recipe;
 import static smile.iceBulterrecipe.recipe.entity.QRecipeFood.recipeFood;
 
@@ -20,22 +22,22 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
     @Override
     public RecipeListRes getBookmarkRecipes(List<Recipe> bookmarkRecipeList, List<Long> foodIdxes) {
         return new RecipeListRes(bookmarkRecipeList.stream()
-                .map(recipe -> RecipeRes.toDto(recipe, getPercentageOfFood(recipe, foodIdxes)))
+                .map(recipe -> RecipeRes.toDto(recipe, getPercentageOfFood(recipe.getRecipeIdx(), foodIdxes)))
                 .collect(Collectors.toList()));
     }
 
     // 레시피 내 보유한 음식 백분율 계산
     @Override
-    public Integer getPercentageOfFood(Recipe recipe, List<Long> foodIdxes) {
+    public Integer getPercentageOfFood(Long recipeIdx, List<Long> foodIdxes) {
         // 레시피 food 중 냉장고에 보유하고 있는 food 수
         long recipeFridgeFoodNum = jpaQueryFactory.selectFrom(recipeFood)
-                .where(recipeFood.recipe.eq(recipe)
+                .where(recipeFood.recipe.recipeIdx.eq(recipeIdx)
                         .and(recipeFood.food.foodIdx.in(foodIdxes)))
                 .stream().count();
 
         // 레시피 총 food 수
         long recipeFoodNum = jpaQueryFactory.selectFrom(recipeFood)
-                .where(recipeFood.recipe.eq(recipe))
+                .where(recipeFood.recipe.recipeIdx.eq(recipeIdx))
                 .stream().count();
 
         // 나누는 수가 0이면 오류로 0 반환
@@ -55,5 +57,38 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
                 .fetch();
     }
 
+
+    // 레시피 푸드 총 갯수
+//    public List<RecipeRes> getPopularRecipe(List<Food> foodList) {
+//        Path<Long> recipeCount = Expressions.numberPath(Long.class, "recipeCount");
+//        return jpaQueryFactory.select(new QRecipeRes(recipeFood.recipe.recipeIdx,
+//                recipeFood.recipe.recipeImgKey,
+//                recipeFood.recipe.recipeName,
+//                recipeFood.recipe.recipeCategory.stringValue(),
+//                ExpressionUtils.z(
+//                        JPAExpressions.select(recipeFood.count())
+//                                .from(recipeFood)
+//                                .where(recipeFood.isEnable.eq(true)
+//                                        .and(recipeFood.food.in(foodList)))
+//                , recipeCount)
+//                )
+//                .from(recipeFood)
+//                .where(recipeFood.isEnable.eq(true)
+//                        .and(recipeFood.food.in(foodList)))
+//                .groupBy(recipeFood)
+//                .fetch();
+//    }
+//
+//    private Expression<Integer> getRecipeFoodCount(){
+//        return select(recipeFood.count().intValue())
+//                .from(recipeFood)
+//                .where(recipeFood.isEnable.eq(true));
+//    }
+//    private Expression<Integer> getRecipeFoodCountForFridge(List<Food> foodList){
+//        return select(recipeFood.count().intValue())
+//                .from(recipeFood)
+//                .where(recipeFood.isEnable.eq(true)
+//                        .and(recipeFood.food.in(foodList)));
+//    }
 
 }

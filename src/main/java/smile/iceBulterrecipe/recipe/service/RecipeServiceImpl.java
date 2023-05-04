@@ -1,6 +1,8 @@
 package smile.iceBulterrecipe.recipe.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.food.dto.assembler.FoodAssembler;
@@ -12,9 +14,10 @@ import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeFoodAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeLikeAssembler;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
+import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
+import smile.iceBulterrecipe.recipe.dto.response.RecipeDetailsRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
-import smile.iceBulterrecipe.recipe.dto.response.*;
 import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeFood;
@@ -53,16 +56,20 @@ public class RecipeServiceImpl implements RecipeService{
 
     // 인기 레시피
     @Override
-    public RecipeListRes getPopularRecipeListsForFridge(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
+    public Page<RecipeRes> getPopularRecipeListsForFridge(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
-        List<Recipe> recipeList = this.recipeLikeRepository.getPopularRecipe();
+        Page<RecipeRes> recipeList = this.recipeLikeRepository.getPopularRecipe(pageable, foodIdxes);
 
-        return new RecipeListRes(recipeList.stream()
-                .filter(r -> this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes) >= GET_RECIPE_PERCENTAGE)
-                .map(r -> RecipeRes.toDto(r, this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes),
-                        this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true)))
-                .collect(Collectors.toList()));
+        recipeList.toList().stream()
+                .filter(r -> this.recipeFoodRepository.getPercentageOfFood(r.getRecipeIdx(), foodIdxes) >= GET_RECIPE_PERCENTAGE)
+                .collect(Collectors.toList())
+                .forEach(r -> {
+                    r.setRecipeLikeStatus(this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true));
+                    r.setPercentageOfFood(this.recipeFoodRepository.getPercentageOfFood(r.getRecipeIdx(), foodIdxes));
+                });
+//        recipeList.toList().removeIf(r -> r.getRecipeLikeStatus() == null);
+        return recipeList;
     }
 
     // 냉장고 레시피
@@ -73,8 +80,8 @@ public class RecipeServiceImpl implements RecipeService{
         List<Recipe> recipeList = this.recipeFoodRepository.getRecipeByFridgeFoodList(foodIdxes);
 
         return new RecipeListRes(recipeList.stream()
-                .filter(r -> this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes) >= GET_RECIPE_PERCENTAGE)
-                .map(r -> RecipeRes.toDto(r, this.recipeFoodRepository.getPercentageOfFood(r, foodIdxes),
+                .filter(r -> this.recipeFoodRepository.getPercentageOfFood(r.getRecipeIdx(), foodIdxes) >= GET_RECIPE_PERCENTAGE)
+                .map(r -> RecipeRes.toDto(r, this.recipeFoodRepository.getPercentageOfFood(r.getRecipeIdx(), foodIdxes),
                         this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true)))
                 .collect(Collectors.toList()));
     }

@@ -16,6 +16,9 @@ public class RecipeRes {
     private String recipeName;
     private String recipeCategory;
     private Integer percentageOfFood;
+
+
+
     private Boolean recipeLikeStatus;
 
     public static RecipeRes toDto(Recipe recipe, Integer percentage, Boolean recipeLikeStatus) {
@@ -26,6 +29,17 @@ public class RecipeRes {
                 recipe.getRecipeCategory().getCategory(),
                 percentage,
                 recipeLikeStatus
+        );
+    }
+
+    public static RecipeRes toDto(Recipe recipe) {
+        return new RecipeRes(
+                recipe.getRecipeIdx(),
+                AwsS3ImageUrlUtils.toUrl(recipe.getRecipeImgKey()),
+                recipe.getRecipeName(),
+                recipe.getRecipeCategory().getCategory(),
+                null,
+                null
         );
     }
 
@@ -52,4 +66,8 @@ public class RecipeRes {
     public void setRecipeLikeStatus(Boolean recipeLikeStatus) {
         this.recipeLikeStatus = recipeLikeStatus;
     }
+    public void setPercentageOfFood(Integer percentageOfFood) {
+        this.percentageOfFood = percentageOfFood;
+    }
+
 }
