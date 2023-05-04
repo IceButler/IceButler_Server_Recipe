@@ -68,7 +68,6 @@ public class RecipeServiceImpl implements RecipeService{
                     r.setRecipeLikeStatus(this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true));
                     r.setPercentageOfFood(this.recipeFoodRepository.getPercentageOfFood(r.getRecipeIdx(), foodIdxes));
                 });
-//        recipeList.toList().removeIf(r -> r.getRecipeLikeStatus() == null);
         return recipeList;
     }
 

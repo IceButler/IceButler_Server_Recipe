@@ -57,38 +57,4 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
                 .fetch();
     }
 
-
-    // 레시피 푸드 총 갯수
-//    public List<RecipeRes> getPopularRecipe(List<Food> foodList) {
-//        Path<Long> recipeCount = Expressions.numberPath(Long.class, "recipeCount");
-//        return jpaQueryFactory.select(new QRecipeRes(recipeFood.recipe.recipeIdx,
-//                recipeFood.recipe.recipeImgKey,
-//                recipeFood.recipe.recipeName,
-//                recipeFood.recipe.recipeCategory.stringValue(),
-//                ExpressionUtils.z(
-//                        JPAExpressions.select(recipeFood.count())
-//                                .from(recipeFood)
-//                                .where(recipeFood.isEnable.eq(true)
-//                                        .and(recipeFood.food.in(foodList)))
-//                , recipeCount)
-//                )
-//                .from(recipeFood)
-//                .where(recipeFood.isEnable.eq(true)
-//                        .and(recipeFood.food.in(foodList)))
-//                .groupBy(recipeFood)
-//                .fetch();
-//    }
-//
-//    private Expression<Integer> getRecipeFoodCount(){
-//        return select(recipeFood.count().intValue())
-//                .from(recipeFood)
-//                .where(recipeFood.isEnable.eq(true));
-//    }
-//    private Expression<Integer> getRecipeFoodCountForFridge(List<Food> foodList){
-//        return select(recipeFood.count().intValue())
-//                .from(recipeFood)
-//                .where(recipeFood.isEnable.eq(true)
-//                        .and(recipeFood.food.in(foodList)));
-//    }
-
 }

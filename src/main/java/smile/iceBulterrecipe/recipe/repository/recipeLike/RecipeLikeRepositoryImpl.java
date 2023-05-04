@@ -49,13 +49,6 @@ public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
                 .map(RecipeRes::toDto)
                 .collect(Collectors.toList());
 
-//        JPAQuery<Long> count = jpaQueryFactory
-//                .select(recipe.count())
-//                .from(recipe)
-//                .where(
-//                        recipe.isEnable.eq(true)
-//                );
-
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()),  collect.size());
 //        return PageableExecutionUtils.getPage
