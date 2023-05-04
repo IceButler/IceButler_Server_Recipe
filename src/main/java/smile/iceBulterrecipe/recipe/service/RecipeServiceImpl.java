@@ -91,7 +91,7 @@ public class RecipeServiceImpl implements RecipeService{
     public RecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
-        List<Recipe> bookmarkRecipeList = this.recipeLikeRepository.getBookmarkRecipe(user, true);
+        List<RecipeLike> bookmarkRecipeList = this.recipeLikeRepository.getBookmarkRecipe(user, true);
         return this.recipeFoodRepository.getBookmarkRecipes(bookmarkRecipeList, foodIdxes);
     }
 
