@@ -23,7 +23,7 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
     @Override
     public RecipeListRes getBookmarkRecipes(List<RecipeLike> bookmarkRecipeList, List<Long> foodIdxes) {
         return new RecipeListRes(bookmarkRecipeList.stream()
-                .map(recipe -> RecipeRes.toDto(recipe, getPercentageOfFood(recipe.getRecipeIdx(), foodIdxes)))
+                .map(recipe -> RecipeRes.toDto(recipe.getRecipe(), getPercentageOfFood(recipe.getRecipe().getRecipeIdx(), foodIdxes), recipe.getIsEnable()))
                 .collect(Collectors.toList()));
     }
 
