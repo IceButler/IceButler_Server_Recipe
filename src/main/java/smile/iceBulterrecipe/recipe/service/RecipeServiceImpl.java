@@ -111,10 +111,11 @@ public class RecipeServiceImpl implements RecipeService{
     public RecipeDetailsRes getRecipeDetails(Long recipeIdx) {
         Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
         List<RecipeFood> recipeFoods = this.recipeFoodRepository.findByRecipeAndIsEnable(recipe, true);
-        List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnable(recipe, true);
+//        List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnable(recipe, true);
+        List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnableOrderByNextIdx(recipe, true);
         return RecipeDetailsRes.toDto(recipe, recipeFoods, cookery);
     }
-    
+
     @Transactional
     @Override
     public void postRecipe(PostRecipeReq recipeReq, Long userIdx) {
