@@ -84,6 +84,13 @@ public class RecipeController {
         this.recipeService.postRecipe(recipeReq, loginStatus.getUserIdx());
         return ResponseCustom.OK();
     }
+
+    // 마이 레시피 조회
+    @Auth
+    @GetMapping("/myrecipe")
+    public ResponseCustom<?> getMyRecipe(@IsLogin LoginStatus loginStatus) {
+        return ResponseCustom.OK(this.recipeService.getMyRecipe(loginStatus.getUserIdx()));
+    }
 }
 
 

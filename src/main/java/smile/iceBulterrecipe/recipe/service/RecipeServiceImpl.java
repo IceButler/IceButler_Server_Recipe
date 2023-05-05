@@ -14,10 +14,7 @@ import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeFoodAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeLikeAssembler;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
-import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
-import smile.iceBulterrecipe.recipe.dto.response.RecipeDetailsRes;
-import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
-import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
+import smile.iceBulterrecipe.recipe.dto.response.*;
 import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeFood;
@@ -138,4 +135,13 @@ public class RecipeServiceImpl implements RecipeService{
             this.cookeryRepository.save(this.cookeryAssembler.toEntity(cookery, recipe, nextIdx.getAndSet(nextIdx.get() + 1))) ;
         });
     }
+
+    // 마이 레시피 조회
+    @Override
+    public MyRecipeListRes getMyRecipe(Long userIdx) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        List<Recipe> myRecipeList = this.recipeRepository.findByUserAndIsEnable(user, true);
+        return MyRecipeListRes.toDto(myRecipeList);
+    }
+
 }
