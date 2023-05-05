@@ -2,6 +2,9 @@ package smile.iceBulterrecipe.recipe.repository.recipeFood;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.entity.QRecipe;
@@ -14,6 +17,7 @@ import java.util.stream.Collectors;
 import static com.querydsl.jpa.JPAExpressions.selectFrom;
 import static smile.iceBulterrecipe.recipe.entity.QRecipe.recipe;
 import static smile.iceBulterrecipe.recipe.entity.QRecipeFood.recipeFood;
+import static smile.iceBulterrecipe.recipe.entity.QRecipeLike.recipeLike;
 
 
 @RequiredArgsConstructor
@@ -49,13 +53,28 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
 
     // todo: 정렬 필요 아직 order by에 무엇을 넣어야 하는지 모르겠음.
     @Override
-    public List<Recipe> getRecipeByFridgeFoodList(List<Long> foodIdxes) {
-        return jpaQueryFactory.selectFrom(recipe)
-                .leftJoin(recipeFood).on(recipe.eq(recipeFood.recipe))
-                .where(recipeFood.recipe.eq(recipe).and(recipeFood.isEnable.eq(true))
+    public Page<RecipeRes> getRecipeByFridgeFoodList(Pageable pageable, List<Long> foodIdxes) {
+        List<Recipe> fetch = jpaQueryFactory
+                .selectFrom(recipe)
+                .leftJoin(recipeFood)
+                .on(recipe.eq(recipeFood.recipe))
+                .where(recipeFood.recipe.eq(recipe)
+                        .and(recipeFood.isEnable.eq(true))
+                        .and(recipe.isEnable.eq(true))
                         .and(recipeFood.food.foodIdx.in(foodIdxes)))
                 .groupBy(recipeFood.recipe)
                 .fetch();
+
+
+        List<RecipeRes> collect = fetch.stream()
+                .filter(r -> getPercentageOfFood(r.getRecipeIdx(), foodIdxes) >= 50)
+                .sorted((a, b) -> getPercentageOfFood(b.getRecipeIdx(), foodIdxes) - getPercentageOfFood(a.getRecipeIdx(), foodIdxes))
+                .map(RecipeRes::toDto)
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()),  collect.size());
+        return new PageImpl<>(collect.subList(start, end), pageable, collect.size());
     }
 
 }
