@@ -27,7 +27,7 @@ public class RecipeDetailsRes {
     recipeDetailsRes.quantity = recipe.getQuantity();
     recipeDetailsRes.leadTime = recipe.getLeadTime();
     recipeDetailsRes.recipeFoods = recipeFoods.stream().map(m -> RecipeFoodRes.toDto(m.getFoodDetail())).collect(Collectors.toList());
-    recipeDetailsRes.cookery = cookery.stream().map(m -> CookeryRes.toDto(m.getDescription(), m.getCookeryImgKey())).collect(Collectors.toList());
+    recipeDetailsRes.cookery = cookery.stream().map(m -> CookeryRes.toDto(m.getDescription(), m.getCookeryImgKey(), m.getNextIdx())).collect(Collectors.toList());
     return recipeDetailsRes;
   }
 }

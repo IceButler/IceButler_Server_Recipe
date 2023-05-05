@@ -11,5 +11,7 @@ import java.util.List;
 public interface CookeryRepository extends JpaRepository<Cookery, Long> {
 
     void deleteByRecipe(Recipe recipe);
-    List<Cookery> findByRecipeAndIsEnable(Recipe recipe, Boolean status);
+
+    //    List<Cookery> findByRecipeAndIsEnable(Recipe recipe, Boolean status);
+    List<Cookery> findByRecipeAndIsEnableOrderByNextIdx(Recipe recipe, Boolean status);
 }
