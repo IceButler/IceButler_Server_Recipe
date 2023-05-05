@@ -11,6 +11,7 @@ import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
+import org.springframework.data.domain.Pageable;
 
 @RequestMapping("/multiRecipes")
 @RestController
@@ -25,14 +26,15 @@ public class MultiRecipeController {
     @GetMapping("/{multiFridgeIdx}")
     public ResponseCustom<?> getRecipeMainLists(@IsLogin LoginStatus loginStatus,
                                                 @PathVariable(name = "multiFridgeIdx") Long multiFridgeIdx,
-                                                @RequestParam(name = "category") String category){
+                                                @RequestParam(name = "category") String category,
+                                                Pageable pageable){
         ResponseCustom<RecipeFridgeFoodListsRes> lists = this.mainServerClient.getFridgeFoodLists(null, multiFridgeIdx, loginStatus.getUserIdx());
         if(lists.getData() == null) return lists;
 
         if(category.equals(Constant.RecipeConstant.FRIDGE_FOOD_RECIPE)){
             return ResponseCustom.OK(this.recipeService.getFridgeRecipeLists(loginStatus.getUserIdx(),lists.getData()));
         }else if(category.equals(Constant.RecipeConstant.POPULAR_FOOD)){
-            return ResponseCustom.OK(this.recipeService.getPopularRecipeListsForFridge(loginStatus.getUserIdx(),  lists.getData()));
+            return ResponseCustom.OK(this.recipeService.getPopularRecipeListsForFridge(loginStatus.getUserIdx(),  lists.getData(), pageable));
         }else{
             throw  new UserNotFoundException(); // todo : 에러 고치기 ;0;
         }

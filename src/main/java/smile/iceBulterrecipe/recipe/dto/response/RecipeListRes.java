@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class RecipeListRes {
+public class  RecipeListRes {
     List<RecipeRes> recipeMainResList;
 
     public static RecipeListRes toDto(List<RecipeRes> recipe) {
