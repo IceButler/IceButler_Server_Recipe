@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import smile.iceBulterrecipe.global.Constant;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.entity.QRecipe;
@@ -67,7 +68,7 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
 
 
         List<RecipeRes> collect = fetch.stream()
-                .filter(r -> getPercentageOfFood(r.getRecipeIdx(), foodIdxes) >= 50)
+                .filter(r -> getPercentageOfFood(r.getRecipeIdx(), foodIdxes) >=  Constant.RecipeConstant.GET_RECIPE_PERCENTAGE)
                 .sorted((a, b) -> getPercentageOfFood(b.getRecipeIdx(), foodIdxes) - getPercentageOfFood(a.getRecipeIdx(), foodIdxes))
                 .map(RecipeRes::toDto)
                 .collect(Collectors.toList());
