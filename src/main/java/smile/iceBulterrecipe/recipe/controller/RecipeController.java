@@ -92,6 +92,15 @@ public class RecipeController {
     public ResponseCustom<?> getMyRecipe(@IsLogin LoginStatus loginStatus) {
         return ResponseCustom.OK(this.recipeService.getMyRecipe(loginStatus.getUserIdx()));
     }
+
+    // 레시피 검색
+    @Auth
+    @GetMapping("/list")
+    public ResponseCustom<?> getSearchRecipeList(@IsLogin LoginStatus loginStatus,
+                                                 @RequestParam(value = "keyword") String keyword,
+                                                 Pageable pageable){
+        return ResponseCustom.OK(this.recipeService.getSearchRecipeList(loginStatus.getUserIdx(), keyword, pageable));
+    }
 }
 
 

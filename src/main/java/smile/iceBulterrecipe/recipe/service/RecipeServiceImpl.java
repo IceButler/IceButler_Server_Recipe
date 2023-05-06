@@ -31,9 +31,6 @@ import smile.iceBulterrecipe.user.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-
-import static smile.iceBulterrecipe.global.Constant.RecipeConstant.GET_RECIPE_PERCENTAGE;
 
 @RequiredArgsConstructor
 @Service
@@ -140,6 +137,16 @@ public class RecipeServiceImpl implements RecipeService{
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         List<Recipe> myRecipeList = this.recipeRepository.findByUserAndIsEnable(user, true);
         return MyRecipeListRes.toDto(myRecipeList);
+    }
+
+    @Override
+    public Page<RecipeRes> getSearchRecipeList(Long userIdx, String keyword, Pageable pageable) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        Page<Recipe> recipeLists = this.recipeRepository.findByRecipeNameContainingAndIsEnable(keyword, true, pageable);
+        Page<RecipeRes> recipeRes = this.recipeAssembler.toDtoList(recipeLists);
+        recipeRes.toList().forEach(r ->
+                r.setRecipeLikeStatus(this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true)));
+        return recipeRes;
     }
 
 }

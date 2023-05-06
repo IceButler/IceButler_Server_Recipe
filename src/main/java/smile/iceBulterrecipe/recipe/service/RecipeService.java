@@ -17,4 +17,6 @@ public interface RecipeService{
 
     void postRecipe(PostRecipeReq recipeReq, Long userIdx);
     MyRecipeListRes getMyRecipe(Long userIdx);
+
+    Page<RecipeRes> getSearchRecipeList(Long userIdx, String keyword, Pageable pageable);
 }

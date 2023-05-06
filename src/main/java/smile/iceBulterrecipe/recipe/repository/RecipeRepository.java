@@ -1,7 +1,10 @@
 package smile.iceBulterrecipe.recipe.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.user.entity.User;
 
@@ -15,4 +18,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     Optional<Recipe> findByRecipeIdxAndIsEnable(Long recipeIdx, boolean status);
 
     List<Recipe> findByUserAndIsEnable(User user, boolean status);
+
+    Page<Recipe> findByRecipeNameContainingAndIsEnable(String keyword, boolean status, Pageable pageable);
 }
