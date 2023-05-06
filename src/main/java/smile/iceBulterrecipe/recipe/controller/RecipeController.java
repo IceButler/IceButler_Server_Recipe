@@ -12,6 +12,7 @@ import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
 import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeDetailsRes;
+import smile.iceBulterrecipe.recipe.exception.RecipeListCategoryNotFoundException;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 
@@ -42,11 +43,11 @@ public class RecipeController {
         if(lists.getData() == null) return lists;
 
         if(category.equals(Constant.RecipeConstant.FRIDGE_FOOD_RECIPE)){
-            return ResponseCustom.OK(this.recipeService.getFridgeRecipeLists(loginStatus.getUserIdx(), lists.getData()));
+            return ResponseCustom.OK(this.recipeService.getFridgeRecipeLists(loginStatus.getUserIdx(), lists.getData(), pageable));
         }else if(category.equals(Constant.RecipeConstant.POPULAR_FOOD)){
             return ResponseCustom.OK(this.recipeService.getPopularRecipeListsForFridge(loginStatus.getUserIdx(),  lists.getData(), pageable));
         }else{
-            throw new UserNotFoundException(); // todo : 에러 고치기 ;0;
+            throw new RecipeListCategoryNotFoundException();
         }
     }
 

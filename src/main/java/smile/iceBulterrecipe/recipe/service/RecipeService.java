@@ -11,7 +11,7 @@ import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 
 public interface RecipeService{
     Page<RecipeRes> getPopularRecipeListsForFridge(Long userIdx, RecipeFridgeFoodListsRes listsRes, Pageable pageable);
-    RecipeListRes getFridgeRecipeLists(Long userIdx, RecipeFridgeFoodListsRes listsRes);
+    Page<RecipeRes> getFridgeRecipeLists(Long userIdx, RecipeFridgeFoodListsRes listsRes, Pageable pageable);
     RecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList);
     BookmarkRes bookmarkRecipe(Long recipeIdx, Long userIdx);
 
