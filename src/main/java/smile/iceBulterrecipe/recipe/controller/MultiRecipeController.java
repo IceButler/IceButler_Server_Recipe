@@ -9,6 +9,7 @@ import smile.iceBulterrecipe.global.resolver.Auth;
 import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
+import smile.iceBulterrecipe.recipe.exception.RecipeListCategoryNotFoundException;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +37,7 @@ public class MultiRecipeController {
         }else if(category.equals(Constant.RecipeConstant.POPULAR_FOOD)){
             return ResponseCustom.OK(this.recipeService.getPopularRecipeListsForFridge(loginStatus.getUserIdx(),  lists.getData(), pageable));
         }else{
-            throw  new UserNotFoundException(); // todo : 에러 고치기 ;0;
+            throw  new RecipeListCategoryNotFoundException();
         }
     }
     // 레시피 즐겨찾기 모음
