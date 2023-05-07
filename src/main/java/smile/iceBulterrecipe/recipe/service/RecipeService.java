@@ -18,6 +18,8 @@ public interface RecipeService{
     void postRecipe(PostRecipeReq recipeReq, Long userIdx);
     MyRecipeListRes getMyRecipe(Long userIdx);
 
-    Page<RecipeRes> getSearchRecipeList(Long userIdx, String keyword, Pageable pageable);
+    Page<RecipeRes> getSearchRecipeListForRecipe(Long userIdx, String keyword, Pageable pageable);
     void deleteMyRecipe(Long recipeIdx, Long userIdx);
+
+    Page<RecipeRes> getSearchRecipeListForFood(Long userIdx, String keyword, Pageable pageable);
 }
