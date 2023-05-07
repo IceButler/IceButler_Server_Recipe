@@ -49,6 +49,10 @@ dependencies {
 	//feignClient
 	implementation "org.springframework.cloud:spring-cloud-starter-openfeign:3.1.1"
 	compileOnly "org.springframework.cloud:spring-cloud-starter-openfeign:3.1.1"
+
+	// SQS
+	implementation "io.awspring.cloud:spring-cloud-starter-aws-messaging:2.3.0"
+	implementation "io.awspring.cloud:spring-cloud-aws-dependencies:2.3.0"
 }
 
 dependencyManagement {

@@ -34,6 +34,14 @@ aws:
     bucket: ice-bulter-iamge-bucket
     cookery: recipe-image/
     recipe: recipe-thumbnail/
+  sqs:
+    queue:
+      url: https://sqs.ap-northeast-2.amazonaws.com/637108728135/FoodData.fifo
+      name: FoodData.fifo
+    accesskey: AKIAZIVVDWFDXIOMYWYT
+    secretkey: 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
+    region:
+      static: ap-northeast-2
 
 server:
   main:
