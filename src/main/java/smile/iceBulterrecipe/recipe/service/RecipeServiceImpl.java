@@ -19,6 +19,7 @@ import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeFood;
 import smile.iceBulterrecipe.recipe.entity.RecipeLike;
+import smile.iceBulterrecipe.recipe.exception.InvalidRecipeUserException;
 import smile.iceBulterrecipe.recipe.exception.RecipeNotFoundException;
 import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeRepository;
@@ -31,9 +32,6 @@ import smile.iceBulterrecipe.user.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-
-import static smile.iceBulterrecipe.global.Constant.RecipeConstant.GET_RECIPE_PERCENTAGE;
 
 @RequiredArgsConstructor
 @Service
@@ -140,6 +138,15 @@ public class RecipeServiceImpl implements RecipeService{
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         List<Recipe> myRecipeList = this.recipeRepository.findByUserAndIsEnable(user, true);
         return MyRecipeListRes.toDto(myRecipeList);
+    }
+
+    // 마이 레시피 삭제
+    @Override
+    public void deleteMyRecipe(Long recipeIdx, Long userIdx) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
+        if(!recipe.getUser().equals(user)) throw new InvalidRecipeUserException();
+        this.recipeRepository.deleteById(recipe.getRecipeIdx());
     }
 
 }
