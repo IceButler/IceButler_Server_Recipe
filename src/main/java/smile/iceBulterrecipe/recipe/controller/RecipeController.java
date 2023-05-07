@@ -11,10 +11,10 @@ import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
 import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
+import smile.iceBulterrecipe.recipe.dto.response.MyRecipeListRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeDetailsRes;
 import smile.iceBulterrecipe.recipe.exception.RecipeListCategoryNotFoundException;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
-import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 
 import org.springframework.data.domain.Pageable;
 @RequestMapping("/recipes")
@@ -89,7 +89,7 @@ public class RecipeController {
     // 마이 레시피 조회
     @Auth
     @GetMapping("/myrecipe")
-    public ResponseCustom<?> getMyRecipe(@IsLogin LoginStatus loginStatus) {
+    public ResponseCustom<MyRecipeListRes> getMyRecipe(@IsLogin LoginStatus loginStatus) {
         return ResponseCustom.OK(this.recipeService.getMyRecipe(loginStatus.getUserIdx()));
     }
 
@@ -100,6 +100,15 @@ public class RecipeController {
                                                  @RequestParam(value = "keyword") String keyword,
                                                  Pageable pageable){
         return ResponseCustom.OK(this.recipeService.getSearchRecipeList(loginStatus.getUserIdx(), keyword, pageable));
+        }
+
+    // 마이 레시피 삭제
+    @Auth
+    @DeleteMapping("/{recipeIdx}/myrecipe")
+    public ResponseCustom<?> deleteMyRecipe(@PathVariable Long recipeIdx,
+                                            @IsLogin LoginStatus loginStatus) {
+        this.recipeService.deleteMyRecipe(recipeIdx, loginStatus.getUserIdx());
+        return ResponseCustom.OK();
     }
 }
 
