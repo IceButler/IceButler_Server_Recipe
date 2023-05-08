@@ -30,4 +30,7 @@ public class RecipeReport extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Reason reason;
+
+    @Column(length = 300)
+    private String memo;
 }
