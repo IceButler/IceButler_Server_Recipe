@@ -95,7 +95,7 @@ public class RecipeController {
 
     // 레시피 검색
     @Auth
-    @GetMapping("/list")
+    @GetMapping("/search")
     public ResponseCustom<?> getSearchRecipeList(@IsLogin LoginStatus loginStatus,
                                                  @RequestParam(value = "keyword") String keyword,
                                                  @RequestParam(name = "category") String category,
