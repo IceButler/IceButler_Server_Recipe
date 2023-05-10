@@ -93,6 +93,23 @@ public class RecipeController {
         return ResponseCustom.OK(this.recipeService.getMyRecipe(loginStatus.getUserIdx()));
     }
 
+    // 레시피 검색
+    @Auth
+    @GetMapping("/search")
+    public ResponseCustom<?> getSearchRecipeList(@IsLogin LoginStatus loginStatus,
+                                                 @RequestParam(value = "keyword") String keyword,
+                                                 @RequestParam(name = "category") String category,
+                                                 Pageable pageable){
+        if(category.equals(Constant.RecipeConstant.SEARCH_RECIPE)){
+            return ResponseCustom.OK(this.recipeService.getSearchRecipeListForRecipe(loginStatus.getUserIdx(), keyword, pageable));
+        }else if(category.equals(Constant.RecipeConstant.SEARCH_FOOD)){
+            return ResponseCustom.OK(this.recipeService.getSearchRecipeListForFood(loginStatus.getUserIdx(), keyword, pageable));
+        }else {
+            throw new RecipeListCategoryNotFoundException();
+        }
+
+        }
+
     // 마이 레시피 삭제
     @Auth
     @DeleteMapping("/{recipeIdx}/myrecipe")

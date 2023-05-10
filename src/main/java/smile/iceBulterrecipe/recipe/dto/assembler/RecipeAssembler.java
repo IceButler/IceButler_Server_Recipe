@@ -1,8 +1,11 @@
 package smile.iceBulterrecipe.recipe.dto.assembler;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import smile.iceBulterrecipe.global.utils.AwsS3ImageUrlUtils;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
+import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeCategory;
 import smile.iceBulterrecipe.user.entity.User;
@@ -21,5 +24,16 @@ public class RecipeAssembler {
                 .user(user)
                 .build();
 
+    }
+
+    public Page<RecipeRes> toDtoList(Page<Recipe> recipeLists) {
+        return recipeLists.map(r ->
+                RecipeRes.builder()
+                        .recipeIdx(r.getRecipeIdx())
+                        .recipeName(r.getRecipeName())
+                        .recipeImgUrl(AwsS3ImageUrlUtils.toUrl(r.getRecipeImgKey()))
+                        .recipeCategory(r.getRecipeCategory().getCategory())
+                        .percentageOfFood(null)
+                        .build());
     }
 }

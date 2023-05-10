@@ -1,7 +1,9 @@
 package smile.iceBulterrecipe.recipe.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import smile.iceBulterrecipe.global.utils.AwsS3ImageUrlUtils;
@@ -15,10 +17,8 @@ public class RecipeRes {
     private String recipeImgUrl;
     private String recipeName;
     private String recipeCategory;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer percentageOfFood;
-
-
-
     private Boolean recipeLikeStatus;
 
     public static RecipeRes toDto(Recipe recipe, Integer percentage, Boolean recipeLikeStatus) {
@@ -43,6 +43,7 @@ public class RecipeRes {
         );
     }
 
+    @Builder
     @QueryProjection
     public RecipeRes(Long recipeIdx, String recipeImgUrl, String recipeName, String recipeCategory, Integer percentageOfFood) {
         this.recipeIdx = recipeIdx;

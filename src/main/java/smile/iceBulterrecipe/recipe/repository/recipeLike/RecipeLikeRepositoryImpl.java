@@ -41,8 +41,6 @@ public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
                 .leftJoin(recipeLike)
                     .on(recipe.recipeIdx.eq(recipeLike.recipe.recipeIdx))
                 .where(recipe.isEnable.eq(true))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
                 .fetch();
 
         List<RecipeRes> collect = fetch.stream()
