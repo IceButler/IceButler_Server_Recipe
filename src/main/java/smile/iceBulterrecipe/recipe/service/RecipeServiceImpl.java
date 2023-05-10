@@ -9,6 +9,8 @@ import smile.iceBulterrecipe.food.dto.assembler.FoodAssembler;
 import smile.iceBulterrecipe.food.entity.Food;
 import smile.iceBulterrecipe.food.repository.FoodRepository;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
+import smile.iceBulterrecipe.global.sqs.AmazonSQSSender;
+import smile.iceBulterrecipe.global.sqs.FoodData;
 import smile.iceBulterrecipe.recipe.dto.assembler.CookeryAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeFoodAssembler;
@@ -49,6 +51,8 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeAssembler recipeAssembler;
     private final RecipeFoodAssembler recipeFoodAssembler;
     private final CookeryAssembler cookeryAssembler;
+
+    private final AmazonSQSSender amazonSQSSender;
 
     // 인기 레시피
     @Override
@@ -121,10 +125,14 @@ public class RecipeServiceImpl implements RecipeService{
     public void postRecipe(PostRecipeReq recipeReq, Long userIdx) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
 
-        // todo: 사용자의 음식이 없다면? 그럼 새로 만들어야 함 -> queue 로 진행할 것으로 예상이 됨 *^^* 아직 메인에는 저장 안되는 로직임.
         Recipe recipe = this.recipeRepository.save(this.recipeAssembler.toEntity(recipeReq, user));
         recipeReq.getFoodList().forEach(food -> {
-            Food foodEntity = this.foodRepository.findByFoodName(food.getFoodName()).orElseGet(() -> this.foodRepository.save(this.foodAssembler.toEntity(food)));
+            Food foodEntity = this.foodRepository.findByFoodName(food.getFoodName())
+                    .orElseGet(() -> {
+                        Food saveFood = this.foodRepository.save(this.foodAssembler.toEntity(food));
+                        amazonSQSSender.sendMessage(FoodData.toDto(saveFood));
+                        return saveFood;
+                    });
             this.recipeFoodRepository.save(this.recipeFoodAssembler.toEntity(food, foodEntity, recipe));
         });
         AtomicReference<Long> nextIdx = new AtomicReference<>(0L);
