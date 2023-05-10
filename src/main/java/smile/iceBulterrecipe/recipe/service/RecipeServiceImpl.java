@@ -31,6 +31,7 @@ import smile.iceBulterrecipe.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RequiredArgsConstructor
@@ -53,7 +54,7 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public Page<RecipeRes> getPopularRecipeListsForFridge(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
+        List<UUID> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
         Page<RecipeRes> recipeList = this.recipeLikeRepository.getPopularRecipe(pageable, foodIdxes);
 
         recipeList.toList()
@@ -68,7 +69,7 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public Page<RecipeRes> getFridgeRecipeLists(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
+        List<UUID> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
         Page<RecipeRes> recipeList = this.recipeFoodRepository.getRecipeByFridgeFoodList(pageable, foodIdxes);
         recipeList.toList()
                 .forEach(r -> {
@@ -82,7 +83,7 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public RecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        List<Long> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
+        List<UUID> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
         List<RecipeLike> bookmarkRecipeList = this.recipeLikeRepository.getBookmarkRecipe(user, true);
         return this.recipeFoodRepository.getBookmarkRecipes(bookmarkRecipeList, foodIdxes);
     }

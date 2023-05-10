@@ -10,6 +10,7 @@ import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeFoodReq;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -17,10 +18,10 @@ import java.util.stream.Collectors;
 public class FoodAssembler {
     public Food toEntity(FoodReq food){
         return Food.builder()
-                .foodIdx(food.getFoodIdx())
                 .foodName(food.getFoodName())
                 .foodImgKey(food.getFoodImgKey())
                 .foodCategory(FoodCategory.getFoodCategoryByName(food.getFoodName()))
+                .uuid(UUID.randomUUID())
                 .build();
     }
 
@@ -29,12 +30,13 @@ public class FoodAssembler {
                 .foodName(food.getFoodName())
                 .foodCategory(FoodCategory.PROCESSED_FOOD) // todo: 변경 필요, 일단 더미로 넣어둠
                 .foodImgKey("food/MEAT.png")
+                .uuid(UUID.randomUUID())
                 .build();
     }
 
-    public List<Long> toFoodIdxes(RecipeFridgeFoodListsRes fridgeFoodList) {
+    public List<UUID> toFoodIdxes(RecipeFridgeFoodListsRes fridgeFoodList) {
         return fridgeFoodList.getFoodList().stream()
-                .map(RecipeFridgeFoodListRes::getFoodIdx)
+                .map(RecipeFridgeFoodListRes::getUuid)
                 .collect(Collectors.toList());
     }
 }

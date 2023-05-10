@@ -7,8 +7,9 @@ import smile.iceBulterrecipe.recipe.entity.RecipeLike;
 import smile.iceBulterrecipe.user.entity.User;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface RecipeLikeCustom {
-    Page<RecipeRes> getPopularRecipe(Pageable pageable, List<Long> foodIdxes);
+    Page<RecipeRes> getPopularRecipe(Pageable pageable, List<UUID> foodIdxes);
     List<RecipeLike> getBookmarkRecipe(User user, boolean status);
 }

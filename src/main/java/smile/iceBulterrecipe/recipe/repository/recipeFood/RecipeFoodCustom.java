@@ -8,10 +8,11 @@ import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeLike;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface RecipeFoodCustom {
-    RecipeListRes getBookmarkRecipes(List<RecipeLike> bookmarkRecipeList, List<Long> foodIdxes);
-    Integer getPercentageOfFood(Long recipeIdx, List<Long> foodIdxes);
+    RecipeListRes getBookmarkRecipes(List<RecipeLike> bookmarkRecipeList, List<UUID> foodIdxes);
+    Integer getPercentageOfFood(Long recipeIdx, List<UUID> foodIdxes);
 
-    Page<RecipeRes> getRecipeByFridgeFoodList(Pageable pageable, List<Long> foodIdxes);
+    Page<RecipeRes> getRecipeByFridgeFoodList(Pageable pageable, List<UUID> foodIdxes);
 }
