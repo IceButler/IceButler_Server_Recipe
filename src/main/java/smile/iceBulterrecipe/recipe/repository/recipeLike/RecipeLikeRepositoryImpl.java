@@ -12,6 +12,7 @@ import smile.iceBulterrecipe.recipe.entity.RecipeLike;
 import smile.iceBulterrecipe.user.entity.User;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static smile.iceBulterrecipe.recipe.entity.QRecipe.recipe;
@@ -33,7 +34,7 @@ public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
 
     // 인기 레시피 불러오기
     @Override
-    public Page<RecipeRes> getPopularRecipe(Pageable pageable, List<Long> foodIdxes) {
+    public Page<RecipeRes> getPopularRecipe(Pageable pageable, List<UUID> foodIdxes) {
 
         List<Recipe> fetch = jpaQueryFactory
                 .selectFrom(recipe)
@@ -58,11 +59,11 @@ public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
 
     }
 
-    public Integer getPercentageOfFood(Long recipeIdx, List<Long> foodIdxes) {
+    public Integer getPercentageOfFood(Long recipeIdx, List<UUID> foodIdxes) {
         // 레시피 food 중 냉장고에 보유하고 있는 food 수
         long recipeFridgeFoodNum = jpaQueryFactory.selectFrom(recipeFood)
                 .where(recipeFood.recipe.recipeIdx.eq(recipeIdx)
-                        .and(recipeFood.food.foodIdx.in(foodIdxes)))
+                        .and(recipeFood.food.uuid.in(foodIdxes)))
                 .stream().count();
 
         // 레시피 총 food 수
