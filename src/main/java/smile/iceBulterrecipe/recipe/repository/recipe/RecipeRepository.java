@@ -16,7 +16,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeCus
 
     Optional<Recipe> findByRecipeIdxAndIsEnable(Long recipeIdx, boolean status);
 
-    List<Recipe> findByUserAndIsEnable(User user, boolean status);
+    Page<Recipe> findByUserAndIsEnable(User user, boolean status, Pageable pageable);
 
     Page<Recipe> findByRecipeNameContainingAndIsEnable(String keyword, boolean status, Pageable pageable);
 }

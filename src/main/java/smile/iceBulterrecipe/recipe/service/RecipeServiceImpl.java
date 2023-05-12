@@ -143,10 +143,10 @@ public class RecipeServiceImpl implements RecipeService{
 
     // 마이 레시피 조회
     @Override
-    public MyRecipeListRes getMyRecipe(Long userIdx) {
+    public Page<MyRecipeRes> getMyRecipe(Long userIdx, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        List<Recipe> myRecipeList = this.recipeRepository.findByUserAndIsEnable(user, true);
-        return MyRecipeListRes.toDto(myRecipeList);
+        Page<Recipe> myRecipeList = this.recipeRepository.findByUserAndIsEnable(user, true, pageable);
+        return this.recipeAssembler.toDtoMyRecipeList(myRecipeList);
     }
 
     // 레시피 검색(레시피)

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import smile.iceBulterrecipe.global.utils.AwsS3ImageUrlUtils;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
+import smile.iceBulterrecipe.recipe.dto.response.MyRecipeRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeCategory;
@@ -34,6 +35,16 @@ public class RecipeAssembler {
                         .recipeImgUrl(AwsS3ImageUrlUtils.toUrl(r.getRecipeImgKey()))
                         .recipeCategory(r.getRecipeCategory().getCategory())
                         .percentageOfFood(null)
+                        .build());
+    }
+
+    public Page<MyRecipeRes> toDtoMyRecipeList(Page<Recipe> myRecipeList) {
+        return myRecipeList.map(r ->
+                MyRecipeRes.builder()
+                        .recipeIdx(r.getRecipeIdx())
+                        .recipeImgUrl(AwsS3ImageUrlUtils.toUrl(r.getRecipeImgKey()))
+                        .recipeName(r.getRecipeName())
+                        .recipeCategory(r.getRecipeCategory().getCategory())
                         .build());
     }
 }
