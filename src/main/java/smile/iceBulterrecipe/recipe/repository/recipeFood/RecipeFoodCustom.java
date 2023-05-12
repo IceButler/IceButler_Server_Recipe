@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RecipeFoodCustom {
-    RecipeListRes getBookmarkRecipes(List<RecipeLike> bookmarkRecipeList, List<UUID> foodIdxes);
+    Page<RecipeRes> getBookmarkRecipes(List<RecipeLike> bookmarkRecipeList, List<UUID> foodIdxes, Pageable pageable);
     Integer getPercentageOfFood(Long recipeIdx, List<UUID> foodIdxes);
 
     Page<RecipeRes> getRecipeByFridgeFoodList(Pageable pageable, List<UUID> foodIdxes);

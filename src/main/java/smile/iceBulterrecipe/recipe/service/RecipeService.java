@@ -9,7 +9,7 @@ import smile.iceBulterrecipe.recipe.dto.response.*;
 public interface RecipeService{
     Page<RecipeRes> getPopularRecipeListsForFridge(Long userIdx, RecipeFridgeFoodListsRes listsRes, Pageable pageable);
     Page<RecipeRes> getFridgeRecipeLists(Long userIdx, RecipeFridgeFoodListsRes listsRes, Pageable pageable);
-    RecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList);
+    Page<RecipeRes> getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList, Pageable pageable);
     BookmarkRes bookmarkRecipe(Long recipeIdx, Long userIdx);
 
     void postRecipe(PostRecipeReq recipeReq, Long userIdx);
