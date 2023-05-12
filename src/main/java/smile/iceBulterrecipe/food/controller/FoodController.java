@@ -23,15 +23,15 @@ public class FoodController {
         return ResponseCustom.OK();
     }
 
-    @GetMapping("/hohotest")
-    public void hohotest() {
-        amazonSQSSender.sendMessage(
-                FoodData.builder()
-                        .foodIdx(2L)
-                        .foodName("zxc")
-                        .foodCategory("zxc")
-                        .foodImgKey("zxc")
-                        .build());
-    }
+//    @GetMapping("/hohotest")
+//    public void hohotest() {
+//        amazonSQSSender.sendMessage(
+//                FoodData.builder()
+//                        .foodIdx(2L)
+//                        .foodName("zxc")
+//                        .foodCategory("zxc")
+//                        .foodImgKey("zxc")
+//                        .build());
+//    }
 
 }
