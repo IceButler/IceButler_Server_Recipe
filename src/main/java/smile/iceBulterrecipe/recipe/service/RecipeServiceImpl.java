@@ -7,16 +7,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.food.dto.assembler.FoodAssembler;
 import smile.iceBulterrecipe.food.entity.Food;
+import smile.iceBulterrecipe.food.exception.ChatGPTErrorException;
 import smile.iceBulterrecipe.food.repository.FoodRepository;
+import smile.iceBulterrecipe.food.service.FoodServiceImpl;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.global.sqs.AmazonSQSSender;
-import smile.iceBulterrecipe.global.sqs.FoodData;
 import smile.iceBulterrecipe.recipe.dto.assembler.CookeryAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeFoodAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeLikeAssembler;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
-import smile.iceBulterrecipe.recipe.dto.response.*;
+import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
+import smile.iceBulterrecipe.recipe.dto.response.MyRecipeRes;
+import smile.iceBulterrecipe.recipe.dto.response.RecipeDetailsRes;
+import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeFood;
@@ -45,6 +49,7 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeFoodRepository recipeFoodRepository;
     private final CookeryRepository cookeryRepository;
     private final FoodRepository foodRepository;
+    private final FoodServiceImpl foodService;
 
     private final RecipeLikeAssembler recipeLikeAssembler;
     private final FoodAssembler foodAssembler;
@@ -129,9 +134,9 @@ public class RecipeServiceImpl implements RecipeService{
         recipeReq.getFoodList().forEach(food -> {
             Food foodEntity = this.foodRepository.findByFoodName(food.getFoodName())
                     .orElseGet(() -> {
-
-                        Food saveFood = this.foodRepository.save(this.foodAssembler.toEntity(food));
-                        amazonSQSSender.sendMessage(FoodData.toDto(saveFood));
+                        String foodCategory = getFoodCategoryGPT(food.getFoodName());
+                        Food saveFood = this.foodRepository.save(this.foodAssembler.toEntity(food, foodCategory));
+//                        amazonSQSSender.sendMessage(FoodData.toDto(saveFood));
                         return saveFood;
                     });
             this.recipeFoodRepository.save(this.recipeFoodAssembler.toEntity(food, foodEntity, recipe));
@@ -140,6 +145,16 @@ public class RecipeServiceImpl implements RecipeService{
         recipeReq.getCookeryList().forEach(cookery -> {
             this.cookeryRepository.save(this.cookeryAssembler.toEntity(cookery, recipe, nextIdx.getAndSet(nextIdx.get() + 1))) ;
         });
+    }
+
+    private String getFoodCategoryGPT(String foodName){
+        String foodCategory = null;
+        try {
+            foodCategory = this.foodService.callGPTCategory(foodName);
+        } catch (Exception e){
+            throw new ChatGPTErrorException();
+        }
+        return foodCategory;
     }
 
     // 마이 레시피 조회

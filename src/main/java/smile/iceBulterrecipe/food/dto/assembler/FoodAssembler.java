@@ -26,11 +26,12 @@ public class FoodAssembler {
                 .build();
     }
 
-    public Food toEntity(PostRecipeFoodReq food){
+    public Food toEntity(PostRecipeFoodReq food, String foodCategory){
+        FoodCategory category = FoodCategory.getFoodCategoryByName(foodCategory);
         return Food.builder()
                 .foodName(food.getFoodName())
-                .foodCategory(FoodCategory.PROCESSED_FOOD) // todo: 변경 필요, 일단 더미로 넣어둠
-                .foodImgKey("food/MEAT.png")
+                .foodCategory(category)
+                .foodImgKey(category.getImage())
                 .uuid(UUID.randomUUID())
                 .build();
     }
@@ -40,4 +41,5 @@ public class FoodAssembler {
                 .map(RecipeFridgeFoodListRes::getFoodIdx)
                 .collect(Collectors.toList());
     }
+
 }
