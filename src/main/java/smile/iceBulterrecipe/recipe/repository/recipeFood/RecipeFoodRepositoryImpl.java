@@ -24,10 +24,14 @@ public class RecipeFoodRepositoryImpl implements RecipeFoodCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public RecipeListRes getBookmarkRecipes(List<RecipeLike> bookmarkRecipeList, List<UUID> foodIdxes) {
-        return new RecipeListRes(bookmarkRecipeList.stream()
+    public Page<RecipeRes> getBookmarkRecipes(List<RecipeLike> bookmarkRecipeList, List<UUID> foodIdxes, Pageable pageable) {
+         List<RecipeRes> collect = bookmarkRecipeList.stream()
                 .map(recipe -> RecipeRes.toDto(recipe.getRecipe(), getPercentageOfFood(recipe.getRecipe().getRecipeIdx(), foodIdxes), recipe.getIsEnable()))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()),  collect.size());
+        return new PageImpl<>(collect.subList(start, end), pageable, collect.size());
     }
 
     // 레시피 내 보유한 음식 백분율 계산

@@ -56,11 +56,12 @@ public class RecipeController {
     @Auth
     @GetMapping("{fridgeIdx}/bookmark")
     public ResponseCustom<?> getBookmarkRecipes(@PathVariable Long fridgeIdx,
-                                                            @IsLogin LoginStatus loginStatus) {
+                                                @IsLogin LoginStatus loginStatus,
+                                                Pageable pageable) {
         Long userIdx = loginStatus.getUserIdx();
         ResponseCustom<RecipeFridgeFoodListsRes> fridgeFoodLists = mainServerClient.getFridgeFoodLists(fridgeIdx, null, userIdx);
         if(fridgeFoodLists.getData()==null) return fridgeFoodLists;
-        return ResponseCustom.OK(this.recipeService.getBookmarkRecipes(userIdx, fridgeFoodLists.getData()));
+        return ResponseCustom.OK(this.recipeService.getBookmarkRecipes(userIdx, fridgeFoodLists.getData(), pageable));
     }
 
     // 레시피 즐겨찾기

@@ -85,11 +85,11 @@ public class RecipeServiceImpl implements RecipeService{
 
     // 레시피 즐겨찾기 모음
     @Override
-    public RecipeListRes getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList) {
+    public Page<RecipeRes> getBookmarkRecipes(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         List<UUID> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
         List<RecipeLike> bookmarkRecipeList = this.recipeLikeRepository.getBookmarkRecipe(user, true);
-        return this.recipeFoodRepository.getBookmarkRecipes(bookmarkRecipeList, foodIdxes);
+        return this.recipeFoodRepository.getBookmarkRecipes(bookmarkRecipeList, foodIdxes, pageable);
     }
 
     // 레시피 즐겨찾기
