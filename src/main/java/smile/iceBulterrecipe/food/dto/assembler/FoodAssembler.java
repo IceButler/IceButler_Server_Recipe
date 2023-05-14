@@ -36,7 +36,7 @@ public class FoodAssembler {
 
     public List<UUID> toFoodIdxes(RecipeFridgeFoodListsRes fridgeFoodList) {
         return fridgeFoodList.getFoodList().stream()
-                .map(RecipeFridgeFoodListRes::getUuid)
+                .map(RecipeFridgeFoodListRes::getFoodIdx)
                 .collect(Collectors.toList());
     }
 }
