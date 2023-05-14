@@ -129,6 +129,7 @@ public class RecipeServiceImpl implements RecipeService{
         recipeReq.getFoodList().forEach(food -> {
             Food foodEntity = this.foodRepository.findByFoodName(food.getFoodName())
                     .orElseGet(() -> {
+
                         Food saveFood = this.foodRepository.save(this.foodAssembler.toEntity(food));
                         amazonSQSSender.sendMessage(FoodData.toDto(saveFood));
                         return saveFood;
