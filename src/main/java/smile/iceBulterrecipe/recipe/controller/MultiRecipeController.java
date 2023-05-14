@@ -3,6 +3,7 @@ package smile.iceBulterrecipe.recipe.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import smile.iceBulterrecipe.global.Constant;
+import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListRes;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.global.feign.feignClient.MainServerClient;
 import smile.iceBulterrecipe.global.resolver.Auth;
@@ -31,7 +32,6 @@ public class MultiRecipeController {
                                                 Pageable pageable){
         ResponseCustom<RecipeFridgeFoodListsRes> lists = this.mainServerClient.getFridgeFoodLists(null, multiFridgeIdx, loginStatus.getUserIdx());
         if(lists.getData() == null) return lists;
-
         if(category.equals(Constant.RecipeConstant.FRIDGE_FOOD_RECIPE)){
             return ResponseCustom.OK(this.recipeService.getFridgeRecipeLists(loginStatus.getUserIdx(),lists.getData(), pageable));
         }else if(category.equals(Constant.RecipeConstant.POPULAR_FOOD)){
