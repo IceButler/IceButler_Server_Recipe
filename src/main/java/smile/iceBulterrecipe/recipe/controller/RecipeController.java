@@ -10,6 +10,7 @@ import smile.iceBulterrecipe.global.resolver.Auth;
 import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
+import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReportReq;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
 import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
 import smile.iceBulterrecipe.recipe.dto.response.MyRecipeRes;
@@ -119,6 +120,16 @@ public class RecipeController {
     public ResponseCustom<?> deleteMyRecipe(@PathVariable Long recipeIdx,
                                             @IsLogin LoginStatus loginStatus) {
         this.recipeService.deleteMyRecipe(recipeIdx, loginStatus.getUserIdx());
+        return ResponseCustom.OK();
+    }
+
+    // 레시피 신고
+    @Auth
+    @PostMapping("/{recipeIdx}/report")
+    public ResponseCustom<?> reportRecipe(@PathVariable Long recipeIdx,
+                                          @IsLogin LoginStatus loginStatus,
+                                          @RequestBody PostRecipeReportReq reportReq) {
+        this.recipeService.reportRecipe(recipeIdx, loginStatus.getUserIdx(), reportReq.getReason());
         return ResponseCustom.OK();
     }
 }

@@ -19,4 +19,6 @@ public interface RecipeService{
     void deleteMyRecipe(Long recipeIdx, Long userIdx);
 
     Page<RecipeRes> getSearchRecipeListForFood(Long userIdx, String keyword, Pageable pageable);
+
+    void reportRecipe(Long recipeIdx, Long userIdx, String reason);
 }

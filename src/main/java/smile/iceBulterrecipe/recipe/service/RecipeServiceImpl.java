@@ -12,6 +12,7 @@ import smile.iceBulterrecipe.food.repository.FoodRepository;
 import smile.iceBulterrecipe.food.service.FoodServiceImpl;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.global.sqs.AmazonSQSSender;
+import smile.iceBulterrecipe.recipe.Reason;
 import smile.iceBulterrecipe.recipe.dto.assembler.CookeryAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeFoodAssembler;
@@ -21,13 +22,11 @@ import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
 import smile.iceBulterrecipe.recipe.dto.response.MyRecipeRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeDetailsRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
-import smile.iceBulterrecipe.recipe.entity.Cookery;
-import smile.iceBulterrecipe.recipe.entity.Recipe;
-import smile.iceBulterrecipe.recipe.entity.RecipeFood;
-import smile.iceBulterrecipe.recipe.entity.RecipeLike;
+import smile.iceBulterrecipe.recipe.entity.*;
 import smile.iceBulterrecipe.recipe.exception.InvalidRecipeUserException;
 import smile.iceBulterrecipe.recipe.exception.RecipeNotFoundException;
 import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
+import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
 import smile.iceBulterrecipe.recipe.repository.recipe.RecipeRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeFood.RecipeFoodRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeLike.RecipeLikeRepository;
@@ -56,6 +55,7 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeAssembler recipeAssembler;
     private final RecipeFoodAssembler recipeFoodAssembler;
     private final CookeryAssembler cookeryAssembler;
+    private final RecipeReportRepository recipeReportRepository;
 
     private final AmazonSQSSender amazonSQSSender;
 
@@ -185,6 +185,16 @@ public class RecipeServiceImpl implements RecipeService{
     public Page<RecipeRes> getSearchRecipeListForFood(Long userIdx, String keyword, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         return getSearchRecipeMethods(user, this.recipeRepository.findByFoodNameContainingAndIsEnableHavingRecipe(keyword, pageable));
+    }
+
+    // recipe report
+    @Override
+    public void reportRecipe(Long recipeIdx, Long userIdx, String reason) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        Reason recipeReason = Reason.getFoodCategoryByName(reason);
+        Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
+
+        this.recipeReportRepository.save(this.recipeAssembler.toReportEntity(recipe, user, recipeReason));
     }
 
     // 마이 레시피 삭제
