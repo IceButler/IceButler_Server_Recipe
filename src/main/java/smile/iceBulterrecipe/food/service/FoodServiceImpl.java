@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Service
 @RequiredArgsConstructor
@@ -31,11 +33,12 @@ public class FoodServiceImpl implements FoodService{
     }
 
     public String callGPTCategory(String word) throws IOException, ParseException {
-        URL categoryGPTUrl = new URL("https://za8hqdiis4.execute-api.ap-northeast-2.amazonaws.com/dev/chatgpt-category?keyword="+word);
+        String encWord = URLEncoder.encode(word, StandardCharsets.UTF_8);
+        URL categoryGPTUrl = new URL("https://za8hqdiis4.execute-api.ap-northeast-2.amazonaws.com/dev/chatgpt-category?keyword="+encWord);
         StringBuilder sb = callAPI(categoryGPTUrl);
 
         JSONParser parser = new JSONParser();
-        JSONObject result = (JSONObject)parser.parse(sb.toString());
+        JSONObject result = (JSONObject) parser.parse(sb.toString());
         JSONArray arr = (JSONArray)result.get("categories");
         if(arr != null){
             return (String) arr.get(0);
