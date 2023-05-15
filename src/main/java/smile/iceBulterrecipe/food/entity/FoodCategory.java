@@ -5,6 +5,9 @@ import smile.iceBulterrecipe.food.exception.FoodCategoryNotFoundException;
 
 import java.util.Arrays;
 
+import static smile.iceBulterrecipe.global.Constant.Food.ICON_EXTENSION;
+import static smile.iceBulterrecipe.global.Constant.Food.IMG_FOLDER;
+
 @Getter
 public enum FoodCategory {
     MEAT("육류"),
@@ -29,4 +32,8 @@ public enum FoodCategory {
                 .filter(r -> r.getCategory().equals(name))
                 .findAny().orElseThrow(FoodCategoryNotFoundException::new);
     }
+    public String getImage() {
+        return IMG_FOLDER + this.name() + ICON_EXTENSION;
+    }
+
 }

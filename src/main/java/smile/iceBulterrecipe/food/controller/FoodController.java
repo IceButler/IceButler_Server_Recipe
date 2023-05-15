@@ -1,6 +1,7 @@
 package smile.iceBulterrecipe.food.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 import smile.iceBulterrecipe.food.dto.request.FoodReq;
 import smile.iceBulterrecipe.food.service.FoodService;
@@ -8,6 +9,8 @@ import smile.iceBulterrecipe.food.service.FoodServiceImpl;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.global.sqs.AmazonSQSSender;
 import smile.iceBulterrecipe.global.sqs.FoodData;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping(value = "/foods")
@@ -18,7 +21,7 @@ public class FoodController {
     private final AmazonSQSSender amazonSQSSender;
 
     @GetMapping("")
-    public ResponseCustom<?> addFood(@RequestBody FoodReq foodReq){
+    public ResponseCustom<?> addFood(@RequestBody FoodReq foodReq) {
         this.foodService.addFood(foodReq);
         return ResponseCustom.OK();
     }
