@@ -22,6 +22,7 @@ public class AwsS3ImageUrlUtils {
     }
 
     public static String toUrl(String imageKey) {
+        if(imageKey == null) return null;
         return "https://"+bucket+".s3."+region+".amazonaws.com/"+imageKey;
     }
 }
