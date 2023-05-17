@@ -3,6 +3,7 @@ package smile.iceBulterrecipe.recipe.dto.response;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import smile.iceBulterrecipe.global.utils.AwsS3ImageUrlUtils;
 
 @Data
 @RequiredArgsConstructor
@@ -18,10 +19,10 @@ public class CookeryRes {
     this.nextIdx = nextIdx;
   }
 
-  public static CookeryRes toDto(String description, String cookeryImgUrl, Long nextIdx) {
+  public static CookeryRes toDto(String description, String cookeryImgKey, Long nextIdx) {
     return CookeryRes.builder()
             .description(description)
-            .cookeryImgUrl(cookeryImgUrl)
+            .cookeryImgUrl(AwsS3ImageUrlUtils.toUrl(cookeryImgKey))
             .nextIdx(nextIdx)
             .build();
   }
