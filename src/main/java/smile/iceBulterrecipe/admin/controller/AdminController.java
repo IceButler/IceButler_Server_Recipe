@@ -3,6 +3,7 @@ package smile.iceBulterrecipe.admin.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import smile.iceBulterrecipe.admin.dto.AdminReq;
 import smile.iceBulterrecipe.admin.dto.PostReportRes;
 import smile.iceBulterrecipe.admin.service.AdminServiceImpl;
 import smile.iceBulterrecipe.global.resolver.Auth;
@@ -19,6 +20,14 @@ import org.springframework.data.domain.Pageable;
 public class AdminController {
 
     private final AdminServiceImpl adminService;
+
+
+    @PostMapping
+    public ResponseCustom<Void> addAdmin(@RequestBody AdminReq request)
+    {
+        adminService.addAdmin(request);
+        return ResponseCustom.OK();
+    }
 
     //신고 완료 처리
     @Auth

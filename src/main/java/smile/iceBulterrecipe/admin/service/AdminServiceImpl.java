@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import smile.iceBulterrecipe.admin.dto.AdminReq;
 import smile.iceBulterrecipe.admin.dto.PostReportRes;
 import smile.iceBulterrecipe.recipe.Reason;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
@@ -28,6 +29,11 @@ public class AdminServiceImpl implements AdminService{
     private final RecipeRepository recipeRepository;
     private final RecipeReportRepository recipeReportRepository;
     private final RecipeAssembler recipeAssembler;
+
+    @Override
+    public void addAdmin(AdminReq request) {
+        // admin 추가
+    }
 
     //신고 처리 완료
     @Override
