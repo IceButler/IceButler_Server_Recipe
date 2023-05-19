@@ -64,7 +64,7 @@ public class RecipeServiceImpl implements RecipeService{
     public Page<RecipeRes> getPopularRecipeListsForFridge(Long userIdx, RecipeFridgeFoodListsRes fridgeFoodList, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         List<UUID> foodIdxes = this.foodAssembler.toFoodIdxes(fridgeFoodList);
-        Page<RecipeRes> recipeList = this.recipeLikeRepository.getPopularRecipe(pageable, foodIdxes);
+        Page<RecipeRes> recipeList = this.recipeLikeRepository.getPopularRecipe(pageable);
 
         recipeList.toList()
                 .forEach(r -> {
