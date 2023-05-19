@@ -3,6 +3,7 @@ package smile.iceBulterrecipe.recipe.dto.assembler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import smile.iceBulterrecipe.admin.dto.PostReportRes;
 import smile.iceBulterrecipe.global.utils.AwsS3ImageUrlUtils;
 import smile.iceBulterrecipe.recipe.Reason;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
@@ -56,5 +57,17 @@ public class RecipeAssembler {
                 .recipe(recipe)
                 .reason(recipeReason)
                 .build();
+    }
+
+    public Page<PostReportRes> toAdminReportEntity(Page<RecipeReport> recipeReports){
+        return recipeReports.map(r ->
+                        PostReportRes.builder()
+                                .recipeIdx(r.getRecipeReportIdx())
+                                .recipeName(r.getRecipe().getRecipeName())
+                                .author(r.getRecipe().getUser().getNickname())
+                                .reason(r.getReason())
+                                .reporter(r.getUser().getNickname())
+                                .reportDate(r.getCreatedAt())
+                                .build());
     }
 }
