@@ -29,13 +29,20 @@ public class AdminController {
         return ResponseCustom.OK();
     }
 
-    //신고 완료 처리
-    @Auth
-    @PostMapping("/{recipeIdx}/report")
-    public ResponseCustom<Page<PostReportRes>> adminReportRecipe(@PathVariable Long recipeIdx,
-                                                                 @IsLogin LoginStatus loginStatus,
-                                                                 @RequestBody PostRecipeReportReq reportReq,
-                                                                 Pageable pageable) {
-     return ResponseCustom.OK(this.adminService.adminReportRecipe(recipeIdx, loginStatus.getUserIdx(), reportReq.getReason(),pageable));
+
+//    @Auth
+//    @PostMapping("/{recipeIdx}/report")
+//    public ResponseCustom<Page<PostReportRes>> adminReportRecipe(@PathVariable Long recipeIdx,
+//                                                                 @IsLogin LoginStatus loginStatus,
+//                                                                 @RequestBody PostRecipeReportReq reportReq,
+//                                                                 Pageable pageable) {
+//     return ResponseCustom.OK(this.adminService.adminReportRecipe(recipeIdx, loginStatus.getUserIdx(), reportReq.getReason(),pageable));
+//    }
+
+    //레시피 신고완료
+    @PostMapping("/{recipeReportIdx}/report")
+    public ResponseCustom<?> adminReportRecipe(@PathVariable Long recipeReportIdx) {
+        this.adminService.adminReportRecipe(recipeReportIdx);
+        return ResponseCustom.OK();
     }
 }

@@ -41,4 +41,9 @@ public class RecipeReport extends BaseEntity {
         this.recipe = recipe;
         this.reason = reason;
     }
+
+
+    public void adminReportRecipe() {
+        this.setIsEnable(false);
+    }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.admin.dto.AdminReq;
 import smile.iceBulterrecipe.admin.dto.PostReportRes;
 import smile.iceBulterrecipe.recipe.Reason;
@@ -35,16 +36,25 @@ public class AdminServiceImpl implements AdminService{
         // admin 추가
     }
 
-    //신고 처리 완료
     @Override
-    public Page<PostReportRes> adminReportRecipe(Long recipeIdx, Long userIdx, String reason, Pageable pageable) {
-        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        Reason recipeReason = Reason.getFoodCategoryByName(reason);
-        Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
-        this.recipeReportRepository.save(this.recipeAssembler.toReportEntity(recipe, user, recipeReason));
-        Page<RecipeReport> recipeReports = this.recipeReportRepository.findByRecipeAndUserAndReason(recipe, user, recipeReason,pageable);
-
-        return this.recipeAssembler.toAdminReportEntity(recipeReports);
+    @Transactional
+    public void adminReportRecipe(Long recipeReportIdx) {
+        RecipeReport recipeReport=recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(UserNotFoundException::new);
+        recipeReport.adminReportRecipe();
     }
+
+//    @Override
+//    public Page<PostReportRes> adminReportRecipe(Long recipeIdx, Long userIdx, String reason, Pageable pageable) {
+//        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+//        Reason recipeReason = Reason.getFoodCategoryByName(reason);
+//        Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
+//        this.recipeReportRepository.save(this.recipeAssembler.toReportEntity(recipe, user, recipeReason));
+//        Page<RecipeReport> recipeReports = this.recipeReportRepository.findByRecipeAndUserAndReason(recipe, user, recipeReason,pageable);
+//
+//        return this.recipeAssembler.toAdminReportEntity(recipeReports);
+//    }
+
+    //신고 처리 완료
+
 
 }

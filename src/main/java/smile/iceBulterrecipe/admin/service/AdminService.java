@@ -8,5 +8,6 @@ import smile.iceBulterrecipe.admin.dto.PostReportRes;
 public interface AdminService {
     void addAdmin(AdminReq request);
 
-    Page<PostReportRes> adminReportRecipe(Long recipeIdx, Long userIdx, String reason, Pageable pageable);
+//    Page<PostReportRes> adminReportRecipe(Long recipeIdx, Long userIdx, String reason, Pageable pageable);
+    void adminReportRecipe(Long recipeReportIdx);
 }
