@@ -1,4 +1,4 @@
-package smile.iceBulterrecipe.admin.dto;
+package smile.iceBulterrecipe.admin.dto.response;
 
 import lombok.*;
 import smile.iceBulterrecipe.recipe.Reason;

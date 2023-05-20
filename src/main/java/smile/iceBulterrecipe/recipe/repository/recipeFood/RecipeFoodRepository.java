@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeFood;
+import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface RecipeFoodRepository extends JpaRepository<RecipeFood, Long>, R
     void deleteByRecipe(Recipe recipe);
 
     List<RecipeFood> findByRecipeAndIsEnable(Recipe recipe, Boolean status);
+
 }

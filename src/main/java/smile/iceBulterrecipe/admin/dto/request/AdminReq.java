@@ -1,4 +1,4 @@
-package smile.iceBulterrecipe.admin.dto;
+package smile.iceBulterrecipe.admin.dto.request;
 
 
 import lombok.Builder;

@@ -19,5 +19,9 @@ public interface RecipeReportRepository extends JpaRepository<RecipeReport, Long
     void deleteByUser(User user);
 
 //    Page<RecipeReport> findByRecipeAndUserAndReason(Recipe recipe, User user, Reason reason,Pageable pageable);
+    Optional<RecipeReport> findByRecipeReportIdx(Long recipeReportIdx);
+
     Optional<RecipeReport> findByRecipeReportIdxAndIsEnable(Long recipeReportIdx,Boolean isEnable);
+
+
 }
