@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.admin.dto.AdminReq;
 import smile.iceBulterrecipe.admin.dto.PostReportRes;
+import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
 import smile.iceBulterrecipe.recipe.Reason;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
@@ -39,7 +40,7 @@ public class AdminServiceImpl implements AdminService{
     @Override
     @Transactional
     public void adminReportRecipe(Long recipeReportIdx) {
-        RecipeReport recipeReport=recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(UserNotFoundException::new);
+        RecipeReport recipeReport=recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
         recipeReport.adminReportRecipe();
     }
 
