@@ -5,10 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
+
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -30,4 +33,6 @@ public class AdminAssembler {
         if(reportMemoModifyReq.getMemo()!=null)recipeReport.toUpdateReportMemo(reportMemoModifyReq.getMemo());
 return recipeReport;
     }
+
+
 }

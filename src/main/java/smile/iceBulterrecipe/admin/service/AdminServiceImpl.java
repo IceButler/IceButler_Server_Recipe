@@ -17,6 +17,10 @@ import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeFood.RecipeFoodRepository;
+import smile.iceBulterrecipe.user.entity.User;
+import smile.iceBulterrecipe.user.exception.UserNickNameNotFoundException;
+import smile.iceBulterrecipe.user.exception.UserNotFoundException;
+import smile.iceBulterrecipe.user.repository.UserRepository;
 
 import java.util.List;
 
@@ -27,6 +31,7 @@ public class AdminServiceImpl implements AdminService{
     private final RecipeReportRepository recipeReportRepository;
     private final RecipeFoodRepository recipeFoodRepository;
     private final CookeryRepository cookeryRepository;
+    private final UserRepository userRepository;
 
 
     @Override
@@ -66,6 +71,16 @@ public class AdminServiceImpl implements AdminService{
     public void modifyRecipeReport(Long recipeReportIdx, ReportMemoModifyReq reportMemoModifyReq) {
         RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
         recipeReportRepository.save(adminAssembler.toUpdateReportInfo(recipeReport,reportMemoModifyReq));
+
+    }
+
+    //회원별 레시피 신고내역 조회
+    @Override
+    public Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable ) {
+        User user = this.userRepository.findByNickname(nickname).orElseThrow(UserNickNameNotFoundException::new);
+        Page<RecipeReport> recipeReports = this.recipeReportRepository.findByUserAndIsEnable(user, true, pageable);
+
+        return this.adminAssembler.toAdminReportEntity(recipeReports);
 
     }
 }
