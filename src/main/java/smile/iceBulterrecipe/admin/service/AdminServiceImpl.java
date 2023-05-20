@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.admin.dto.AdminReq;
 import smile.iceBulterrecipe.admin.dto.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.dto.assembler.AdminAssembler;
+import smile.iceBulterrecipe.admin.entity.Admin;
 import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
+import smile.iceBulterrecipe.admin.repository.AdminRepository;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
 
@@ -17,11 +19,14 @@ import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
 public class AdminServiceImpl implements AdminService{
     private final AdminAssembler adminAssembler;
     private final RecipeReportRepository recipeReportRepository;
+    private final AdminRepository adminRepository;
 
 
+    @Transactional
     @Override
     public void addAdmin(AdminReq request) {
-        // admin 추가
+        Admin admin = new Admin(request.getAdminIdx(), request.getEmail());
+        adminRepository.save(admin);
     }
 
     //신고 완료 처리

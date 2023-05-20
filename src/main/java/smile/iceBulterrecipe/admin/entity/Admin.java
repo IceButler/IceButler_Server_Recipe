@@ -14,20 +14,18 @@ import javax.persistence.*;
 @EntityListeners(UserEntityListener.class)
 public class Admin extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long adminIdx;
     @Column(nullable = false)
     private String email;
-    private String password;
     private Boolean loginStatus;
 
     public void login() {
         this.loginStatus = true;
     }
 
-    public Admin(String email, String password) {
+    public Admin(Long adminIdx, String email) {
+        this.adminIdx = adminIdx;
         this.email = email;
-        this.password = password;
     }
 }
