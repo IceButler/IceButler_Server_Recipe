@@ -1,4 +1,7 @@
 package smile.iceBulterrecipe.admin.repository;
 
-public interface AdminRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import smile.iceBulterrecipe.admin.entity.Admin;
+
+public interface AdminRepository extends JpaRepository<Admin, Long> {
 }
