@@ -3,7 +3,6 @@ package smile.iceBulterrecipe.recipe.dto.assembler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-import smile.iceBulterrecipe.admin.dto.PostReportRes;
 import smile.iceBulterrecipe.global.utils.AwsS3ImageUrlUtils;
 import smile.iceBulterrecipe.recipe.Reason;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;

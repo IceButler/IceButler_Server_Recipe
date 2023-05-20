@@ -2,16 +2,14 @@ package smile.iceBulterrecipe.admin.dto;
 
 import lombok.*;
 import smile.iceBulterrecipe.recipe.Reason;
-import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
-import smile.iceBulterrecipe.user.entity.User;
 
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
 @Builder
-public class PostReportRes {
+public class GetRecipeReportRes {
     private Long recipeReportIdx;
     private String recipeName;
     private String author;
@@ -19,8 +17,8 @@ public class PostReportRes {
     private String reporter;
     private LocalDateTime reportDate;
 
-    public static PostReportRes toDto(int rowNumber,RecipeReport recipeReport){
-        return new PostReportRes(
+    public static GetRecipeReportRes toDto(int rowNumber, RecipeReport recipeReport){
+        return new GetRecipeReportRes(
                 (long) rowNumber,
                 recipeReport.getRecipe().getRecipeName(),
                 recipeReport.getRecipe().getUser().getNickname(),
