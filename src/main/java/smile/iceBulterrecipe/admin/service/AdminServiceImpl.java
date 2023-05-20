@@ -10,9 +10,12 @@ import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.dto.assembler.AdminAssembler;
+import smile.iceBulterrecipe.admin.entity.Admin;
 import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
 import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.RecipeFood;
+
+import smile.iceBulterrecipe.admin.repository.AdminRepository;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
@@ -27,11 +30,14 @@ public class AdminServiceImpl implements AdminService{
     private final RecipeReportRepository recipeReportRepository;
     private final RecipeFoodRepository recipeFoodRepository;
     private final CookeryRepository cookeryRepository;
+    private final AdminRepository adminRepository;
 
 
+    @Transactional
     @Override
     public void addAdmin(AdminReq request) {
-        // admin 추가
+        Admin admin = new Admin(request.getAdminIdx(), request.getEmail());
+        adminRepository.save(admin);
     }
 
     //신고 완료 처리
