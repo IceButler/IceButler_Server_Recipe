@@ -5,18 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import smile.iceBulterrecipe.global.Constant;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeRes;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeLike;
 import smile.iceBulterrecipe.user.entity.User;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static smile.iceBulterrecipe.recipe.entity.QRecipe.recipe;
-import static smile.iceBulterrecipe.recipe.entity.QRecipeFood.recipeFood;
 import static smile.iceBulterrecipe.recipe.entity.QRecipeLike.recipeLike;
 
 @RequiredArgsConstructor
@@ -34,7 +31,7 @@ public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
 
     // 인기 레시피 불러오기
     @Override
-    public Page<RecipeRes> getPopularRecipe(Pageable pageable, List<UUID> foodIdxes) {
+    public Page<RecipeRes> getPopularRecipe(Pageable pageable) {
 
         List<Recipe> fetch = jpaQueryFactory
                 .selectFrom(recipe)
@@ -45,7 +42,6 @@ public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
                 .fetch();
 
         List<RecipeRes> collect = fetch.stream()
-                .filter(r -> getPercentageOfFood(r.getRecipeIdx(), foodIdxes) >= Constant.RecipeConstant.GET_RECIPE_PERCENTAGE)
                 .sorted((a, b) -> b.getRecipeLikes().size() - a.getRecipeLikes().size())
                 .map(RecipeRes::toDto)
                 .collect(Collectors.toList());
@@ -55,24 +51,6 @@ public class RecipeLikeRepositoryImpl implements RecipeLikeCustom{
 //        return PageableExecutionUtils.getPage
         return new PageImpl<>(collect.subList(start, end), pageable, collect.size());
 
-    }
-
-    public Integer getPercentageOfFood(Long recipeIdx, List<UUID> foodIdxes) {
-        // 레시피 food 중 냉장고에 보유하고 있는 food 수
-        long recipeFridgeFoodNum = jpaQueryFactory.selectFrom(recipeFood)
-                .where(recipeFood.recipe.recipeIdx.eq(recipeIdx)
-                        .and(recipeFood.food.uuid.in(foodIdxes)))
-                .stream().count();
-
-        // 레시피 총 food 수
-        long recipeFoodNum = jpaQueryFactory.selectFrom(recipeFood)
-                .where(recipeFood.recipe.recipeIdx.eq(recipeIdx))
-                .stream().count();
-
-        // 나누는 수가 0이면 오류로 0 반환
-        if(recipeFoodNum==0) return 0;
-        double percentageOfFood = recipeFridgeFoodNum / (double) recipeFoodNum * 100;
-        return (int)Math.round(percentageOfFood);
     }
 
 
