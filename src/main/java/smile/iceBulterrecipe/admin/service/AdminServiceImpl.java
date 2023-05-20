@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.admin.dto.request.AdminReq;
+import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.dto.assembler.AdminAssembler;
@@ -48,6 +49,7 @@ public class AdminServiceImpl implements AdminService{
         return this.adminAssembler.toAdminReportEntity(recipeReports);
     }
 
+    //신고 상세내역 조회
     @Override
     public GetRecipeReportDetailsRes getRecipeDetails(Long recipeReportIdx) {
         RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
@@ -55,6 +57,15 @@ public class AdminServiceImpl implements AdminService{
         List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnableOrderByNextIdx(recipeReport.getRecipe(),true);
 
         return GetRecipeReportDetailsRes.toDto(recipeReport,recipeFoods,cookery);
+
+    }
+
+    //신고 메모 수정
+    @Override
+    @Transactional
+    public void modifyRecipeReport(Long recipeReportIdx, ReportMemoModifyReq reportMemoModifyReq) {
+        RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
+        recipeReportRepository.save(adminAssembler.toUpdateReportInfo(recipeReport,reportMemoModifyReq));
 
     }
 }

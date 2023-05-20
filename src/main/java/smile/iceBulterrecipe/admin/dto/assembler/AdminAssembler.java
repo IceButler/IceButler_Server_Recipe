@@ -3,7 +3,9 @@ package smile.iceBulterrecipe.admin.dto.assembler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
+import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,5 +24,10 @@ public class AdminAssembler {
                         .reporter(r.getUser().getNickname())
                         .reportDate(r.getCreatedAt())
                         .build());
+    }
+
+    public RecipeReport toUpdateReportInfo(RecipeReport recipeReport, ReportMemoModifyReq reportMemoModifyReq){
+        if(reportMemoModifyReq.getMemo()!=null)recipeReport.toUpdateReportMemo(reportMemoModifyReq.getMemo());
+return recipeReport;
     }
 }
