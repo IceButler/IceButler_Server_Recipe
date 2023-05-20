@@ -59,15 +59,5 @@ public class RecipeAssembler {
                 .build();
     }
 
-    public Page<PostReportRes> toAdminReportEntity(Page<RecipeReport> recipeReports){
-        return recipeReports.map(r ->
-                        PostReportRes.builder()
-                                .recipeIdx(r.getRecipeReportIdx())
-                                .recipeName(r.getRecipe().getRecipeName())
-                                .author(r.getRecipe().getUser().getNickname())
-                                .reason(r.getReason())
-                                .reporter(r.getUser().getNickname())
-                                .reportDate(r.getCreatedAt())
-                                .build());
-    }
+
 }

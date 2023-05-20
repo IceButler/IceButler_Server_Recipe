@@ -12,16 +12,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class PostReportRes {
-    private Long recipeIdx;
+    private Long recipeReportIdx;
     private String recipeName;
     private String author;
     private Reason reason;
     private String reporter;
     private LocalDateTime reportDate;
 
-    public static PostReportRes toDto(RecipeReport recipeReport){
+    public static PostReportRes toDto(int rowNumber,RecipeReport recipeReport){
         return new PostReportRes(
-            recipeReport.getRecipeReportIdx(),
+                (long) rowNumber,
                 recipeReport.getRecipe().getRecipeName(),
                 recipeReport.getRecipe().getUser().getNickname(),
                 recipeReport.getReason(),

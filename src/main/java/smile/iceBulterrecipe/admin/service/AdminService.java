@@ -10,4 +10,6 @@ public interface AdminService {
 
 //    Page<PostReportRes> adminReportRecipe(Long recipeIdx, Long userIdx, String reason, Pageable pageable);
     void adminReportRecipe(Long recipeReportIdx);
+
+    Page<PostReportRes> getRecipeReport(Pageable pageable);
 }

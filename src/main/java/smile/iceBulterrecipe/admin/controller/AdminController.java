@@ -11,6 +11,7 @@ import smile.iceBulterrecipe.global.resolver.IsLogin;
 import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReportReq;
+import smile.iceBulterrecipe.recipe.dto.response.MyRecipeRes;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
 
 import org.springframework.data.domain.Pageable;
@@ -38,6 +39,12 @@ public class AdminController {
 //                                                                 Pageable pageable) {
 //     return ResponseCustom.OK(this.adminService.adminReportRecipe(recipeIdx, loginStatus.getUserIdx(), reportReq.getReason(),pageable));
 //    }
+
+    //레시피 신고 내역 조회
+    @GetMapping("/check")
+    public ResponseCustom<Page<PostReportRes>> getRecipeReport(Pageable pageable) {
+        return ResponseCustom.OK(this.adminService.getRecipeReport( pageable));
+    }
 
     //레시피 신고완료
     @PostMapping("/{recipeReportIdx}/report")

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.admin.dto.AdminReq;
 import smile.iceBulterrecipe.admin.dto.PostReportRes;
+import smile.iceBulterrecipe.admin.dto.assembler.AdminAssembler;
 import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
 import smile.iceBulterrecipe.recipe.Reason;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
@@ -27,10 +28,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class AdminServiceImpl implements AdminService{
-    private final UserRepository userRepository;
-    private final RecipeRepository recipeRepository;
+    private final AdminAssembler adminAssembler;
     private final RecipeReportRepository recipeReportRepository;
-    private final RecipeAssembler recipeAssembler;
+
 
     @Override
     public void addAdmin(AdminReq request) {
@@ -42,6 +42,12 @@ public class AdminServiceImpl implements AdminService{
     public void adminReportRecipe(Long recipeReportIdx) {
         RecipeReport recipeReport=recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
         recipeReport.adminReportRecipe();
+    }
+
+    @Override
+    public Page<PostReportRes> getRecipeReport(Pageable pageable) {
+        Page<RecipeReport> recipeReports=this.recipeReportRepository.findAll(pageable);
+        return this.adminAssembler.toAdminReportEntity(recipeReports);
     }
 
 //    @Override
