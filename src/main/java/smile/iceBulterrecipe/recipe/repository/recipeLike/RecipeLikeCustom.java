@@ -10,6 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RecipeLikeCustom {
-    Page<RecipeRes> getPopularRecipe(Pageable pageable, List<UUID> foodIdxes);
+    Page<RecipeRes> getPopularRecipe(Pageable pageable);
     List<RecipeLike> getBookmarkRecipe(User user, boolean status);
 }
