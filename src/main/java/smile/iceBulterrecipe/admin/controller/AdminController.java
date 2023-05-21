@@ -39,6 +39,13 @@ public class AdminController {
         return ResponseCustom.OK();
     }
 
+
+    @PostMapping("/remove/{recipeReportIdx}/recipe")
+    public ResponseCustom<Void> removeRecipe(@PathVariable Long recipeReportIdx) {
+        this.adminService.removeRecipe(recipeReportIdx);
+        return ResponseCustom.OK();
+    }
+
     //레시피 신고 내역 상세조회
     @GetMapping("/{recipeReportIdx}/detail")
     public ResponseCustom<GetRecipeReportDetailsRes> getRecipeReportDetails(@PathVariable Long recipeReportIdx) {
@@ -48,9 +55,7 @@ public class AdminController {
     //레시피 신고 메모 수정
     @PatchMapping("/{recipeReportIdx}")
     public ResponseCustom<Void> modifyRecipeReport(@PathVariable Long recipeReportIdx,
-    public ResponseCustom<?> modifyRecipeReport(@PathVariable Long recipeReportIdx,
-                                          @RequestBody ReportMemoModifyReq reportMemoModifyReq
-                                          ) {
+                                                   @RequestBody ReportMemoModifyReq reportMemoModifyReq) {
         this.adminService.modifyRecipeReport(recipeReportIdx, reportMemoModifyReq);
         return ResponseCustom.OK();
     }
@@ -60,5 +65,4 @@ public class AdminController {
     public ResponseCustom<?> getUserReportCheck(@PathVariable String nickname,Pageable pageable) {
         return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname,pageable));
     }
-
 }

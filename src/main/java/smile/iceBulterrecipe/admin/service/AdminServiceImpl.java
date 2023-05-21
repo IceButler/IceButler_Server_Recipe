@@ -16,7 +16,11 @@ import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
 import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.RecipeFood;
 import smile.iceBulterrecipe.admin.repository.AdminRepository;
+import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
+import smile.iceBulterrecipe.recipe.exception.RecipeNotFoundException;
+import smile.iceBulterrecipe.recipe.repository.recipe.RecipeRepository;
+import java.util.Optional;
 import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeFood.RecipeFoodRepository;
@@ -38,6 +42,7 @@ public class AdminServiceImpl implements AdminService{
     private final UserRepository userRepository;
 
     private final AdminRepository adminRepository;
+    private final RecipeRepository recipeRepository;
 
 
     @Transactional
@@ -64,6 +69,15 @@ public class AdminServiceImpl implements AdminService{
 
     //신고 상세내역 조회
     @Override
+    @Transactional
+    public void removeRecipe(Long recipeReportIdx) {
+        RecipeReport report = recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx, true).orElseThrow(RecipeReportNotFoundException::new);
+        Recipe recipe = recipeRepository.findByRecipeIdxAndIsEnable(report.getRecipe().getRecipeIdx(), true).orElseThrow(RecipeNotFoundException::new);
+        recipe.removeRecipe(false);
+    }
+  
+    @Override
+    @Transactional
     public GetRecipeReportDetailsRes getRecipeDetails(Long recipeReportIdx) {
         RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
         List<RecipeFood> recipeFoods = this.recipeFoodRepository.findByRecipeAndIsEnable(recipeReport.getRecipe(),true);
