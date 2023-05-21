@@ -3,6 +3,7 @@ package smile.iceBulterrecipe.admin.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import smile.iceBulterrecipe.admin.dto.request.AdminReq;
+import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 
@@ -19,5 +20,10 @@ public interface AdminService {
 
 
     GetRecipeReportDetailsRes getRecipeDetails(Long recipeReportIdx);
+
+    void modifyRecipeReport(Long recipeReportIdx, ReportMemoModifyReq reportMemoModifyReq);
+
+    Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable);
+
 }
 

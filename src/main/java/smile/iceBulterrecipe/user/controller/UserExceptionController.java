@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.user.exception.AuthAnnotationIsNowhereException;
 import smile.iceBulterrecipe.user.exception.TokenExpirationException;
+import smile.iceBulterrecipe.user.exception.UserNickNameNotFoundException;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 
 @Slf4j
@@ -20,6 +21,14 @@ public class UserExceptionController {
         log.error(e.getMessage());
         return ResponseCustom.NOT_FOUND(e.getMessage());
     }
+
+    @ExceptionHandler(UserNickNameNotFoundException.class)
+    public ResponseCustom<?> catchUserNotFoundException(UserNickNameNotFoundException e) {
+        log.error(e.getMessage());
+        return ResponseCustom.NOT_FOUND(e.getMessage());
+    }
+
+
 
     @ExceptionHandler(TokenExpirationException.class)
     public ResponseCustom<?> catchTokenExpirationException(TokenExpirationException e) {
