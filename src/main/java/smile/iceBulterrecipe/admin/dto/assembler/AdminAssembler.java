@@ -3,7 +3,7 @@ package smile.iceBulterrecipe.admin.dto.assembler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-import smile.iceBulterrecipe.admin.dto.GetRecipeReportRes;
+import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 
 import java.util.concurrent.atomic.AtomicInteger;

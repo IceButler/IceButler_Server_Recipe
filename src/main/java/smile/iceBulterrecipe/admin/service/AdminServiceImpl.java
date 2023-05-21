@@ -5,20 +5,29 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import smile.iceBulterrecipe.admin.dto.AdminReq;
-import smile.iceBulterrecipe.admin.dto.GetRecipeReportRes;
+import smile.iceBulterrecipe.admin.dto.request.AdminReq;
+import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
+import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.dto.assembler.AdminAssembler;
 import smile.iceBulterrecipe.admin.entity.Admin;
 import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
+import smile.iceBulterrecipe.recipe.entity.Cookery;
+import smile.iceBulterrecipe.recipe.entity.RecipeFood;
 import smile.iceBulterrecipe.admin.repository.AdminRepository;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
+import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
+import smile.iceBulterrecipe.recipe.repository.recipeFood.RecipeFoodRepository;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class AdminServiceImpl implements AdminService{
     private final AdminAssembler adminAssembler;
     private final RecipeReportRepository recipeReportRepository;
+    private final RecipeFoodRepository recipeFoodRepository;
+    private final CookeryRepository cookeryRepository;
     private final AdminRepository adminRepository;
 
 
@@ -42,5 +51,15 @@ public class AdminServiceImpl implements AdminService{
     public Page<GetRecipeReportRes> getRecipeReport(Pageable pageable) {
         Page<RecipeReport> recipeReports=this.recipeReportRepository.findAll(pageable);
         return this.adminAssembler.toAdminReportEntity(recipeReports);
+    }
+
+    @Override
+    public GetRecipeReportDetailsRes getRecipeDetails(Long recipeReportIdx) {
+        RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
+        List<RecipeFood> recipeFoods = this.recipeFoodRepository.findByRecipeAndIsEnable(recipeReport.getRecipe(),true);
+        List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnableOrderByNextIdx(recipeReport.getRecipe(),true);
+
+        return GetRecipeReportDetailsRes.toDto(recipeReport,recipeFoods,cookery);
+
     }
 }
