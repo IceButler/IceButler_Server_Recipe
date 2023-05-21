@@ -27,8 +27,4 @@ public class AdminAssembler {
                         .build());
     }
 
-    public RecipeReport toUpdateReportInfo(RecipeReport recipeReport, ReportMemoModifyReq reportMemoModifyReq){
-        if(reportMemoModifyReq.getMemo()!=null)recipeReport.toUpdateReportMemo(reportMemoModifyReq.getMemo());
-return recipeReport;
-    }
 }
