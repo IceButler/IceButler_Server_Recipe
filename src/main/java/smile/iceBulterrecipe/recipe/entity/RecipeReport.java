@@ -42,8 +42,13 @@ public class RecipeReport extends BaseEntity {
         this.reason = reason;
     }
 
-
     public void adminReportRecipe() {
         this.setIsEnable(false);
     }
+
+    public void toUpdateReportMemo(String memo){
+        this.memo=memo;
+    }
+
+
 }

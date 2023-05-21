@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import smile.iceBulterrecipe.admin.dto.request.AdminReq;
+import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
+
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.service.AdminServiceImpl;
@@ -44,4 +46,14 @@ public class AdminController {
     public ResponseCustom<GetRecipeReportDetailsRes> getRecipeReportDetails(@PathVariable Long recipeReportIdx) {
         return ResponseCustom.OK(this.adminService.getRecipeDetails(recipeReportIdx));
     }
+
+    //레시피 신고 메모 수정
+    @PatchMapping("/{recipeReportIdx}")
+    public ResponseCustom<?> modifyRecipeReport(@PathVariable Long recipeReportIdx,
+                                          @RequestBody ReportMemoModifyReq reportMemoModifyReq
+                                          ) {
+        this.adminService.modifyRecipeReport(recipeReportIdx, reportMemoModifyReq);
+        return ResponseCustom.OK();
+    }
+
 }
