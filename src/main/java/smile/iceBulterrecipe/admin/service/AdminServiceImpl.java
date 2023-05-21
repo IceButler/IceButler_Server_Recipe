@@ -91,7 +91,11 @@ public class AdminServiceImpl implements AdminService{
     @Transactional
     public void modifyRecipeReport(Long recipeReportIdx, ReportMemoModifyReq reportMemoModifyReq) {
         RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
-        recipeReportRepository.save(adminAssembler.toUpdateReportInfo(recipeReport,reportMemoModifyReq));
+        if (reportMemoModifyReq.getMemo() != null) {
+            recipeReport.toUpdateReportMemo(reportMemoModifyReq.getMemo());
+        } else {
+            throw new NotExistMemoException();
+        }
 
     }
 
@@ -105,10 +109,5 @@ public class AdminServiceImpl implements AdminService{
 
     }
 
-        if (reportMemoModifyReq.getMemo() != null) {
-            recipeReport.toUpdateReportMemo(reportMemoModifyReq.getMemo());
-        } else {
-            throw new NotExistMemoException();
-        }
-    }
+
 }
