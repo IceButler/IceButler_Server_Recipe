@@ -48,6 +48,7 @@ public class AdminController {
     //레시피 신고 메모 수정
     @PatchMapping("/{recipeReportIdx}")
     public ResponseCustom<Void> modifyRecipeReport(@PathVariable Long recipeReportIdx,
+    public ResponseCustom<?> modifyRecipeReport(@PathVariable Long recipeReportIdx,
                                           @RequestBody ReportMemoModifyReq reportMemoModifyReq
                                           ) {
         this.adminService.modifyRecipeReport(recipeReportIdx, reportMemoModifyReq);
@@ -59,7 +60,5 @@ public class AdminController {
     public ResponseCustom<?> getUserReportCheck(@PathVariable String nickname,Pageable pageable) {
         return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname,pageable));
     }
-
-
 
 }

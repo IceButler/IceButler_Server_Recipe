@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
-
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
@@ -34,6 +33,4 @@ public class AdminAssembler {
         if(reportMemoModifyReq.getMemo()!=null)recipeReport.toUpdateReportMemo(reportMemoModifyReq.getMemo());
 return recipeReport;
     }
-
-
 }

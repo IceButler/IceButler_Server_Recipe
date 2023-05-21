@@ -11,6 +11,7 @@ import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.dto.assembler.AdminAssembler;
 import smile.iceBulterrecipe.admin.entity.Admin;
+import smile.iceBulterrecipe.admin.exception.NotExistMemoException;
 import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
 import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.RecipeFood;
@@ -71,7 +72,6 @@ public class AdminServiceImpl implements AdminService{
         return GetRecipeReportDetailsRes.toDto(recipeReport,recipeFoods,cookery);
 
     }
-
     //신고 메모 수정
     @Override
     @Transactional
@@ -91,4 +91,10 @@ public class AdminServiceImpl implements AdminService{
 
     }
 
+        if (reportMemoModifyReq.getMemo() != null) {
+            recipeReport.toUpdateReportMemo(reportMemoModifyReq.getMemo());
+        } else {
+            throw new NotExistMemoException();
+        }
+    }
 }
