@@ -36,4 +36,11 @@ public class AdminController {
         this.adminService.adminReportRecipe(recipeReportIdx);
         return ResponseCustom.OK();
     }
+
+    @PostMapping("/remove/{recipeReportIdx}/recipe")
+    public ResponseCustom<Void> removeRecipe(@PathVariable Long recipeReportIdx) {
+        this.adminService.removeRecipe(recipeReportIdx);
+        return ResponseCustom.OK();
+    }
+
 }

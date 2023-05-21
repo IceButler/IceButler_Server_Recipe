@@ -12,4 +12,7 @@ public interface AdminService {
     void adminReportRecipe(Long recipeReportIdx);
 
     Page<GetRecipeReportRes> getRecipeReport(Pageable pageable);
+
+    void removeRecipe(Long recipeReportIdx);
+
 }

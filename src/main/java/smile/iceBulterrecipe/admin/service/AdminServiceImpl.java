@@ -11,8 +11,13 @@ import smile.iceBulterrecipe.admin.dto.assembler.AdminAssembler;
 import smile.iceBulterrecipe.admin.entity.Admin;
 import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
 import smile.iceBulterrecipe.admin.repository.AdminRepository;
+import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
+import smile.iceBulterrecipe.recipe.exception.RecipeNotFoundException;
 import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
+import smile.iceBulterrecipe.recipe.repository.recipe.RecipeRepository;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +25,7 @@ public class AdminServiceImpl implements AdminService{
     private final AdminAssembler adminAssembler;
     private final RecipeReportRepository recipeReportRepository;
     private final AdminRepository adminRepository;
+    private final RecipeRepository recipeRepository;
 
 
     @Transactional
@@ -42,5 +48,13 @@ public class AdminServiceImpl implements AdminService{
     public Page<GetRecipeReportRes> getRecipeReport(Pageable pageable) {
         Page<RecipeReport> recipeReports=this.recipeReportRepository.findAll(pageable);
         return this.adminAssembler.toAdminReportEntity(recipeReports);
+    }
+
+    @Override
+    @Transactional
+    public void removeRecipe(Long recipeReportIdx) {
+        RecipeReport report = recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx, true).orElseThrow(RecipeReportNotFoundException::new);
+        Recipe recipe = recipeRepository.findByRecipeIdxAndIsEnable(report.getRecipe().getRecipeIdx(), true).orElseThrow(RecipeNotFoundException::new);
+        recipe.removeRecipe(false);
     }
 }

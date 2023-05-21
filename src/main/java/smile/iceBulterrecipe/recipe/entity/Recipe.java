@@ -47,4 +47,8 @@ public class Recipe extends BaseEntity {
         this.leadTime = leadTime;
         this.user = user;
     }
+
+    public void removeRecipe(Boolean isEnable) {
+        this.setIsEnable(isEnable);
+    }
 }
