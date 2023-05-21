@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import smile.iceBulterrecipe.admin.dto.request.AdminReq;
 import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
-
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.service.AdminServiceImpl;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 public class AdminController {
 
     private final AdminServiceImpl adminService;
-
 
     @PostMapping
     public ResponseCustom<Void> addAdmin(@RequestBody AdminReq request)
@@ -49,11 +47,18 @@ public class AdminController {
 
     //레시피 신고 메모 수정
     @PatchMapping("/{recipeReportIdx}")
+    public ResponseCustom<Void> modifyRecipeReport(@PathVariable Long recipeReportIdx,
     public ResponseCustom<?> modifyRecipeReport(@PathVariable Long recipeReportIdx,
                                           @RequestBody ReportMemoModifyReq reportMemoModifyReq
                                           ) {
         this.adminService.modifyRecipeReport(recipeReportIdx, reportMemoModifyReq);
         return ResponseCustom.OK();
+    }
+
+    //회원별 레시피 신고내역 조회
+    @GetMapping("/{nickname}/user")
+    public ResponseCustom<?> getUserReportCheck(@PathVariable String nickname,Pageable pageable) {
+        return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname,pageable));
     }
 
 }

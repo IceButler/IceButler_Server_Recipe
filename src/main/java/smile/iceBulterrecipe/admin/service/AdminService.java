@@ -18,5 +18,8 @@ public interface AdminService {
     GetRecipeReportDetailsRes getRecipeDetails(Long recipeReportIdx);
 
     void modifyRecipeReport(Long recipeReportIdx, ReportMemoModifyReq reportMemoModifyReq);
+
+    Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable);
+
 }
 

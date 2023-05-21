@@ -9,7 +9,9 @@ import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -27,4 +29,8 @@ public class AdminAssembler {
                         .build());
     }
 
+    public RecipeReport toUpdateReportInfo(RecipeReport recipeReport, ReportMemoModifyReq reportMemoModifyReq){
+        if(reportMemoModifyReq.getMemo()!=null)recipeReport.toUpdateReportMemo(reportMemoModifyReq.getMemo());
+return recipeReport;
+    }
 }
