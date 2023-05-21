@@ -24,6 +24,7 @@ import smile.iceBulterrecipe.user.exception.UserNickNameNotFoundException;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 import smile.iceBulterrecipe.user.repository.UserRepository;
 
+
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -34,6 +35,7 @@ public class AdminServiceImpl implements AdminService{
     private final RecipeFoodRepository recipeFoodRepository;
     private final CookeryRepository cookeryRepository;
     private final UserRepository userRepository;
+
     private final AdminRepository adminRepository;
 
 
@@ -88,4 +90,5 @@ public class AdminServiceImpl implements AdminService{
         return this.adminAssembler.toAdminReportEntity(recipeReports);
 
     }
+
 }

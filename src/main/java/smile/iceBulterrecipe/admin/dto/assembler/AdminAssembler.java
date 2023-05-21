@@ -7,6 +7,7 @@ import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 
 import smile.iceBulterrecipe.recipe.entity.Recipe;
+import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 
 import java.util.List;
