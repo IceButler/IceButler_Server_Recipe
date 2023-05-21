@@ -14,7 +14,6 @@ import smile.iceBulterrecipe.admin.entity.Admin;
 import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
 import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.RecipeFood;
-
 import smile.iceBulterrecipe.admin.repository.AdminRepository;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
@@ -65,7 +64,6 @@ public class AdminServiceImpl implements AdminService{
         return GetRecipeReportDetailsRes.toDto(recipeReport,recipeFoods,cookery);
 
     }
-
     //신고 메모 수정
     @Override
     @Transactional

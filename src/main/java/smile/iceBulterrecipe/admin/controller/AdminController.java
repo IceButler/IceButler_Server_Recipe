@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import smile.iceBulterrecipe.admin.dto.request.AdminReq;
 import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
+
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.service.AdminServiceImpl;
@@ -54,4 +55,5 @@ public class AdminController {
         this.adminService.modifyRecipeReport(recipeReportIdx, reportMemoModifyReq);
         return ResponseCustom.OK();
     }
+
 }
