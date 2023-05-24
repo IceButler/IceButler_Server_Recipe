@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8??
     url: jdbc:mysql://3.34.135.100:3306/icebulter
     username: root # ??????
-    password: 1111 # ??????
+    password: icebulter1350 # ??????
   sql:
     init:
       platform: mysql
