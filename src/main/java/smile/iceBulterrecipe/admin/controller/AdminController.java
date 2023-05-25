@@ -7,6 +7,7 @@ import smile.iceBulterrecipe.admin.dto.request.AdminReq;
 import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
+import smile.iceBulterrecipe.admin.dto.response.UserResponse;
 import smile.iceBulterrecipe.admin.service.AdminServiceImpl;
 import smile.iceBulterrecipe.global.resolver.Admin;
 import smile.iceBulterrecipe.global.resolver.AdminLoginStatus;
@@ -30,6 +31,18 @@ public class AdminController {
     {
         adminService.addAdmin(request);
         return ResponseCustom.OK();
+    }
+
+//    @Admin
+    @GetMapping("/users")
+    public ResponseCustom<Page<UserResponse>> search(
+//            @IsAdminLogin AdminLoginStatus loginStatus,
+            Pageable pageable,
+            @RequestParam(defaultValue = "") String nickname,
+            @RequestParam(defaultValue = "true") boolean active
+    )
+    {
+        return ResponseCustom.OK(adminService.search(pageable, nickname, active));
     }
 
     //레시피 신고 내역 조회
