@@ -1,16 +1,13 @@
 spring:
   application:
     name: IceButler_Server_Recipe
+  profiles:
+    include: rds
 
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8??
-    url: jdbc:mysql://3.34.135.100:3306/icebulter
-    username: root # ??????
-    password: icebulter1350 # ??????
   sql:
     init:
       platform: mysql
