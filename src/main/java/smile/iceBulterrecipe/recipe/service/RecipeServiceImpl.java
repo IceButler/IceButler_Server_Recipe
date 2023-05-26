@@ -123,7 +123,7 @@ public class RecipeServiceImpl implements RecipeService{
         List<RecipeFood> recipeFoods = this.recipeFoodRepository.findByRecipeAndIsEnable(recipe, true);
 //        List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnable(recipe, true);
         List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnableOrderByNextIdx(recipe, true);
-        Boolean isSubscribe = this.recipeLikeRepository.findByUserAndRecipe(user, recipe).isPresent();
+        Boolean isSubscribe = this.recipeLikeRepository.findByUserAndRecipeAndIsEnable(user, recipe, true).isPresent();
         return RecipeDetailsRes.toDto(recipe, recipeFoods, cookery, isSubscribe);
     }
 

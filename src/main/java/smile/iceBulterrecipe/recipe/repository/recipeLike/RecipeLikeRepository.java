@@ -19,4 +19,5 @@ public interface RecipeLikeRepository extends JpaRepository<RecipeLike, Long>, R
     Boolean existsByUserAndRecipe_RecipeIdxAndIsEnable(User user, Long recipeIdx, Boolean isEnable);
 
     Optional<RecipeLike> findByUserAndRecipe(User user, Recipe recipe);
+    Optional<RecipeLike> findByUserAndRecipeAndIsEnable(User user, Recipe recipe, Boolean isEnable);
 }
