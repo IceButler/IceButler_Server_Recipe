@@ -78,9 +78,9 @@ public class RecipeController {
     @GetMapping("/detail/{recipeIdx}")
     public ResponseCustom<RecipeDetailsRes> getRecipeDetails(@PathVariable Long recipeIdx,
                                                              @IsLogin LoginStatus loginStatus) {
-        return ResponseCustom.OK(this.recipeService.getRecipeDetails(recipeIdx));
+        return ResponseCustom.OK(this.recipeService.getRecipeDetails(recipeIdx, loginStatus.getUserIdx()));
     }
-    
+
     // 레시피 추가
     @Auth
     @PostMapping("")

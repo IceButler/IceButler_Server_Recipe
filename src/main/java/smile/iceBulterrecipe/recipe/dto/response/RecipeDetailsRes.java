@@ -20,10 +20,12 @@ public class RecipeDetailsRes {
   private Long leadTime;
   private List<RecipeFoodRes> recipeFoods;
   private List<CookeryRes> cookery;
+  private Boolean isSubscribe;
 
 
-  public static RecipeDetailsRes toDto(Recipe recipe, List<RecipeFood> recipeFoods, List<Cookery> cookery) {
+  public static RecipeDetailsRes toDto(Recipe recipe, List<RecipeFood> recipeFoods, List<Cookery> cookery, Boolean isSubscribe) {
     RecipeDetailsRes recipeDetailsRes = new RecipeDetailsRes();
+    recipeDetailsRes.isSubscribe = isSubscribe;
     recipeDetailsRes.recipeImgUrl = AwsS3ImageUrlUtils.toUrl(recipe.getRecipeImgKey());
     recipeDetailsRes.recipeName = recipe.getRecipeName();
     recipeDetailsRes.recipeCategory = recipe.getRecipeCategory().getCategory();
