@@ -89,6 +89,17 @@ public class RecipeController {
         return ResponseCustom.OK();
     }
 
+    //레시피 수정
+    @Auth
+    @PatchMapping("{recipeIdx}/modify")
+    public ResponseCustom<Void> updateRecipe(@IsLogin LoginStatus loginStatus
+            , @RequestBody PostRecipeReq recipeReq
+            , @PathVariable Long recipeIdx
+    ){
+        this.recipeService.updateRecipe(recipeReq, loginStatus.getUserIdx(),recipeIdx);
+        return ResponseCustom.OK();
+    }
+
     // 마이 레시피 조회
     @Auth
     @GetMapping("/myrecipe")
@@ -132,6 +143,7 @@ public class RecipeController {
         this.recipeService.reportRecipe(recipeIdx, loginStatus.getUserIdx(), reportReq.getReason());
         return ResponseCustom.OK();
     }
+
 }
 
 
