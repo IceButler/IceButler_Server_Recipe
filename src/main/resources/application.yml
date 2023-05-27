@@ -18,11 +18,7 @@ spring:
   sql:
     init:
       platform: mysql
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://recipe.csaa3ijtvera.ap-northeast-2.rds.amazonaws.com/recipe
-    username: admin
-    password: icebulter1350!
+
   jpa:
     hibernate:
       ddl-auto: update
