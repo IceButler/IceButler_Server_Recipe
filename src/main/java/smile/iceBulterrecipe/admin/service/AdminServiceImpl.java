@@ -10,6 +10,7 @@ import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.dto.assembler.AdminAssembler;
+import smile.iceBulterrecipe.admin.dto.response.UserResponse;
 import smile.iceBulterrecipe.admin.entity.Admin;
 import smile.iceBulterrecipe.admin.exception.NotExistMemoException;
 import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
@@ -104,10 +105,11 @@ public class AdminServiceImpl implements AdminService{
     public Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable ) {
         User user = this.userRepository.findByNickname(nickname).orElseThrow(UserNickNameNotFoundException::new);
         Page<RecipeReport> recipeReports = this.recipeReportRepository.findByUserAndIsEnable(user, true, pageable);
-
         return this.adminAssembler.toAdminReportEntity(recipeReports);
-
     }
 
-
+    @Override
+    public Page<UserResponse> search(Pageable pageable, String nickname, boolean active) {
+        return adminRepository.findAllByNicknameAndActive(pageable, nickname, active);
+    }
 }

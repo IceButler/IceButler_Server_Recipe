@@ -6,6 +6,7 @@ import smile.iceBulterrecipe.admin.dto.request.AdminReq;
 import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
+import smile.iceBulterrecipe.admin.dto.response.UserResponse;
 
 public interface AdminService {
     void addAdmin(AdminReq request);
@@ -25,5 +26,6 @@ public interface AdminService {
 
     Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable);
 
+    Page<UserResponse> search(Pageable pageable, String nickname, boolean active);
 }
 

@@ -19,6 +19,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Long userIdx;
     private String nickname;
+    private String email;
     private String profileImgKey;
 
     @Builder

@@ -118,12 +118,14 @@ public class RecipeServiceImpl implements RecipeService{
         return BookmarkRes.toDto(recipeLike);
     }
 
-    public RecipeDetailsRes getRecipeDetails(Long recipeIdx) {
+    public RecipeDetailsRes getRecipeDetails(Long recipeIdx, Long userIdx) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
         List<RecipeFood> recipeFoods = this.recipeFoodRepository.findByRecipeAndIsEnable(recipe, true);
 //        List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnable(recipe, true);
         List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnableOrderByNextIdx(recipe, true);
-        return RecipeDetailsRes.toDto(recipe, recipeFoods, cookery);
+        Boolean isSubscribe = this.recipeLikeRepository.findByUserAndRecipeAndIsEnable(user, recipe, true).isPresent();
+        return RecipeDetailsRes.toDto(recipe, recipeFoods, cookery, isSubscribe);
     }
 
     @Transactional
