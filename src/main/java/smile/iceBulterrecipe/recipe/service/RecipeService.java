@@ -21,4 +21,7 @@ public interface RecipeService{
     Page<RecipeRes> getSearchRecipeListForFood(Long userIdx, String keyword, Pageable pageable);
 
     void reportRecipe(Long recipeIdx, Long userIdx, String reason);
+
+
+    void updateRecipe(PostRecipeReq recipeReq, Long userIdx, Long recipeIdx);
 }

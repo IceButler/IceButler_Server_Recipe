@@ -51,4 +51,13 @@ public class Recipe extends BaseEntity {
     public void removeRecipe(Boolean isEnable) {
         this.setIsEnable(isEnable);
     }
+
+
+    public void updateRecipe(String recipeName, String recipeImgKey, Integer quantity, Long leadTime,RecipeCategory recipeCategory) {
+        this.recipeName = recipeName;
+        this.recipeImgKey = recipeImgKey;
+        this.quantity = quantity;
+        this.leadTime = leadTime;
+        this.recipeCategory=recipeCategory;
+    }
 }

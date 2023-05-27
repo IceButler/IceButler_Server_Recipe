@@ -18,6 +18,7 @@ import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeFoodAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeLikeAssembler;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
+import smile.iceBulterrecipe.recipe.dto.request.RecipeAddsReq;
 import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
 import smile.iceBulterrecipe.recipe.dto.response.MyRecipeRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeDetailsRes;
@@ -147,6 +148,39 @@ public class RecipeServiceImpl implements RecipeService{
         });
     }
 
+    //레시피 수정
+    @Override
+    @Transactional
+    public void updateRecipe(PostRecipeReq recipeReq, Long userIdx, Long recipeIdx) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+
+        Recipe recipe = this.recipeRepository.findById(recipeIdx).orElseThrow(RecipeNotFoundException::new);
+
+        if (!recipe.getUser().equals(user)) {
+            throw new UserNotFoundException();
+        }
+        recipe.updateRecipe(recipeReq.getRecipeName(),recipeReq.getRecipeImgKey(),recipeReq.getQuantity(),recipeReq.getLeadTime(),RecipeCategory.getFoodCategoryByName(recipeReq.getRecipeCategory()));
+
+        this.recipeFoodRepository.deleteByRecipe(recipe);
+
+        recipeReq.getFoodList().forEach(food -> {
+            Food foodEntity = this.foodRepository.findByFoodName(food.getFoodName())
+                    .orElseGet(() -> {
+                        String foodCategory = getFoodCategoryGPT(food.getFoodName());
+                        Food saveFood = this.foodRepository.save(this.foodAssembler.toEntity(food, foodCategory));
+                        return saveFood;
+                    });
+            this.recipeFoodRepository.save(this.recipeFoodAssembler.toEntity(food, foodEntity, recipe));
+        });
+
+        this.cookeryRepository.deleteByRecipe(recipe);
+
+        AtomicReference<Long> nextIdx = new AtomicReference<>(0L);
+        recipeReq.getCookeryList().forEach(cookery -> {
+            this.cookeryRepository.save(this.cookeryAssembler.toEntity(cookery, recipe, nextIdx.getAndSet(nextIdx.get() + 1)));
+        });
+    }
+
     private String getFoodCategoryGPT(String foodName){
         String foodCategory = null;
         try {
@@ -170,7 +204,6 @@ public class RecipeServiceImpl implements RecipeService{
     public Page<RecipeRes> getSearchRecipeListForRecipe(Long userIdx, String keyword, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         return getSearchRecipeMethods(user, this.recipeRepository.findByRecipeNameContainingAndIsEnable(keyword, true, pageable));
-
     }
 
     private Page<RecipeRes> getSearchRecipeMethods(User user, Page<Recipe> recipeLists) {
@@ -179,14 +212,12 @@ public class RecipeServiceImpl implements RecipeService{
                 r.setRecipeLikeStatus(this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true)));
         return recipeRes;
     }
-
     // 레시피 검색(음식)
     @Override
     public Page<RecipeRes> getSearchRecipeListForFood(Long userIdx, String keyword, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         return getSearchRecipeMethods(user, this.recipeRepository.findByFoodNameContainingAndIsEnableHavingRecipe(keyword, pageable));
     }
-
     // recipe report
     @Override
     public void reportRecipe(Long recipeIdx, Long userIdx, String reason) {
@@ -196,7 +227,6 @@ public class RecipeServiceImpl implements RecipeService{
 
         this.recipeReportRepository.save(this.recipeAssembler.toReportEntity(recipe, user, recipeReason));
     }
-
     // 마이 레시피 삭제
     @Override
     public void deleteMyRecipe(Long recipeIdx, Long userIdx) {
