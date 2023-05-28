@@ -50,19 +50,9 @@ public class AdminController {
         return ResponseCustom.OK(adminService.search(pageable, nickname, active));
     }
 
-    //레시피 신고 내역 조회
-    @Admin
-    @GetMapping("/check")
-    public ResponseCustom<Page<GetRecipeReportRes>> getRecipeReport(Pageable pageable,
-                @IsAdminLogin AdminLoginStatus loginStatus
-
-                                                                    ) {
-        return ResponseCustom.OK(this.adminService.getRecipeReport( pageable));
-    }
-
     //레시피 신고완료
     @Admin
-    @PostMapping("/{recipeReportIdx}/report")
+    @PostMapping("/reports/{recipeReportIdx}")
     public ResponseCustom<Void> adminReportRecipe(@PathVariable Long recipeReportIdx,
                                                   @IsAdminLogin AdminLoginStatus loginStatus
 
@@ -83,7 +73,7 @@ public class AdminController {
 
     //레시피 신고 내역 상세조회
     @Admin
-    @GetMapping("/{recipeReportIdx}/detail")
+    @GetMapping("/reports/{recipeReportIdx}")
     public ResponseCustom<GetRecipeReportDetailsRes> getRecipeReportDetails(@PathVariable Long recipeReportIdx,
                                                                             @IsAdminLogin AdminLoginStatus loginStatus
     ) {
@@ -92,7 +82,7 @@ public class AdminController {
 
     //레시피 신고 메모 수정
     @Admin
-    @PatchMapping("/{recipeReportIdx}")
+    @PatchMapping("/reports/{recipeReportIdx}")
     public ResponseCustom<Void> modifyRecipeReport(@PathVariable Long recipeReportIdx,
                                                    @RequestBody ReportMemoModifyReq reportMemoModifyReq,
                                                    @IsAdminLogin AdminLoginStatus loginStatus
@@ -103,11 +93,17 @@ public class AdminController {
 
     //회원별 레시피 신고내역 조회
     @Admin
-    @GetMapping("/{nickname}/user")
-    public ResponseCustom<Page<GetRecipeReportRes>> getUserReportCheck(@PathVariable String nickname,
-                                                              @IsAdminLogin AdminLoginStatus loginStatus
+    @GetMapping("/reports")
+    public ResponseCustom<Page<GetRecipeReportRes>> getUserReportCheck(
+            @RequestParam(required = true) String type,
+            @RequestParam(required = false) String nickname,
+            @IsAdminLogin AdminLoginStatus loginStatus
             ,Pageable pageable) {
-        return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname,pageable));
+        if (nickname != null) {
+            return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname, pageable));
+        } else {
+            return ResponseCustom.OK(this.adminService.getRecipeReport(pageable));
+        }
     }
 
 
