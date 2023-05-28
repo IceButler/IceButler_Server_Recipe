@@ -15,6 +15,10 @@ import smile.iceBulterrecipe.global.resolver.IsAdminLogin;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
 
 import org.springframework.data.domain.Pageable;
+import smile.iceBulterrecipe.global.sqs.AmazonSQSSender;
+import smile.iceBulterrecipe.global.sqs.FoodData;
+
+import java.util.UUID;
 
 @RequestMapping("/admin")
 @RestController
@@ -22,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 public class AdminController {
 
     private final AdminServiceImpl adminService;
+    private final AmazonSQSSender amazonSQSSender;
 
     @Admin
     @PostMapping
@@ -103,5 +108,16 @@ public class AdminController {
                                                               @IsAdminLogin AdminLoginStatus loginStatus
             ,Pageable pageable) {
         return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname,pageable));
+    }
+
+
+    @GetMapping("/sqs-test")
+    public ResponseCustom<Void> getUserReportCheck() {
+        amazonSQSSender.sendMessage(FoodData.builder()
+                .foodName("fromRecipe")
+                .foodCategory("recipe")
+                .foodImgKey("recipe.img")
+                .uuid(UUID.randomUUID().toString()).build());
+        return ResponseCustom.OK();
     }
 }

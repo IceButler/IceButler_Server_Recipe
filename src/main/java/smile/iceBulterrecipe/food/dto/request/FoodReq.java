@@ -27,7 +27,7 @@ public class FoodReq {
                 .foodName(foodData.getFoodName())
                 .foodImgKey(foodData.getFoodImgKey())
                 .foodCategory(foodData.getFoodCategory())
-                .uuid(foodData.getUuid())
+                .uuid(UUID.fromString(foodData.getUuid()))
                 .build();
     }
 }
