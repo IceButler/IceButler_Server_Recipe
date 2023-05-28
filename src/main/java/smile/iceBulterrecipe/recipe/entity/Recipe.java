@@ -48,8 +48,8 @@ public class Recipe extends BaseEntity {
         this.user = user;
     }
 
-    public void removeRecipe(Boolean isEnable) {
-        this.setIsEnable(isEnable);
+    public void removeRecipe() {
+        this.setIsEnable(false);
     }
 
 

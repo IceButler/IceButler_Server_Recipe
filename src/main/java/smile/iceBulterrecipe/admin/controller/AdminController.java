@@ -68,7 +68,7 @@ public class AdminController {
 
 
     @Admin
-    @PostMapping("/remove/{recipeReportIdx}/recipe")
+    @DeleteMapping("/recipes/{recipeReportIdx}")
     public ResponseCustom<Void> removeRecipe(@PathVariable Long recipeReportIdx,
                                              @IsAdminLogin AdminLoginStatus loginStatus
     ) {

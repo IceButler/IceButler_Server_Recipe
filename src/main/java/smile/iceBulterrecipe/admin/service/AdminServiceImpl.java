@@ -74,9 +74,9 @@ public class AdminServiceImpl implements AdminService{
     public void removeRecipe(Long recipeReportIdx) {
         RecipeReport report = recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx, true).orElseThrow(RecipeReportNotFoundException::new);
         Recipe recipe = recipeRepository.findByRecipeIdxAndIsEnable(report.getRecipe().getRecipeIdx(), true).orElseThrow(RecipeNotFoundException::new);
-        recipe.removeRecipe(false);
+        recipe.removeRecipe();
     }
-  
+
     @Override
     @Transactional
     public GetRecipeReportDetailsRes getRecipeDetails(Long recipeReportIdx) {
