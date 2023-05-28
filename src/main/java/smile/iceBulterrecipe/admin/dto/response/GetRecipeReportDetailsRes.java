@@ -11,6 +11,7 @@ import smile.iceBulterrecipe.recipe.entity.RecipeFood;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class GetRecipeReportDetailsRes {
     private String author;
     private Reason reason;
     private String reporter;
-    private LocalDateTime reportDate;
+    private String reportDate;
     private String memo;
     private String recipeImgUrl;
     private String recipeName;
@@ -31,11 +32,13 @@ public class GetRecipeReportDetailsRes {
     private List<CookeryRes> cookery;
 
     public static GetRecipeReportDetailsRes toDto(RecipeReport recipeReport,List<RecipeFood> recipeFoods, List<Cookery> cookery){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");  // 출력 형식 지정
+
         GetRecipeReportDetailsRes getRecipeReportDetailsRes=new GetRecipeReportDetailsRes();
         getRecipeReportDetailsRes.author=recipeReport.getRecipe().getUser().getNickname();
         getRecipeReportDetailsRes.reason=recipeReport.getReason();
         getRecipeReportDetailsRes.reporter=recipeReport.getUser().getNickname();
-        getRecipeReportDetailsRes.reportDate=recipeReport.getCreatedAt();
+        getRecipeReportDetailsRes.reportDate=recipeReport.getCreatedAt().format(formatter);
         getRecipeReportDetailsRes.memo=recipeReport.getMemo();
         getRecipeReportDetailsRes.recipeImgUrl = AwsS3ImageUrlUtils.toUrl(recipeReport.getRecipe().getRecipeImgKey());
         getRecipeReportDetailsRes.recipeName = recipeReport.getRecipe().getRecipeName();
