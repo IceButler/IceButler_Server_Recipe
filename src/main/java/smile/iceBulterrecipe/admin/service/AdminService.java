@@ -14,7 +14,7 @@ public interface AdminService {
 //    Page<PostReportRes> adminReportRecipe(Long recipeIdx, Long userIdx, String reason, Pageable pageable);
     void adminReportRecipe(Long recipeReportIdx);
 
-    Page<GetRecipeReportRes> getRecipeReport(Pageable pageable);
+    Page<GetRecipeReportRes> getRecipeReport(Pageable pageable,int type);
 
 
     void removeRecipe(Long recipeReportIdx);
@@ -24,7 +24,7 @@ public interface AdminService {
 
     void modifyRecipeReport(Long recipeReportIdx, ReportMemoModifyReq reportMemoModifyReq);
 
-    Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable);
+    Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable,int type);
 
     Page<UserResponse> search(Pageable pageable, String nickname, boolean active);
 }
