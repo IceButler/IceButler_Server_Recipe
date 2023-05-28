@@ -63,8 +63,15 @@ public class AdminServiceImpl implements AdminService{
 
     //신고 내역 조회
     @Override
-    public Page<GetRecipeReportRes> getRecipeReport(Pageable pageable) {
+    public Page<GetRecipeReportRes> getRecipeReport(Pageable pageable,int type) {
         Page<RecipeReport> recipeReports=this.recipeReportRepository.findAll(pageable);
+        if (type == 0) {
+            recipeReports = this.recipeReportRepository.findAllByIsEnableFalse(pageable);
+        } else if (type == 1) {
+            recipeReports = this.recipeReportRepository.findAllByIsEnableTrue(pageable);
+        }else {
+            throw new RecipeReportNotFoundException();
+        }
         return this.adminAssembler.toAdminReportEntity(recipeReports);
     }
 
@@ -102,9 +109,17 @@ public class AdminServiceImpl implements AdminService{
 
     //회원별 레시피 신고내역 조회
     @Override
-    public Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable ) {
+    public Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable ,int type) {
         User user = this.userRepository.findByNickname(nickname).orElseThrow(UserNickNameNotFoundException::new);
         Page<RecipeReport> recipeReports = this.recipeReportRepository.findByUserAndIsEnable(user, true, pageable);
+        if (type == 0) {
+            recipeReports = this.recipeReportRepository.findByUserAndIsEnableFalse(user, pageable);
+        } else if (type == 1) {
+            recipeReports = this.recipeReportRepository.findByUserAndIsEnableTrue(user, pageable);
+        }else {
+            throw new RecipeReportNotFoundException();
+        }
+
         return this.adminAssembler.toAdminReportEntity(recipeReports);
     }
 

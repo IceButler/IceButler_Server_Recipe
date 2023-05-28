@@ -27,4 +27,9 @@ public interface RecipeReportRepository extends JpaRepository<RecipeReport, Long
 
     Page<RecipeReport> findByUserAndIsEnable(User user, boolean b, Pageable pageable);
 
+    Page<RecipeReport> findAllByIsEnableFalse(Pageable pageable);
+    Page<RecipeReport> findAllByIsEnableTrue(Pageable pageable);
+    Page<RecipeReport> findByUserAndIsEnableFalse(User user, Pageable pageable);
+    Page<RecipeReport> findByUserAndIsEnableTrue(User user, Pageable pageable);
+
 }
