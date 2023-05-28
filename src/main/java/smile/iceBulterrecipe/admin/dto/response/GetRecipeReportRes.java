@@ -5,6 +5,7 @@ import smile.iceBulterrecipe.recipe.Reason;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @AllArgsConstructor
@@ -15,16 +16,18 @@ public class GetRecipeReportRes {
     private String author;
     private Reason reason;
     private String reporter;
-    private LocalDateTime reportDate;
+    private String reportDate;
 
     public static GetRecipeReportRes toDto(int rowNumber, RecipeReport recipeReport){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");  // 출력 형식 지정
+
         return new GetRecipeReportRes(
                 (long) rowNumber,
                 recipeReport.getRecipe().getRecipeName(),
                 recipeReport.getRecipe().getUser().getNickname(),
                 recipeReport.getReason(),
                 recipeReport.getUser().getNickname(),
-                recipeReport.getCreatedAt()
+                recipeReport.getCreatedAt().format(formatter)
         );
     }
 }

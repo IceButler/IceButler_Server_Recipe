@@ -104,7 +104,7 @@ public class AdminController {
     //회원별 레시피 신고내역 조회
     @Admin
     @GetMapping("/{nickname}/user")
-    public ResponseCustom<?> getUserReportCheck(@PathVariable String nickname,
+    public ResponseCustom<Page<GetRecipeReportRes>> getUserReportCheck(@PathVariable String nickname,
                                                               @IsAdminLogin AdminLoginStatus loginStatus
             ,Pageable pageable) {
         return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname,pageable));
