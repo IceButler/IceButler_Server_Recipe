@@ -64,7 +64,7 @@ public class AdminServiceImpl implements AdminService{
     //신고 내역 조회
     @Override
     public Page<GetRecipeReportRes> getRecipeReport(Pageable pageable,int type) {
-        Page<RecipeReport> recipeReports=this.recipeReportRepository.findAll(pageable);
+        Page<RecipeReport> recipeReports;
         if (type == 0) {
             recipeReports = this.recipeReportRepository.findAllByIsEnableFalse(pageable);
         } else if (type == 1) {
@@ -87,7 +87,8 @@ public class AdminServiceImpl implements AdminService{
     @Override
     @Transactional
     public GetRecipeReportDetailsRes getRecipeDetails(Long recipeReportIdx) {
-        RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
+        RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdx(recipeReportIdx).orElseThrow(RecipeReportNotFoundException::new);
+
         List<RecipeFood> recipeFoods = this.recipeFoodRepository.findByRecipeAndIsEnable(recipeReport.getRecipe(),true);
         List<Cookery> cookery = this.cookeryRepository.findByRecipeAndIsEnableOrderByNextIdx(recipeReport.getRecipe(),true);
 
