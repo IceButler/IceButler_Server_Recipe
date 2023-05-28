@@ -95,7 +95,7 @@ public class AdminController {
     @Admin
     @GetMapping("/reports")
     public ResponseCustom<Page<GetRecipeReportRes>> getUserReportCheck(
-            @RequestParam(required = true) int type,
+            @RequestParam(required = true) Integer type,
             @RequestParam(required = false) String nickname,
             @IsAdminLogin AdminLoginStatus loginStatus
             ,Pageable pageable) {
