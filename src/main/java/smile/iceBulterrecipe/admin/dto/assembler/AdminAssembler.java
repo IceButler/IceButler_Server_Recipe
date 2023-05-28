@@ -13,15 +13,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class AdminAssembler {
     public Page<GetRecipeReportRes> toAdminReportEntity(Page<RecipeReport> recipeReports){
-        AtomicInteger rowNumber = new AtomicInteger(recipeReports.getNumber() * recipeReports.getSize() + 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");  // 출력 형식 지정
 
         return recipeReports.map(r ->
                 GetRecipeReportRes.builder()
-                        .recipeReportIdx((long) rowNumber.getAndIncrement())
+                        .recipeReportIdx(r.getRecipeReportIdx())
                         .recipeName(r.getRecipe().getRecipeName())
                         .author(r.getRecipe().getUser().getNickname())
-                        .reason(r.getReason())
+                        .reason(r.getReason().getReason())
                         .reporter(r.getUser().getNickname())
                         .reportDate(r.getCreatedAt().format(formatter))
                         .build());

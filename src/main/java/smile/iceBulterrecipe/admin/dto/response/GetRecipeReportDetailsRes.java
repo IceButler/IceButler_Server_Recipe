@@ -18,8 +18,9 @@ import java.util.stream.Collectors;
 @Data
 @RequiredArgsConstructor
 public class GetRecipeReportDetailsRes {
+    private Long recipeReportIdx;
     private String author;
-    private Reason reason;
+    private String reason;
     private String reporter;
     private String reportDate;
     private String memo;
@@ -35,8 +36,9 @@ public class GetRecipeReportDetailsRes {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");  // 출력 형식 지정
 
         GetRecipeReportDetailsRes getRecipeReportDetailsRes=new GetRecipeReportDetailsRes();
+        getRecipeReportDetailsRes.recipeReportIdx=recipeReport.getRecipeReportIdx();
         getRecipeReportDetailsRes.author=recipeReport.getRecipe().getUser().getNickname();
-        getRecipeReportDetailsRes.reason=recipeReport.getReason();
+        getRecipeReportDetailsRes.reason=recipeReport.getReason().getReason();
         getRecipeReportDetailsRes.reporter=recipeReport.getUser().getNickname();
         getRecipeReportDetailsRes.reportDate=recipeReport.getCreatedAt().format(formatter);
         getRecipeReportDetailsRes.memo=recipeReport.getMemo();

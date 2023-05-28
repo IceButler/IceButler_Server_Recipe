@@ -14,18 +14,18 @@ public class GetRecipeReportRes {
     private Long recipeReportIdx;
     private String recipeName;
     private String author;
-    private Reason reason;
+    private String reason;
     private String reporter;
     private String reportDate;
 
-    public static GetRecipeReportRes toDto(int rowNumber, RecipeReport recipeReport){
+    public static GetRecipeReportRes toDto( RecipeReport recipeReport){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");  // 출력 형식 지정
 
         return new GetRecipeReportRes(
-                (long) rowNumber,
+                recipeReport.getRecipeReportIdx(),
                 recipeReport.getRecipe().getRecipeName(),
                 recipeReport.getRecipe().getUser().getNickname(),
-                recipeReport.getReason(),
+                recipeReport.getReason().getReason(),
                 recipeReport.getUser().getNickname(),
                 recipeReport.getCreatedAt().format(formatter)
         );

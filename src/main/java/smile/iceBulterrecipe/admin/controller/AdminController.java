@@ -75,6 +75,7 @@ public class AdminController {
     @Admin
     @GetMapping("/reports/{recipeReportIdx}")
     public ResponseCustom<GetRecipeReportDetailsRes> getRecipeReportDetails(@PathVariable Long recipeReportIdx,
+//                                                                            @RequestParam(required = true) Integer type,
                                                                             @IsAdminLogin AdminLoginStatus loginStatus
     ) {
         return ResponseCustom.OK(this.adminService.getRecipeDetails(recipeReportIdx));
@@ -97,8 +98,9 @@ public class AdminController {
     public ResponseCustom<Page<GetRecipeReportRes>> getUserReportCheck(
             @RequestParam(required = true) Integer type,
             @RequestParam(required = false) String nickname,
+            Pageable pageable,
             @IsAdminLogin AdminLoginStatus loginStatus
-            ,Pageable pageable) {
+            ) {
         if (nickname != null) {
             return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname, pageable,type));
         } else {
