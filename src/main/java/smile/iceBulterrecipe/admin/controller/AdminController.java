@@ -9,6 +9,9 @@ import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.dto.response.UserResponse;
 import smile.iceBulterrecipe.admin.service.AdminServiceImpl;
+import smile.iceBulterrecipe.food.entity.Food;
+import smile.iceBulterrecipe.food.entity.FoodCategory;
+import smile.iceBulterrecipe.food.repository.FoodRepository;
 import smile.iceBulterrecipe.global.resolver.Admin;
 import smile.iceBulterrecipe.global.resolver.AdminLoginStatus;
 import smile.iceBulterrecipe.global.resolver.IsAdminLogin;
@@ -27,6 +30,7 @@ public class AdminController {
 
     private final AdminServiceImpl adminService;
     private final AmazonSQSSender amazonSQSSender;
+    private final FoodRepository foodRepository;
 
     @Admin
     @PostMapping
@@ -118,11 +122,16 @@ public class AdminController {
 
     @GetMapping("/sqs-test")
     public ResponseCustom<Void> getUserReportCheck() {
-        amazonSQSSender.sendMessage(FoodData.builder()
-                .foodName("fromRecipe")
-                .foodCategory("recipe")
-                .foodImgKey("recipe.img")
-                .uuid(UUID.randomUUID().toString()).build());
+        Food testFood = Food.builder()
+                .uuid(UUID.randomUUID())
+                .foodName("testFoodName2")
+                .foodCategory(FoodCategory.PROCESSED_FOOD)
+                .foodImgKey("food/testFoodName2.img")
+                .build();
+
+        foodRepository.save(testFood);
+        amazonSQSSender.sendMessage(FoodData.toDto(testFood));
+
         return ResponseCustom.OK();
     }
 }
