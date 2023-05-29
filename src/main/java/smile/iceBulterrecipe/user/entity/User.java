@@ -23,10 +23,11 @@ public class User extends BaseEntity {
     private String profileImgKey;
 
     @Builder
-    public User(Long userIdx, String nickname, String profileImgKey) {
+    public User(Long userIdx, String nickname, String profileImgKey, String email){
         this.userIdx = userIdx;
         this.nickname = nickname;
         this.profileImgKey = profileImgKey;
+        this.email = email;
     }
 
     public void modifyProfile(String nickname, String profileImgKey) {

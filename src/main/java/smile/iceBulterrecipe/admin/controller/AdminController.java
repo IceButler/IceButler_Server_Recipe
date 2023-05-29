@@ -50,6 +50,13 @@ public class AdminController {
         return ResponseCustom.OK(adminService.search(pageable, nickname, active));
     }
 
+    @DeleteMapping("/users/{userIdx}")
+    public ResponseCustom<Void> withdraw(@PathVariable Long userIdx)
+    {
+        adminService.withdraw(userIdx);
+        return ResponseCustom.OK();
+    }
+
     //레시피 신고완료
     @Admin
     @PostMapping("/reports/{recipeReportIdx}")

@@ -9,4 +9,5 @@ public class UserReq {
     private Long userIdx;
     private String nickname;
     private String profileImgKey;
+    private String email;
 }

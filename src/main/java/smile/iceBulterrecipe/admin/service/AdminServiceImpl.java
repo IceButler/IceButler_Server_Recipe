@@ -128,4 +128,11 @@ public class AdminServiceImpl implements AdminService{
     public Page<UserResponse> search(Pageable pageable, String nickname, boolean active) {
         return adminRepository.findAllByNicknameAndActive(pageable, nickname, active);
     }
+
+    @Transactional
+    @Override
+    public void withdraw(Long userIdx) {
+        User user = userRepository.findById(userIdx).orElseThrow(UserNotFoundException::new);
+        userRepository.delete(user);
+    }
 }

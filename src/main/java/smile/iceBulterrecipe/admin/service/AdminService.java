@@ -27,5 +27,7 @@ public interface AdminService {
     Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable,int type);
 
     Page<UserResponse> search(Pageable pageable, String nickname, boolean active);
+
+    void withdraw(Long userIdx);
 }
 

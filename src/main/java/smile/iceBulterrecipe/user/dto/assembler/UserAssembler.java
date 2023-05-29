@@ -11,8 +11,10 @@ public class UserAssembler {
     public User toEntity(UserReq userInfo) {
         return User.builder()
                 .userIdx(userInfo.getUserIdx())
+                .email(userInfo.getEmail())
                 .nickname(userInfo.getNickname())
                 .profileImgKey(userInfo.getProfileImgKey())
                 .build();
     }
+
 }
