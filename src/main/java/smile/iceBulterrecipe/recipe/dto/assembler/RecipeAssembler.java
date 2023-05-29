@@ -36,7 +36,6 @@ public class RecipeAssembler {
                         .recipeName(r.getRecipeName())
                         .recipeImgUrl(AwsS3ImageUrlUtils.toUrl(r.getRecipeImgKey()))
                         .recipeCategory(r.getRecipeCategory().getCategory())
-                        .percentageOfFood(null)
                         .build());
     }
 

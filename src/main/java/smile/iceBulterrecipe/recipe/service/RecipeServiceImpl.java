@@ -18,7 +18,6 @@ import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeFoodAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeLikeAssembler;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
-import smile.iceBulterrecipe.recipe.dto.request.RecipeAddsReq;
 import smile.iceBulterrecipe.recipe.dto.response.BookmarkRes;
 import smile.iceBulterrecipe.recipe.dto.response.MyRecipeRes;
 import smile.iceBulterrecipe.recipe.dto.response.RecipeDetailsRes;
@@ -203,22 +202,26 @@ public class RecipeServiceImpl implements RecipeService{
 
     // 레시피 검색(레시피)
     @Override
-    public Page<RecipeRes> getSearchRecipeListForRecipe(Long userIdx, String keyword, Pageable pageable) {
+    public Page<RecipeRes> getSearchRecipeListForRecipe(Long userIdx, RecipeFridgeFoodListsRes foodLists, String keyword, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        return getSearchRecipeMethods(user, this.recipeRepository.findByRecipeNameContainingAndIsEnable(keyword, true, pageable));
+        return getSearchRecipeMethods(user, this.recipeRepository.findByRecipeNameContainingAndIsEnable(keyword, true, pageable), foodLists);
     }
 
-    private Page<RecipeRes> getSearchRecipeMethods(User user, Page<Recipe> recipeLists) {
+    private Page<RecipeRes> getSearchRecipeMethods(User user, Page<Recipe> recipeLists, RecipeFridgeFoodListsRes foodLists) {
+        List<UUID> foodIdxes = this.foodAssembler.toFoodIdxes(foodLists);
         Page<RecipeRes> recipeRes = this.recipeAssembler.toDtoList(recipeLists);
         recipeRes.toList().forEach(r ->
-                r.setRecipeLikeStatus(this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true)));
+                {
+                    r.setRecipeLikeStatus(this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, r.getRecipeIdx(), true));
+                    r.setPercentageOfFood(this.recipeFoodRepository.getPercentageOfFood(r.getRecipeIdx(), foodIdxes));
+                });
         return recipeRes;
     }
     // 레시피 검색(음식)
     @Override
-    public Page<RecipeRes> getSearchRecipeListForFood(Long userIdx, String keyword, Pageable pageable) {
+    public Page<RecipeRes> getSearchRecipeListForFood(Long userIdx, RecipeFridgeFoodListsRes foodLists, String keyword, Pageable pageable) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
-        return getSearchRecipeMethods(user, this.recipeRepository.findByFoodNameContainingAndIsEnableHavingRecipe(keyword, pageable));
+        return getSearchRecipeMethods(user, this.recipeRepository.findByFoodNameContainingAndIsEnableHavingRecipe(keyword, pageable), foodLists);
     }
     // recipe report
     @Override
