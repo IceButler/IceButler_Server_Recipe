@@ -110,20 +110,25 @@ public class RecipeController {
 
     // 레시피 검색
     @Auth
-    @GetMapping("/search")
+    @GetMapping("/search/{fridgeIdx}")
     public ResponseCustom<?> getSearchRecipeList(@IsLogin LoginStatus loginStatus,
+                                                 @PathVariable(name = "fridgeIdx") Long fridgeIdx,
                                                  @RequestParam(value = "keyword") String keyword,
                                                  @RequestParam(name = "category") String category,
-                                                 Pageable pageable){
-        if(category.equals(Constant.RecipeConstant.SEARCH_RECIPE)){
-            return ResponseCustom.OK(this.recipeService.getSearchRecipeListForRecipe(loginStatus.getUserIdx(), keyword, pageable));
-        }else if(category.equals(Constant.RecipeConstant.SEARCH_FOOD)){
-            return ResponseCustom.OK(this.recipeService.getSearchRecipeListForFood(loginStatus.getUserIdx(), keyword, pageable));
-        }else {
+                                                 Pageable pageable) {
+
+        ResponseCustom<RecipeFridgeFoodListsRes> lists = this.mainServerClient.getFridgeFoodLists(fridgeIdx, null, loginStatus.getUserIdx());
+        if (lists.getData() == null) return lists;
+
+        if (category.equals(Constant.RecipeConstant.SEARCH_RECIPE)) {
+            return ResponseCustom.OK(this.recipeService.getSearchRecipeListForRecipe(loginStatus.getUserIdx(), lists.getData(), keyword, pageable));
+        } else if (category.equals(Constant.RecipeConstant.SEARCH_FOOD)) {
+            return ResponseCustom.OK(this.recipeService.getSearchRecipeListForFood(loginStatus.getUserIdx(), lists.getData(), keyword, pageable));
+        } else {
             throw new RecipeListCategoryNotFoundException();
         }
 
-        }
+    }
 
     // 마이 레시피 삭제
     @Auth

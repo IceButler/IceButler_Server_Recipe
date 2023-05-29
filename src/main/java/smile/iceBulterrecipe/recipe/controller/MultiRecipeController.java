@@ -51,4 +51,26 @@ public class MultiRecipeController {
         if(fridgeFoodLists.getData()==null) return fridgeFoodLists;
         return ResponseCustom.OK(this.recipeService.getBookmarkRecipes(userIdx, fridgeFoodLists.getData(), pageable));
     }
+
+    // 레시피 검색
+    @Auth
+    @GetMapping("/search/{multiFridgeIdx}")
+    public ResponseCustom<?> getSearchRecipeList(@IsLogin LoginStatus loginStatus,
+                                                 @PathVariable(name = "multiFridgeIdx") Long multiFridgeIdx,
+                                                 @RequestParam(value = "keyword") String keyword,
+                                                 @RequestParam(name = "category") String category,
+                                                 Pageable pageable) {
+
+        ResponseCustom<RecipeFridgeFoodListsRes> lists = this.mainServerClient.getFridgeFoodLists(null, multiFridgeIdx, loginStatus.getUserIdx());
+        if (lists.getData() == null) return lists;
+
+        if (category.equals(Constant.RecipeConstant.SEARCH_RECIPE)) {
+            return ResponseCustom.OK(this.recipeService.getSearchRecipeListForRecipe(loginStatus.getUserIdx(), lists.getData(), keyword, pageable));
+        } else if (category.equals(Constant.RecipeConstant.SEARCH_FOOD)) {
+            return ResponseCustom.OK(this.recipeService.getSearchRecipeListForFood(loginStatus.getUserIdx(), lists.getData(), keyword, pageable));
+        } else {
+            throw new RecipeListCategoryNotFoundException();
+        }
+
+    }
 }

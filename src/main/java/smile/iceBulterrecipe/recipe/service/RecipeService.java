@@ -15,10 +15,10 @@ public interface RecipeService{
     void postRecipe(PostRecipeReq recipeReq, Long userIdx);
     Page<MyRecipeRes> getMyRecipe(Long userIdx, Pageable pageable);
 
-    Page<RecipeRes> getSearchRecipeListForRecipe(Long userIdx, String keyword, Pageable pageable);
+    Page<RecipeRes> getSearchRecipeListForRecipe(Long userIdx, RecipeFridgeFoodListsRes data, String keyword, Pageable pageable);
     void deleteMyRecipe(Long recipeIdx, Long userIdx);
 
-    Page<RecipeRes> getSearchRecipeListForFood(Long userIdx, String keyword, Pageable pageable);
+    Page<RecipeRes> getSearchRecipeListForFood(Long userIdx, RecipeFridgeFoodListsRes data, String keyword, Pageable pageable);
 
     void reportRecipe(Long recipeIdx, Long userIdx, String reason);
 
