@@ -12,6 +12,7 @@ import smile.iceBulterrecipe.food.repository.FoodRepository;
 import smile.iceBulterrecipe.food.service.FoodServiceImpl;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.global.sqs.AmazonSQSSender;
+import smile.iceBulterrecipe.global.sqs.FoodData;
 import smile.iceBulterrecipe.recipe.Reason;
 import smile.iceBulterrecipe.recipe.dto.assembler.CookeryAssembler;
 import smile.iceBulterrecipe.recipe.dto.assembler.RecipeAssembler;
@@ -138,7 +139,7 @@ public class RecipeServiceImpl implements RecipeService{
                     .orElseGet(() -> {
                         String foodCategory = getFoodCategoryGPT(food.getFoodName());
                         Food saveFood = this.foodRepository.save(this.foodAssembler.toEntity(food, foodCategory));
-//                        amazonSQSSender.sendMessage(FoodData.toDto(saveFood));
+                        amazonSQSSender.sendMessage(FoodData.toDto(saveFood));
                         return saveFood;
                     });
             this.recipeFoodRepository.save(this.recipeFoodAssembler.toEntity(food, foodEntity, recipe));
