@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GetRecipeReportDetailsRes {
     private Long recipeReportIdx;
+    private Long recipeIdx;
     private String author;
     private String reason;
     private String reporter;
@@ -37,6 +38,7 @@ public class GetRecipeReportDetailsRes {
 
         GetRecipeReportDetailsRes getRecipeReportDetailsRes=new GetRecipeReportDetailsRes();
         getRecipeReportDetailsRes.recipeReportIdx=recipeReport.getRecipeReportIdx();
+        getRecipeReportDetailsRes.recipeIdx=recipeReport.getRecipe().getRecipeIdx();
         getRecipeReportDetailsRes.author=recipeReport.getRecipe().getUser().getNickname();
         getRecipeReportDetailsRes.reason=recipeReport.getReason().getReason();
         getRecipeReportDetailsRes.reporter=recipeReport.getUser().getNickname();
