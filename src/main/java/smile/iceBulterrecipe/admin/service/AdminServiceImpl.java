@@ -21,7 +21,6 @@ import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 import smile.iceBulterrecipe.recipe.exception.RecipeNotFoundException;
 import smile.iceBulterrecipe.recipe.repository.recipe.RecipeRepository;
-import java.util.Optional;
 import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeFood.RecipeFoodRepository;
@@ -99,7 +98,7 @@ public class AdminServiceImpl implements AdminService{
     @Override
     @Transactional
     public void modifyRecipeReport(Long recipeReportIdx, ReportMemoModifyReq reportMemoModifyReq) {
-        RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
+        RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdx(recipeReportIdx).orElseThrow(RecipeReportNotFoundException::new);
         if (reportMemoModifyReq.getMemo() != null) {
             recipeReport.toUpdateReportMemo(reportMemoModifyReq.getMemo());
         } else {
@@ -135,4 +134,5 @@ public class AdminServiceImpl implements AdminService{
         User user = userRepository.findById(userIdx).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
     }
+
 }
