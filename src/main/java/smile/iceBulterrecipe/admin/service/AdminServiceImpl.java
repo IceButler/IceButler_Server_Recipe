@@ -110,12 +110,12 @@ public class AdminServiceImpl implements AdminService{
     //회원별 레시피 신고내역 조회
     @Override
     public Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable ,int type) {
-        User user = this.userRepository.findByNickname(nickname).orElseThrow(UserNickNameNotFoundException::new);
-        Page<RecipeReport> recipeReports = this.recipeReportRepository.findByUserAndIsEnable(user, true, pageable);
+        User user = this.userRepository.findByNicknameContains(nickname).orElseThrow(UserNickNameNotFoundException::new);
+        Page<RecipeReport> recipeReports;
         if (type == 0) {
-            recipeReports = this.recipeReportRepository.findByUserAndIsEnableFalse(user, pageable);
+            recipeReports = this.recipeReportRepository.findByRecipe_UserAndIsEnableFalse(user, pageable);
         } else if (type == 1) {
-            recipeReports = this.recipeReportRepository.findByUserAndIsEnableTrue(user, pageable);
+            recipeReports = this.recipeReportRepository.findByRecipe_UserAndIsEnableTrue(user, pageable);
         }else {
             throw new RecipeReportNotFoundException();
         }
