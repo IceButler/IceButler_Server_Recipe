@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.food.dto.assembler.FoodAssembler;
 import smile.iceBulterrecipe.food.dto.request.FoodReq;
+import smile.iceBulterrecipe.food.entity.Food;
+import smile.iceBulterrecipe.food.exception.FoodNotFoundException;
 import smile.iceBulterrecipe.food.repository.FoodRepository;
 
 import org.json.simple.JSONObject;
@@ -30,6 +32,14 @@ public class FoodServiceImpl implements FoodService{
     @Override
     public void addFood(FoodReq foodReq) {
         this.foodRepository.save(this.foodAssembler.toEntity(foodReq));
+    }
+
+    @Override
+    @Transactional
+    public void deleteFood(FoodReq foodReq) {
+//        Food food = this.foodRepository.findById(foodReq.getFoodIdx()).orElseThrow(FoodNotFoundException::new);
+        Food food = this.foodRepository.findByUuidAndIsEnable(foodReq.getUuid(), true).orElseThrow(FoodNotFoundException::new);
+        food.deleteFood();
     }
 
     public String callGPTCategory(String word) throws IOException, ParseException {

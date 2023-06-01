@@ -7,13 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import smile.iceBulterrecipe.global.BaseEntity;
 
 import java.util.UUID;
 
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Food {
+public class Food extends BaseEntity {
     @Id// id 직접 할당
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
@@ -38,4 +39,7 @@ public class Food {
         this.uuid = uuid;
     }
 
+    public void deleteFood() {
+        this.setIsEnable(false);
+    }
 }

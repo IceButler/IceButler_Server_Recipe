@@ -6,4 +6,6 @@ import smile.iceBulterrecipe.food.dto.request.FoodReq;
 @Service
 public interface FoodService {
     void addFood(FoodReq foodReq);
+
+  void deleteFood(FoodReq foodReq);
 }
