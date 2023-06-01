@@ -29,5 +29,6 @@ public interface AdminService {
     Page<UserResponse> search(Pageable pageable, String nickname, boolean active);
 
     void withdraw(Long userIdx);
+
 }
 
