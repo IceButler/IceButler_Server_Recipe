@@ -48,10 +48,11 @@ public class AdminController {
 //            @IsAdminLogin AdminLoginStatus loginStatus,
             Pageable pageable,
             @RequestParam(defaultValue = "") String nickname,
-            @RequestParam(defaultValue = "true") boolean active
+            @RequestParam(defaultValue = "true") boolean active,
+            @RequestParam(defaultValue = "false") boolean order
     )
     {
-        return ResponseCustom.OK(adminService.search(pageable, nickname, active));
+        return ResponseCustom.OK(adminService.search(pageable, nickname, active, order));
     }
 
     @DeleteMapping("/users/{userIdx}")

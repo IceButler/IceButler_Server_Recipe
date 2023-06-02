@@ -124,8 +124,8 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public Page<UserResponse> search(Pageable pageable, String nickname, boolean active) {
-        return adminRepository.findAllByNicknameAndActive(pageable, nickname, active);
+    public Page<UserResponse> search(Pageable pageable, String nickname, boolean active, boolean order) {
+        return adminRepository.findAllByNicknameAndActive(pageable, nickname, active, order);
     }
 
     @Transactional

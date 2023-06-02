@@ -13,6 +13,7 @@ import smile.iceBulterrecipe.recipe.entity.QRecipeReport;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 import smile.iceBulterrecipe.user.entity.User;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,8 @@ public class AdminRepositoryQuerydslImpl implements  AdminRepositoryQuerydsl{
     public Page<UserResponse> findAllByNicknameAndActive(
             Pageable pageable,
             String nickname,
-            boolean active)
+            boolean active,
+            boolean order)
     {
         List<User> result = queryFactory
                 .selectFrom(user)
@@ -63,6 +65,12 @@ public class AdminRepositoryQuerydslImpl implements  AdminRepositoryQuerydsl{
         for (UserResponse userResponse : userResponses)
             for (RecipeReport report : reports)
                 if(userResponse.getUserIdx().equals(report.getUser().getUserIdx())) userResponse.upReportCount();
+
+        userResponses
+                = order ? userResponses.stream()
+                            .sorted(Comparator.comparing(UserResponse::getReportCount).reversed())
+                            .collect(Collectors.toList())
+                : userResponses;
 
         return PageableExecutionUtils.getPage(userResponses, pageable, countQuery::fetchOne);
     }
