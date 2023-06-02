@@ -149,7 +149,7 @@ public class RecipeController {
         return ResponseCustom.OK();
     }
 
-    // 레시피 즐겨찾기
+    // 레시피 기본 정보 불러오기
     @Auth
     @GetMapping("/{fridgeIdx}/info/{recipeIdx}")
     public ResponseCustom<?> recipeBasicInfo(@PathVariable(name = "fridgeIdx") Long fridgeIdx,
