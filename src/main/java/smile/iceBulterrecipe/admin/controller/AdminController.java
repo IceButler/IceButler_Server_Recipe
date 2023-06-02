@@ -130,10 +130,6 @@ public class AdminController {
             return ResponseCustom.OK(this.adminService.getUsersReportCheck(nickname, pageable));
     }
 
-
-
-
-
     @GetMapping("/sqs-test")
     public ResponseCustom<Void> getUserReportCheck() {
         Food testFood = Food.builder()

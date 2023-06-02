@@ -157,10 +157,5 @@ public class AdminServiceImpl implements AdminService{
         userRepository.delete(user);
     }
 
-    @Override
-    public Page<GetRecipeReportRes> getAllRecipeReport(Pageable pageable) {
-        Page<RecipeReport> recipeReports = this.recipeReportRepository.findAll(pageable);
-        return this.adminAssembler.toAdminReportEntity(recipeReports);
-    }
 
 }
