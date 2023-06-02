@@ -156,6 +156,10 @@ public class AdminServiceImpl implements AdminService{
         User user = userRepository.findById(userIdx).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
     }
-
+    @Override
+    public Page<GetRecipeReportRes> getAllRecipeReport(Pageable pageable) {
+        Page<RecipeReport> recipeReports = this.recipeReportRepository.findAll(pageable);
+        return this.adminAssembler.toAdminReportEntity(recipeReports);
+    }
 
 }
