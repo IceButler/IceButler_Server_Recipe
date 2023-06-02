@@ -4,9 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import smile.iceBulterrecipe.admin.dto.request.AdminReq;
 import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
-import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
-import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
-import smile.iceBulterrecipe.admin.dto.response.UserResponse;
+import smile.iceBulterrecipe.admin.dto.response.*;
 
 public interface AdminService {
     void addAdmin(AdminReq request);
@@ -34,5 +32,7 @@ public interface AdminService {
 
 
     Page<GetRecipeReportRes> getUsersReportCheck(String nickname, Pageable pageable);
+
+    UserRecipeReportsRes GetUserRecipeReports(Long userIdx);
 }
 

@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
+import smile.iceBulterrecipe.admin.dto.response.UserRecipeReportRes;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -25,4 +27,6 @@ public class AdminAssembler {
                         .reportDate(r.getCreatedAt().format(formatter))
                         .build());
     }
+
+
 }
