@@ -75,7 +75,7 @@ public class MultiRecipeController {
     }
 
     @Auth
-    @PostMapping("/{multiFridgeIdx}/info/{recipeIdx}")
+    @GetMapping("/{multiFridgeIdx}/info/{recipeIdx}")
     public ResponseCustom<?> recipeBasicInfo(@PathVariable(name = "multiFridgeIdx") Long multiFridgeIdx,
                                              @PathVariable(name = "recipeIdx") Long recipeIdx,
                                              @IsLogin LoginStatus loginStatus) {
