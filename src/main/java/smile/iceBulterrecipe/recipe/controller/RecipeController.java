@@ -149,6 +149,16 @@ public class RecipeController {
         return ResponseCustom.OK();
     }
 
+    // 레시피 즐겨찾기
+    @Auth
+    @GetMapping("/{fridgeIdx}/info/{recipeIdx}")
+    public ResponseCustom<?> recipeBasicInfo(@PathVariable(name = "fridgeIdx") Long fridgeIdx,
+                                                       @PathVariable(name = "recipeIdx") Long recipeIdx,
+                                                      @IsLogin LoginStatus loginStatus) {
+        ResponseCustom<RecipeFridgeFoodListsRes> lists = this.mainServerClient.getFridgeFoodLists(fridgeIdx, null, loginStatus.getUserIdx());
+        if(lists.getData() == null) return lists;
+        return ResponseCustom.OK(this.recipeService.recipeBasicInfo(recipeIdx,  lists.getData(), loginStatus.getUserIdx()));
+    }
 }
 
 
