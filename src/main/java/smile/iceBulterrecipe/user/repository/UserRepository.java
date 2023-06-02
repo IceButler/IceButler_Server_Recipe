@@ -11,10 +11,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUserIdxAndIsEnable(Long userIdx, Boolean isEnable);
 
-    Optional<User> findByNicknameContains(String nickname);
+    List<User> findByNicknameContains(String nickname);
 
 
-
-
-
+    List<User> findAllByNicknameContains(String nickname);
 }

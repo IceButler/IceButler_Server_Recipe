@@ -104,20 +104,29 @@ public class AdminController {
         return ResponseCustom.OK();
     }
 
-    //회원별 레시피 신고내역 조회
+    //레시피 신고내역 조회
     @Admin
     @GetMapping("/reports")
     public ResponseCustom<Page<GetRecipeReportRes>> getUserReportCheck(
-            @RequestParam(required = true) Integer type,
+            @RequestParam(required = false) Integer type,
             @RequestParam(required = false) String nickname,
             Pageable pageable,
             @IsAdminLogin AdminLoginStatus loginStatus
             ) {
-        if (nickname != null) {
-            return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname, pageable,type));
-        } else {
-            return ResponseCustom.OK(this.adminService.getRecipeReport(pageable,type));
+        if (type == null) {
+            if (nickname != null) {
+                return ResponseCustom.OK(this.adminService.getUsersReportCheck(nickname, pageable));
+            } else{
+                return ResponseCustom.OK(this.adminService.getAllRecipeReport(pageable));
+            }
+        }else{
+            if (nickname != null) {
+                return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname, pageable, type));
+            } else {
+                return ResponseCustom.OK(this.adminService.getRecipeReport(pageable, type));
+            }
         }
+
     }
 
 

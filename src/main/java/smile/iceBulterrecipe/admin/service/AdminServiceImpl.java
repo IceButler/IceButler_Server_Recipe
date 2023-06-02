@@ -2,6 +2,7 @@ package smile.iceBulterrecipe.admin.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 import smile.iceBulterrecipe.user.repository.UserRepository;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -110,17 +112,37 @@ public class AdminServiceImpl implements AdminService{
     //회원별 레시피 신고내역 조회
     @Override
     public Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable ,int type) {
-        User user = this.userRepository.findByNicknameContains(nickname).orElseThrow(UserNickNameNotFoundException::new);
-        Page<RecipeReport> recipeReports;
-        if (type == 0) {
-            recipeReports = this.recipeReportRepository.findByRecipe_UserAndIsEnableFalse(user, pageable);
-        } else if (type == 1) {
-            recipeReports = this.recipeReportRepository.findByRecipe_UserAndIsEnableTrue(user, pageable);
-        }else {
-            throw new RecipeReportNotFoundException();
+        List<User> users = this.userRepository.findAllByNicknameContains(nickname);
+        if (users.isEmpty()) {
+            throw new UserNickNameNotFoundException();
         }
+        List<RecipeReport> allRecipeReports = new ArrayList<>();
+        for (User user : users) {
+            Page<RecipeReport> recipeReports;
+            if (type == 0) {
+                recipeReports = this.recipeReportRepository.findByRecipe_UserAndIsEnableFalse(user, pageable);
+            } else if (type == 1) {
+                recipeReports = this.recipeReportRepository.findByRecipe_UserAndIsEnableTrue(user, pageable);
+            } else {
+                throw new RecipeReportNotFoundException();
+            }
+            allRecipeReports.addAll(recipeReports.getContent());
+        }
+        return this.adminAssembler.toAdminReportEntity(new PageImpl<>(allRecipeReports, pageable, allRecipeReports.size()));
+    }
 
-        return this.adminAssembler.toAdminReportEntity(recipeReports);
+    @Override
+    public Page<GetRecipeReportRes> getUsersReportCheck(String nickname, Pageable pageable) {
+        List<User> users = this.userRepository.findAllByNicknameContains(nickname);
+        if (users.isEmpty()) {
+            throw new UserNickNameNotFoundException();
+        }
+        List<RecipeReport> allRecipeReports = new ArrayList<>();
+        for (User user : users) {
+            Page<RecipeReport> recipeReports = this.recipeReportRepository.findByRecipe_User(user, pageable);
+            allRecipeReports.addAll(recipeReports.getContent());
+        }
+        return this.adminAssembler.toAdminReportEntity(new PageImpl<>(allRecipeReports, pageable, allRecipeReports.size()));
     }
 
     @Override
@@ -133,6 +155,11 @@ public class AdminServiceImpl implements AdminService{
     public void withdraw(Long userIdx) {
         User user = userRepository.findById(userIdx).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
+    }
+    @Override
+    public Page<GetRecipeReportRes> getAllRecipeReport(Pageable pageable) {
+        Page<RecipeReport> recipeReports = this.recipeReportRepository.findAll(pageable);
+        return this.adminAssembler.toAdminReportEntity(recipeReports);
     }
 
 }
