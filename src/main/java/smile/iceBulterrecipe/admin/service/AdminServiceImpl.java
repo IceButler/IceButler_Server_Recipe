@@ -80,7 +80,6 @@ public class AdminServiceImpl implements AdminService{
     @Override
     @Transactional
     public void removeRecipe(Long recipeIdx) {
-//        RecipeReport report = recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx, true).orElseThrow(RecipeReportNotFoundException::new);
         Recipe recipe = recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
         recipeRepository.delete(recipe);
     }
