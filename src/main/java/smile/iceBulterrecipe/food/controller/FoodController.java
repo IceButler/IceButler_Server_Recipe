@@ -33,7 +33,7 @@ public class FoodController {
         return ResponseCustom.OK();
     }
 
-    @PatchMapping("")
+    @PostMapping("")
     public ResponseCustom<?> updateFood(@RequestBody FoodReq foodReq) {
         this.foodService.updateFood(foodReq);
         return ResponseCustom.OK();

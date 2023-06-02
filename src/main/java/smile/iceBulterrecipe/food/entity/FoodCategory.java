@@ -32,6 +32,13 @@ public enum FoodCategory {
                 .filter(r -> r.getCategory().equals(name))
                 .findAny().orElseThrow(FoodCategoryNotFoundException::new);
     }
+
+    public static FoodCategory getFoodCategory(String foodCategory){
+        return Arrays.stream(FoodCategory.values())
+                .filter(r -> r.toString().equals(foodCategory))
+                .findAny().orElseThrow(FoodCategoryNotFoundException::new);
+    }
+
     public String getImage() {
         return IMG_FOLDER + this.name() + ICON_EXTENSION;
     }

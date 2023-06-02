@@ -45,7 +45,7 @@ public class Food extends BaseEntity {
     }
 
     public void toUpdateFoodInfo(FoodReq foodReq) {
-        this.foodCategory = FoodCategory.getFoodCategoryByName(foodReq.getFoodCategory());
+        this.foodCategory = FoodCategory.getFoodCategory(foodReq.getFoodCategory());
         this.foodName = foodReq.getFoodName();
         this.foodImgKey = foodReq.getFoodImgKey();
     }
