@@ -75,11 +75,11 @@ public class AdminController {
 
 
     @Admin
-    @DeleteMapping("/recipes/{recipeReportIdx}")
-    public ResponseCustom<Void> removeRecipe(@PathVariable Long recipeReportIdx,
+    @DeleteMapping("/recipes/{recipeIdx}")
+    public ResponseCustom<Void> removeRecipe(@PathVariable Long recipeIdx,
                                              @IsAdminLogin AdminLoginStatus loginStatus
     ) {
-        this.adminService.removeRecipe(recipeReportIdx);
+        this.adminService.removeRecipe(recipeIdx);
         return ResponseCustom.OK();
     }
 
