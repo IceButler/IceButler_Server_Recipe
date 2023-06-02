@@ -112,12 +112,26 @@ public class AdminController {
             Pageable pageable,
             @IsAdminLogin AdminLoginStatus loginStatus
             ) {
-        if (nickname != null) {
-            return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname, pageable,type));
-        } else {
-            return ResponseCustom.OK(this.adminService.getRecipeReport(pageable,type));
-        }
+            if (nickname != null) {
+                return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname, pageable, type));
+            } else {
+                return ResponseCustom.OK(this.adminService.getRecipeReport(pageable, type));
+            }
     }
+
+    //회원 레시피 신고내역,신고완료내역 조회
+    @Admin
+    @GetMapping("/reports/users")
+    public ResponseCustom<Page<GetRecipeReportRes>> getUsersReportCheck(
+            @RequestParam(required = true) String nickname,
+            Pageable pageable,
+            @IsAdminLogin AdminLoginStatus loginStatus
+    ) {
+            return ResponseCustom.OK(this.adminService.getUsersReportCheck(nickname, pageable));
+    }
+
+
+
 
 
     @GetMapping("/sqs-test")

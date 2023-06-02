@@ -30,5 +30,8 @@ public interface AdminService {
 
     void withdraw(Long userIdx);
 
+    Page<GetRecipeReportRes> getAllRecipeReport(Pageable pageable);
+
+    Page<GetRecipeReportRes> getUsersReportCheck(String nickname, Pageable pageable);
 }
 
