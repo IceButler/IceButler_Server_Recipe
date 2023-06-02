@@ -73,4 +73,14 @@ public class MultiRecipeController {
         }
 
     }
+
+    @Auth
+    @PostMapping("/{multiFridgeIdx}/info/{recipeIdx}")
+    public ResponseCustom<?> recipeBasicInfo(@PathVariable(name = "multiFridgeIdx") Long multiFridgeIdx,
+                                             @PathVariable(name = "recipeIdx") Long recipeIdx,
+                                             @IsLogin LoginStatus loginStatus) {
+        ResponseCustom<RecipeFridgeFoodListsRes> lists = this.mainServerClient.getFridgeFoodLists(null, multiFridgeIdx, loginStatus.getUserIdx());
+        if(lists.getData() == null) return lists;
+        return ResponseCustom.OK(this.recipeService.recipeBasicInfo(recipeIdx,  lists.getData(), loginStatus.getUserIdx()));
+    }
 }

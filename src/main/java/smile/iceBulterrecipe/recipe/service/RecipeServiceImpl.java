@@ -156,7 +156,7 @@ public class RecipeServiceImpl implements RecipeService{
     public void updateRecipe(PostRecipeReq recipeReq, Long userIdx, Long recipeIdx) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
 
-        Recipe recipe = this.recipeRepository.findById(recipeIdx).orElseThrow(RecipeNotFoundException::new);
+        Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
 
         if (!recipe.getUser().equals(user)) {
             throw new UserNotFoundException();
@@ -181,6 +181,17 @@ public class RecipeServiceImpl implements RecipeService{
         recipeReq.getCookeryList().forEach(cookery -> {
             this.cookeryRepository.save(this.cookeryAssembler.toEntity(cookery, recipe, nextIdx.getAndSet(nextIdx.get() + 1)));
         });
+    }
+
+    // 레시피 기본 정보 조회 api
+    @Override
+    public RecipeRes recipeBasicInfo(Long recipeIdx, RecipeFridgeFoodListsRes foodLists, Long userIdx) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
+        List<UUID> foodIdxes = this.foodAssembler.toFoodIdxes(foodLists);
+        return RecipeRes.toDto(recipe,
+                this.recipeFoodRepository.getPercentageOfFood(recipe.getRecipeIdx(), foodIdxes),
+                this.recipeLikeRepository.existsByUserAndRecipe_RecipeIdxAndIsEnable(user, recipe.getRecipeIdx(), true));
     }
 
     private String getFoodCategoryGPT(String foodName){
