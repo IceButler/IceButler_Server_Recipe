@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import smile.iceBulterrecipe.food.dto.request.FoodReq;
 import smile.iceBulterrecipe.global.BaseEntity;
 
 import java.util.UUID;
@@ -41,5 +42,11 @@ public class Food extends BaseEntity {
 
     public void deleteFood() {
         this.setIsEnable(false);
+    }
+
+    public void toUpdateFoodInfo(FoodReq foodReq) {
+        this.foodCategory = FoodCategory.getFoodCategoryByName(foodReq.getFoodCategory());
+        this.foodName = foodReq.getFoodName();
+        this.foodImgKey = foodReq.getFoodImgKey();
     }
 }

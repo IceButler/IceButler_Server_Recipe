@@ -42,6 +42,13 @@ public class FoodServiceImpl implements FoodService{
         food.deleteFood();
     }
 
+    @Override
+    @Transactional
+    public void updateFood(FoodReq foodReq) {
+        Food food = this.foodRepository.findByUuidAndIsEnable(foodReq.getUuid(), true).orElseThrow(FoodNotFoundException::new);
+        food.toUpdateFoodInfo(foodReq);
+    }
+
     public String callGPTCategory(String word) throws IOException, ParseException {
         String encWord = URLEncoder.encode(word, StandardCharsets.UTF_8);
         URL categoryGPTUrl = new URL("https://za8hqdiis4.execute-api.ap-northeast-2.amazonaws.com/dev/chatgpt-category?keyword="+encWord);
