@@ -41,5 +41,4 @@ public class FoodAssembler {
                 .map(RecipeFridgeFoodListRes::getFoodIdx)
                 .collect(Collectors.toList());
     }
-
 }

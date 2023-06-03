@@ -33,6 +33,12 @@ public class FoodController {
         return ResponseCustom.OK();
     }
 
+    @PostMapping("")
+    public ResponseCustom<?> updateFood(@RequestBody FoodReq foodReq) {
+        this.foodService.updateFood(foodReq);
+        return ResponseCustom.OK();
+    }
+
 //    @GetMapping("/hohotest")
 //    public void hohotest() {
 //        amazonSQSSender.sendMessage(

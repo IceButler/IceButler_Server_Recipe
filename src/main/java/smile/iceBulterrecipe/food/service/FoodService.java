@@ -8,4 +8,6 @@ public interface FoodService {
     void addFood(FoodReq foodReq);
 
   void deleteFood(FoodReq foodReq);
+
+  void updateFood(FoodReq foodReq);
 }
