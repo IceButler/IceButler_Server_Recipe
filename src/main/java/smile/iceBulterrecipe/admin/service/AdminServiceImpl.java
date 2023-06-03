@@ -1,9 +1,7 @@
 package smile.iceBulterrecipe.admin.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.admin.dto.request.AdminReq;
@@ -62,14 +60,15 @@ public class AdminServiceImpl implements AdminService{
         recipeReport.adminReportRecipe();
     }
 
-    //신고 내역 조회
+    //레시피 신고 내역 조회
     @Override
     public Page<GetRecipeReportRes> getRecipeReport(Pageable pageable,int type) {
         Page<RecipeReport> recipeReports;
+
         if (type == 0) {
-            recipeReports = this.recipeReportRepository.findAllByIsEnableFalse(pageable);
+            recipeReports = this.recipeReportRepository.findAllByIsEnableFalseOrderByCreatedAtDesc(pageable);
         } else if (type == 1) {
-            recipeReports = this.recipeReportRepository.findAllByIsEnableTrue(pageable);
+            recipeReports = this.recipeReportRepository.findAllByIsEnableTrueOrderByCreatedAtDesc(pageable);
         }else {
             throw new RecipeReportNotFoundException();
         }
@@ -98,7 +97,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public UserRecipeReportsRes GetUserRecipeReports(Long userIdx) {
-        List<RecipeReport> recipeReports = recipeReportRepository.findByRecipe_UserUserIdx(userIdx);
+        List<RecipeReport> recipeReports = recipeReportRepository.findByRecipe_UserUserIdxOrderByCreatedAtDesc(userIdx);
         return UserRecipeReportsRes.toDto(userIdx, recipeReports);
 
 
@@ -128,9 +127,9 @@ public class AdminServiceImpl implements AdminService{
         for (User user : users) {
             Page<RecipeReport> recipeReports;
             if (type == 0) {
-                recipeReports = this.recipeReportRepository.findByRecipe_UserAndIsEnableFalse(user, pageable);
+                recipeReports = this.recipeReportRepository.findByRecipe_UserAndIsEnableFalseOrderByCreatedAtDesc(user, pageable);
             } else if (type == 1) {
-                recipeReports = this.recipeReportRepository.findByRecipe_UserAndIsEnableTrue(user, pageable);
+                recipeReports = this.recipeReportRepository.findByRecipe_UserAndIsEnableTrueOrderByCreatedAtDesc(user, pageable);
             } else {
                 throw new RecipeReportNotFoundException();
             }
@@ -147,7 +146,7 @@ public class AdminServiceImpl implements AdminService{
         }
         List<RecipeReport> allRecipeReports = new ArrayList<>();
         for (User user : users) {
-            Page<RecipeReport> recipeReports = this.recipeReportRepository.findByRecipe_User(user, pageable);
+            Page<RecipeReport> recipeReports = this.recipeReportRepository.findByRecipe_UserOrderByCreatedAtDesc(user, pageable);
             allRecipeReports.addAll(recipeReports.getContent());
         }
         return this.adminAssembler.toAdminReportEntity(new PageImpl<>(allRecipeReports, pageable, allRecipeReports.size()));
@@ -168,6 +167,9 @@ public class AdminServiceImpl implements AdminService{
     }
     @Override
     public Page<GetRecipeReportRes> getAllRecipeReport(Pageable pageable) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
         Page<RecipeReport> recipeReports = this.recipeReportRepository.findAll(pageable);
         return this.adminAssembler.toAdminReportEntity(recipeReports);
     }
