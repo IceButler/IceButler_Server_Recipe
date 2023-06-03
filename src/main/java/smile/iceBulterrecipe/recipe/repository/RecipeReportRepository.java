@@ -4,10 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import smile.iceBulterrecipe.admin.dto.response.UserRecipeReportsRes;
 import smile.iceBulterrecipe.recipe.entity.Recipe;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 import smile.iceBulterrecipe.user.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -29,8 +31,8 @@ public interface RecipeReportRepository extends JpaRepository<RecipeReport, Long
     Page<RecipeReport> findByRecipe_User(User user, Pageable pageable);
 
 
+//    List<RecipeReport> findByRecipe_UserUserIdxAndIsEnable(Long userIdx,Boolean isEnable);
+    List<RecipeReport> findByRecipe_UserUserIdx(Long userIdx);
 
-
-
-
+//    List<RecipeReport> findAllByUserUserIdx(Long userIdx);
 }

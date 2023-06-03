@@ -7,6 +7,7 @@ import smile.iceBulterrecipe.admin.dto.request.AdminReq;
 import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
+import smile.iceBulterrecipe.admin.dto.response.UserRecipeReportsRes;
 import smile.iceBulterrecipe.admin.dto.response.UserResponse;
 import smile.iceBulterrecipe.admin.service.AdminServiceImpl;
 import smile.iceBulterrecipe.food.entity.Food;
@@ -102,6 +103,15 @@ public class AdminController {
     ) {
         this.adminService.modifyRecipeReport(recipeReportIdx, reportMemoModifyReq);
         return ResponseCustom.OK();
+    }
+
+    //회원 정지 안내
+    @Admin
+    @GetMapping("/reports/users/{userIdx}")
+    public ResponseCustom<UserRecipeReportsRes> GetUserRecipeReports(@PathVariable Long userIdx,
+                                                                     @IsAdminLogin AdminLoginStatus loginStatus
+    ){
+        return ResponseCustom.OK(this.adminService.GetUserRecipeReports(userIdx));
     }
 
     //레시피 신고내역 조회

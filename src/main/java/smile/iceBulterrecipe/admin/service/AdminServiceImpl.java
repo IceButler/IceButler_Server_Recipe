@@ -8,10 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smile.iceBulterrecipe.admin.dto.request.AdminReq;
 import smile.iceBulterrecipe.admin.dto.request.ReportMemoModifyReq;
-import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
-import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
+import smile.iceBulterrecipe.admin.dto.response.*;
 import smile.iceBulterrecipe.admin.dto.assembler.AdminAssembler;
-import smile.iceBulterrecipe.admin.dto.response.UserResponse;
 import smile.iceBulterrecipe.admin.entity.Admin;
 import smile.iceBulterrecipe.admin.exception.NotExistMemoException;
 import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
@@ -31,8 +29,10 @@ import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 import smile.iceBulterrecipe.user.repository.UserRepository;
 
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -95,6 +95,15 @@ public class AdminServiceImpl implements AdminService{
         return GetRecipeReportDetailsRes.toDto(recipeReport,recipeFoods,cookery);
 
     }
+
+    @Override
+    public UserRecipeReportsRes GetUserRecipeReports(Long userIdx) {
+        List<RecipeReport> recipeReports = recipeReportRepository.findByRecipe_UserUserIdx(userIdx);
+        return UserRecipeReportsRes.toDto(userIdx, recipeReports);
+
+
+    }
+
     //신고 메모 수정
     @Override
     @Transactional
@@ -143,6 +152,8 @@ public class AdminServiceImpl implements AdminService{
         }
         return this.adminAssembler.toAdminReportEntity(new PageImpl<>(allRecipeReports, pageable, allRecipeReports.size()));
     }
+
+
 
     @Override
     public Page<UserResponse> search(Pageable pageable, String nickname, boolean active, boolean order) {
