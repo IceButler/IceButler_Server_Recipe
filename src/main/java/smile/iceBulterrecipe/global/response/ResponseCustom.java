@@ -47,7 +47,7 @@ public class ResponseCustom<T>{
                 .build();
     }
 
-    public static <T> ResponseCustom<T> BAD_REQUEST(@Nullable String description){
+    public static <T> ResponseCustom<T> x(@Nullable String description){
         return (ResponseCustom<T>) ResponseCustom.builder()
                 .transaction_time(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST)

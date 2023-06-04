@@ -152,12 +152,20 @@ public class RecipeController {
     // 레시피 기본 정보 불러오기
     @Auth
     @GetMapping("/{fridgeIdx}/info/{recipeIdx}")
-    public ResponseCustom<?> recipeBasicInfo(@PathVariable(name = "fridgeIdx") Long fridgeIdx,
+    public ResponseCustom<?> getRecipeBasicInfo(@PathVariable(name = "fridgeIdx") Long fridgeIdx,
                                                        @PathVariable(name = "recipeIdx") Long recipeIdx,
                                                       @IsLogin LoginStatus loginStatus) {
         ResponseCustom<RecipeFridgeFoodListsRes> lists = this.mainServerClient.getFridgeFoodLists(fridgeIdx, null, loginStatus.getUserIdx());
         if(lists.getData() == null) return lists;
-        return ResponseCustom.OK(this.recipeService.recipeBasicInfo(recipeIdx,  lists.getData(), loginStatus.getUserIdx()));
+        return ResponseCustom.OK(this.recipeService.getRecipeBasicInfo(recipeIdx,  lists.getData(), loginStatus.getUserIdx()));
+    }
+
+    // 마이 레시피 기본 정보 불러오기
+    @Auth
+    @GetMapping("myrecipe/{recipeIdx}")
+    public ResponseCustom<?> getMyRecipeBasicInfo(@PathVariable(name = "recipeIdx") Long recipeIdx,
+                                             @IsLogin LoginStatus loginStatus) {
+        return ResponseCustom.OK(this.recipeService.getMyRecipeBasicInfo(recipeIdx, loginStatus.getUserIdx()));
     }
 }
 
