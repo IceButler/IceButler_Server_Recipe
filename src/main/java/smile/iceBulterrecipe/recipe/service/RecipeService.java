@@ -3,7 +3,6 @@ package smile.iceBulterrecipe.recipe.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
-import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.recipe.dto.request.PostRecipeReq;
 import smile.iceBulterrecipe.recipe.dto.response.*;
 
@@ -15,7 +14,7 @@ public interface RecipeService{
 
     void postRecipe(PostRecipeReq recipeReq, Long userIdx);
 
-    RecipeRes recipeBasicInfo(Long recipeIdx, RecipeFridgeFoodListsRes foodLists, Long userIdx);
+    RecipeRes getRecipeBasicInfo(Long recipeIdx, RecipeFridgeFoodListsRes foodLists, Long userIdx);
 
     Page<MyRecipeRes> getMyRecipe(Long userIdx, Pageable pageable);
 
@@ -29,4 +28,5 @@ public interface RecipeService{
 
     void updateRecipe(PostRecipeReq recipeReq, Long userIdx, Long recipeIdx);
 
+    RecipeRes getMyRecipeBasicInfo(Long recipeIdx, Long userIdx);
 }

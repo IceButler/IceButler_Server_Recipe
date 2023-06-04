@@ -159,7 +159,7 @@ public class RecipeServiceImpl implements RecipeService{
         Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
 
         if (!recipe.getUser().equals(user)) {
-            throw new UserNotFoundException();
+            throw new InvalidRecipeUserException();
         }
         recipe.updateRecipe(recipeReq.getRecipeName(),recipeReq.getRecipeImgKey(),recipeReq.getQuantity(),recipeReq.getLeadTime(),RecipeCategory.getFoodCategoryByName(recipeReq.getRecipeCategory()));
 
@@ -183,9 +183,18 @@ public class RecipeServiceImpl implements RecipeService{
         });
     }
 
+    // 마이 레시피 기본 정보 조회 api
+    @Override
+    public RecipeRes getMyRecipeBasicInfo(Long recipeIdx, Long userIdx) {
+        User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
+        Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
+        if (!recipe.getUser().equals(user)) throw new InvalidRecipeUserException();
+        return RecipeRes.toDto(recipe);
+    }
+
     // 레시피 기본 정보 조회 api
     @Override
-    public RecipeRes recipeBasicInfo(Long recipeIdx, RecipeFridgeFoodListsRes foodLists, Long userIdx) {
+    public RecipeRes getRecipeBasicInfo(Long recipeIdx, RecipeFridgeFoodListsRes foodLists, Long userIdx) {
         User user = this.userRepository.findByUserIdxAndIsEnable(userIdx, true).orElseThrow(UserNotFoundException::new);
         Recipe recipe = this.recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
         List<UUID> foodIdxes = this.foodAssembler.toFoodIdxes(foodLists);

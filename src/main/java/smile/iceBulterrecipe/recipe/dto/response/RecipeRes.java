@@ -19,6 +19,7 @@ public class RecipeRes {
     private String recipeCategory;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer percentageOfFood;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean recipeLikeStatus;
 
     public static RecipeRes toDto(Recipe recipe, Integer percentage, Boolean recipeLikeStatus) {

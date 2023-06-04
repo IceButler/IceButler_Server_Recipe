@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
+import smile.iceBulterrecipe.recipe.exception.InvalidRecipeUserException;
 import smile.iceBulterrecipe.recipe.exception.RecipeCategoryNotFoundException;
 import smile.iceBulterrecipe.recipe.exception.RecipeListCategoryNotFoundException;
 import smile.iceBulterrecipe.recipe.exception.RecipeNotFoundException;
@@ -27,5 +28,11 @@ public class RecipeExceptionController {
     public ResponseCustom<?> catchRecipeNotFoundException(RecipeNotFoundException e) {
         log.error(e.getMessage());
         return ResponseCustom.NOT_FOUND(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidRecipeUserException.class)
+    public ResponseCustom<?> catchInvalidRecipeUserException(InvalidRecipeUserException e) {
+        log.error(e.getMessage());
+        return ResponseCustom.BAD_REQUEST(e.getMessage());
     }
 }

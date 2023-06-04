@@ -3,7 +3,6 @@ package smile.iceBulterrecipe.recipe.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import smile.iceBulterrecipe.global.Constant;
-import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListRes;
 import smile.iceBulterrecipe.global.feign.dto.response.RecipeFridgeFoodListsRes;
 import smile.iceBulterrecipe.global.feign.feignClient.MainServerClient;
 import smile.iceBulterrecipe.global.resolver.Auth;
@@ -12,7 +11,6 @@ import smile.iceBulterrecipe.global.resolver.LoginStatus;
 import smile.iceBulterrecipe.global.response.ResponseCustom;
 import smile.iceBulterrecipe.recipe.exception.RecipeListCategoryNotFoundException;
 import smile.iceBulterrecipe.recipe.service.RecipeServiceImpl;
-import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 import org.springframework.data.domain.Pageable;
 
 @RequestMapping("/multiRecipes")
@@ -81,6 +79,6 @@ public class MultiRecipeController {
                                              @IsLogin LoginStatus loginStatus) {
         ResponseCustom<RecipeFridgeFoodListsRes> lists = this.mainServerClient.getFridgeFoodLists(null, multiFridgeIdx, loginStatus.getUserIdx());
         if(lists.getData() == null) return lists;
-        return ResponseCustom.OK(this.recipeService.recipeBasicInfo(recipeIdx,  lists.getData(), loginStatus.getUserIdx()));
+        return ResponseCustom.OK(this.recipeService.getRecipeBasicInfo(recipeIdx,  lists.getData(), loginStatus.getUserIdx()));
     }
 }
