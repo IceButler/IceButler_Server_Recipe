@@ -24,7 +24,7 @@ public class Food extends BaseEntity {
     private String foodName;
     private String foodImgKey;
 
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+//    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     @Type(type = "uuid-char")
     private UUID uuid;
 
