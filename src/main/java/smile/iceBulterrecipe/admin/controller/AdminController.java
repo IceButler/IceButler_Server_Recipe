@@ -10,6 +10,7 @@ import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.dto.response.UserRecipeReportsRes;
 import smile.iceBulterrecipe.admin.dto.response.UserResponse;
 import smile.iceBulterrecipe.admin.service.AdminServiceImpl;
+import smile.iceBulterrecipe.food.dto.assembler.FoodAssembler;
 import smile.iceBulterrecipe.food.entity.Food;
 import smile.iceBulterrecipe.food.entity.FoodCategory;
 import smile.iceBulterrecipe.food.repository.FoodRepository;
@@ -21,6 +22,7 @@ import smile.iceBulterrecipe.global.response.ResponseCustom;
 import org.springframework.data.domain.Pageable;
 import smile.iceBulterrecipe.global.sqs.AmazonSQSSender;
 import smile.iceBulterrecipe.global.sqs.FoodData;
+import smile.iceBulterrecipe.recipe.dto.request.PostRecipeFoodReq;
 
 import java.util.UUID;
 
@@ -33,6 +35,7 @@ public class AdminController {
     private final AmazonSQSSender amazonSQSSender;
     private final FoodRepository foodRepository;
 
+    private final FoodAssembler foodAssembler;
     @Admin
     @PostMapping
     public ResponseCustom<Void> addAdmin(@RequestBody AdminReq request,
@@ -140,19 +143,11 @@ public class AdminController {
     }
 
 
-    @GetMapping("/sqs-test")
-    public ResponseCustom<Void> getUserReportCheck() {
-        Food testFood = Food.builder()
-                .uuid(UUID.randomUUID())
-                .foodName("testFoodName2")
-                .foodCategory(FoodCategory.PROCESSED_FOOD)
-                .foodImgKey("food/testFoodName2.img")
-                .build();
-
-        foodRepository.save(testFood);
-        amazonSQSSender.sendMessage(FoodData.toDto(testFood));
-
-        return ResponseCustom.OK();
+    @GetMapping("/hihitest")
+    public void hihiTest() {
+        PostRecipeFoodReq postRecipeFoodReq = new PostRecipeFoodReq("썩은 고기", "상세 썩은 고기");
+        Food food = this.foodRepository.save(foodAssembler.toEntity(postRecipeFoodReq, "육류"));
+        amazonSQSSender.sendMessage(FoodData.toDto(food));
     }
 
 

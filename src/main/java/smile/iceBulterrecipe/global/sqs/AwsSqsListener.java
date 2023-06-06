@@ -39,6 +39,8 @@ public class AwsSqsListener {
 		try{
 			// 음식 데이터 json으로 변환
 			foodData = objectMapper.readValue(info, FoodData.class);
+			String uuid = foodData.getUuid();
+			System.out.println("receiving food uuid :"+uuid);
 		}catch (JsonProcessingException e){
 			throw new RuntimeException(e);
 		}
