@@ -58,7 +58,7 @@ public class AdminRepositoryQuerydslImpl implements  AdminRepositoryQuerydsl{
         List<RecipeReport> reports = queryFactory
                 .selectFrom(recipeReport)
                 .where(
-                        recipeReport.user.userIdx.in(userResponses.stream().map(UserResponse::getUserIdx).collect(Collectors.toList()))
+                        recipeReport.recipe.user.userIdx.in(userResponses.stream().map(UserResponse::getUserIdx).collect(Collectors.toList()))
                 )
                 .fetch();
 
