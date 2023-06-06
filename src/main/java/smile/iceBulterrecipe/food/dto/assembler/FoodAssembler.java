@@ -20,7 +20,6 @@ public class FoodAssembler {
         return Food.builder()
                 .foodName(food.getFoodName())
                 .foodImgKey(food.getFoodImgKey())
-                // TODO 큐에서 전달 받을 때 category value 값을 받아서 우선 변경, 해당 부분 통일 필요
                 .foodCategory(FoodCategory.valueOf(food.getFoodCategory()))
                 .uuid(food.getUuid())
                 .build();
