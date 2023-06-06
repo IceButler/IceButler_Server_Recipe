@@ -9,6 +9,7 @@ import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportDetailsRes;
 import smile.iceBulterrecipe.admin.dto.response.GetRecipeReportRes;
 import smile.iceBulterrecipe.admin.dto.response.UserRecipeReportsRes;
 import smile.iceBulterrecipe.admin.dto.response.UserResponse;
+import smile.iceBulterrecipe.admin.service.AdminService;
 import smile.iceBulterrecipe.admin.service.AdminServiceImpl;
 import smile.iceBulterrecipe.food.dto.assembler.FoodAssembler;
 import smile.iceBulterrecipe.food.entity.Food;
@@ -31,7 +32,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final AdminServiceImpl adminService;
+    private final AdminService adminService;
     private final AmazonSQSSender amazonSQSSender;
     private final FoodRepository foodRepository;
 
@@ -42,27 +43,29 @@ public class AdminController {
                @IsAdminLogin AdminLoginStatus loginStatus
                                          )
     {
-        adminService.addAdmin(request);
+        adminService.addAdmin(request,loginStatus.getAdminIdx());
         return ResponseCustom.OK();
     }
 
-//    @Admin
+    @Admin
     @GetMapping("/users")
     public ResponseCustom<Page<UserResponse>> search(
-//            @IsAdminLogin AdminLoginStatus loginStatus,
+            @IsAdminLogin AdminLoginStatus loginStatus,
             Pageable pageable,
             @RequestParam(defaultValue = "") String nickname,
             @RequestParam(defaultValue = "true") boolean active,
             @RequestParam(defaultValue = "false") boolean order
     )
     {
-        return ResponseCustom.OK(adminService.search(pageable, nickname, active, order));
+        return ResponseCustom.OK(adminService.search(pageable, nickname, active, order,loginStatus.getAdminIdx()));
     }
 
+    @Admin
     @DeleteMapping("/users/{userIdx}")
-    public ResponseCustom<Void> withdraw(@PathVariable Long userIdx)
+    public ResponseCustom<Void> withdraw(            @IsAdminLogin AdminLoginStatus loginStatus,
+                                                     @PathVariable Long userIdx)
     {
-        adminService.withdraw(userIdx);
+        adminService.withdraw(userIdx, loginStatus.getAdminIdx());
         return ResponseCustom.OK();
     }
 
@@ -73,7 +76,7 @@ public class AdminController {
                                                   @IsAdminLogin AdminLoginStatus loginStatus
 
                                                   ) {
-        this.adminService.adminReportRecipe(recipeReportIdx);
+        this.adminService.adminReportRecipe(recipeReportIdx,loginStatus.getAdminIdx());
         return ResponseCustom.OK();
     }
 
@@ -83,7 +86,7 @@ public class AdminController {
     public ResponseCustom<Void> removeRecipe(@PathVariable Long recipeIdx,
                                              @IsAdminLogin AdminLoginStatus loginStatus
     ) {
-        this.adminService.removeRecipe(recipeIdx);
+        this.adminService.removeRecipe(recipeIdx,loginStatus.getAdminIdx());
         return ResponseCustom.OK();
     }
 
@@ -94,7 +97,7 @@ public class AdminController {
 //                                                                            @RequestParam(required = true) Integer type,
                                                                             @IsAdminLogin AdminLoginStatus loginStatus
     ) {
-        return ResponseCustom.OK(this.adminService.getRecipeDetails(recipeReportIdx));
+        return ResponseCustom.OK(this.adminService.getRecipeDetails(recipeReportIdx,loginStatus.getAdminIdx()));
     }
 
     //레시피 신고 메모 수정
@@ -104,7 +107,7 @@ public class AdminController {
                                                    @RequestBody ReportMemoModifyReq reportMemoModifyReq,
                                                    @IsAdminLogin AdminLoginStatus loginStatus
     ) {
-        this.adminService.modifyRecipeReport(recipeReportIdx, reportMemoModifyReq);
+        this.adminService.modifyRecipeReport(recipeReportIdx, reportMemoModifyReq,loginStatus.getAdminIdx());
         return ResponseCustom.OK();
     }
 
@@ -114,7 +117,7 @@ public class AdminController {
     public ResponseCustom<UserRecipeReportsRes> GetUserRecipeReports(@PathVariable Long userIdx,
                                                                      @IsAdminLogin AdminLoginStatus loginStatus
     ){
-        return ResponseCustom.OK(this.adminService.GetUserRecipeReports(userIdx));
+        return ResponseCustom.OK(this.adminService.GetUserRecipeReports(userIdx,loginStatus.getAdminIdx()));
     }
 
     //레시피 신고내역 조회
@@ -128,15 +131,15 @@ public class AdminController {
             ) {
         if (type == null) {
             if (nickname != null) {
-                return ResponseCustom.OK(this.adminService.getUsersReportCheck(nickname, pageable));
+                return ResponseCustom.OK(this.adminService.getUsersReportCheck(nickname, pageable,loginStatus.getAdminIdx()));
             } else{
-                return ResponseCustom.OK(this.adminService.getAllRecipeReport(pageable));
+                return ResponseCustom.OK(this.adminService.getAllRecipeReport(pageable,loginStatus.getAdminIdx()));
             }
         }else{
             if (nickname != null) {
-                return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname, pageable, type));
+                return ResponseCustom.OK(this.adminService.getUserReportCheck(nickname, pageable, type,loginStatus.getAdminIdx()));
             } else {
-                return ResponseCustom.OK(this.adminService.getRecipeReport(pageable, type));
+                return ResponseCustom.OK(this.adminService.getRecipeReport(pageable, type,loginStatus.getAdminIdx()));
             }
         }
 

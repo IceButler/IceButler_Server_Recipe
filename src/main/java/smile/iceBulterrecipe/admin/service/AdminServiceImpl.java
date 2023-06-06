@@ -11,6 +11,7 @@ import smile.iceBulterrecipe.admin.dto.assembler.AdminAssembler;
 import smile.iceBulterrecipe.admin.entity.Admin;
 import smile.iceBulterrecipe.admin.exception.NotExistMemoException;
 import smile.iceBulterrecipe.admin.exception.RecipeReportNotFoundException;
+import smile.iceBulterrecipe.global.resolver.IsAdminLogin;
 import smile.iceBulterrecipe.recipe.entity.Cookery;
 import smile.iceBulterrecipe.recipe.entity.RecipeFood;
 import smile.iceBulterrecipe.admin.repository.AdminRepository;
@@ -22,6 +23,7 @@ import smile.iceBulterrecipe.recipe.repository.CookeryRepository;
 import smile.iceBulterrecipe.recipe.repository.RecipeReportRepository;
 import smile.iceBulterrecipe.recipe.repository.recipeFood.RecipeFoodRepository;
 import smile.iceBulterrecipe.user.entity.User;
+import smile.iceBulterrecipe.user.exception.AdminNotFoundException;
 import smile.iceBulterrecipe.user.exception.UserNickNameNotFoundException;
 import smile.iceBulterrecipe.user.exception.UserNotFoundException;
 import smile.iceBulterrecipe.user.repository.UserRepository;
@@ -47,7 +49,8 @@ public class AdminServiceImpl implements AdminService{
 
     @Transactional
     @Override
-    public void addAdmin(AdminReq request) {
+    public void addAdmin(AdminReq request,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         Admin admin = new Admin(request.getAdminIdx(), request.getEmail());
         adminRepository.save(admin);
     }
@@ -55,14 +58,16 @@ public class AdminServiceImpl implements AdminService{
     //신고 완료 처리
     @Override
     @Transactional
-    public void adminReportRecipe(Long recipeReportIdx) {
+    public void adminReportRecipe(Long recipeReportIdx,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         RecipeReport recipeReport=recipeReportRepository.findByRecipeReportIdxAndIsEnable(recipeReportIdx,true).orElseThrow(RecipeReportNotFoundException::new);
         recipeReport.adminReportRecipe();
     }
 
     //레시피 신고 내역 조회
     @Override
-    public Page<GetRecipeReportRes> getRecipeReport(Pageable pageable,int type) {
+    public Page<GetRecipeReportRes> getRecipeReport(Pageable pageable,int type,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         Page<RecipeReport> recipeReports;
 
         if (type == 0) {
@@ -78,14 +83,16 @@ public class AdminServiceImpl implements AdminService{
     //신고 상세내역 조회
     @Override
     @Transactional
-    public void removeRecipe(Long recipeIdx) {
+    public void removeRecipe(Long recipeIdx,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         Recipe recipe = recipeRepository.findByRecipeIdxAndIsEnable(recipeIdx, true).orElseThrow(RecipeNotFoundException::new);
         recipeRepository.delete(recipe);
     }
 
     @Override
     @Transactional
-    public GetRecipeReportDetailsRes getRecipeDetails(Long recipeReportIdx) {
+    public GetRecipeReportDetailsRes getRecipeDetails(Long recipeReportIdx,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdx(recipeReportIdx).orElseThrow(RecipeReportNotFoundException::new);
 
         List<RecipeFood> recipeFoods = this.recipeFoodRepository.findByRecipeAndIsEnable(recipeReport.getRecipe(),true);
@@ -96,7 +103,8 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public UserRecipeReportsRes GetUserRecipeReports(Long userIdx) {
+    public UserRecipeReportsRes GetUserRecipeReports(Long userIdx,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         List<RecipeReport> recipeReports = recipeReportRepository.findByRecipe_UserUserIdxOrderByCreatedAtDesc(userIdx);
         return UserRecipeReportsRes.toDto(userIdx, recipeReports);
 
@@ -106,7 +114,8 @@ public class AdminServiceImpl implements AdminService{
     //신고 메모 수정
     @Override
     @Transactional
-    public void modifyRecipeReport(Long recipeReportIdx, ReportMemoModifyReq reportMemoModifyReq) {
+    public void modifyRecipeReport(Long recipeReportIdx, ReportMemoModifyReq reportMemoModifyReq,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         RecipeReport recipeReport=this.recipeReportRepository.findByRecipeReportIdx(recipeReportIdx).orElseThrow(RecipeReportNotFoundException::new);
         if (reportMemoModifyReq.getMemo() != null) {
             recipeReport.toUpdateReportMemo(reportMemoModifyReq.getMemo());
@@ -118,7 +127,8 @@ public class AdminServiceImpl implements AdminService{
 
     //회원별 레시피 신고내역 조회
     @Override
-    public Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable ,int type) {
+    public Page<GetRecipeReportRes> getUserReportCheck(String nickname,Pageable pageable ,int type,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         List<User> users = this.userRepository.findAllByNicknameContains(nickname);
         if (users.isEmpty()) {
             throw new UserNickNameNotFoundException();
@@ -139,7 +149,8 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public Page<GetRecipeReportRes> getUsersReportCheck(String nickname, Pageable pageable) {
+    public Page<GetRecipeReportRes> getUsersReportCheck(String nickname, Pageable pageable,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         List<User> users = this.userRepository.findAllByNicknameContains(nickname);
         if (users.isEmpty()) {
             throw new UserNickNameNotFoundException();
@@ -155,18 +166,21 @@ public class AdminServiceImpl implements AdminService{
 
 
     @Override
-    public Page<UserResponse> search(Pageable pageable, String nickname, boolean active, boolean order) {
+    public Page<UserResponse> search(Pageable pageable, String nickname, boolean active, boolean order,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         return adminRepository.findAllByNicknameAndActive(pageable, nickname, active, order);
     }
 
     @Transactional
     @Override
-    public void withdraw(Long userIdx) {
+    public void withdraw(Long userIdx,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         User user = userRepository.findById(userIdx).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
     }
     @Override
-    public Page<GetRecipeReportRes> getAllRecipeReport(Pageable pageable) {
+    public Page<GetRecipeReportRes> getAllRecipeReport(Pageable pageable,Long adminIdx) {
+        adminRepository.findByAdminIdxAndIsEnable(adminIdx,true).orElseThrow(AdminNotFoundException::new);
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
