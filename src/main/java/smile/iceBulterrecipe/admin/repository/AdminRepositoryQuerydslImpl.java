@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import smile.iceBulterrecipe.admin.dto.response.UserResponse;
-import smile.iceBulterrecipe.recipe.entity.QRecipeReport;
 import smile.iceBulterrecipe.recipe.entity.RecipeReport;
 import smile.iceBulterrecipe.user.entity.User;
 

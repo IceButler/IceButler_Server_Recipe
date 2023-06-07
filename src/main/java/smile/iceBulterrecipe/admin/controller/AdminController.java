@@ -62,8 +62,9 @@ public class AdminController {
 
     @Admin
     @DeleteMapping("/users/{userIdx}")
-    public ResponseCustom<Void> withdraw(            @IsAdminLogin AdminLoginStatus loginStatus,
-                                                     @PathVariable Long userIdx)
+    public ResponseCustom<Void> withdraw(
+            @IsAdminLogin AdminLoginStatus loginStatus,
+            @PathVariable Long userIdx)
     {
         adminService.withdraw(userIdx, loginStatus.getAdminIdx());
         return ResponseCustom.OK();
