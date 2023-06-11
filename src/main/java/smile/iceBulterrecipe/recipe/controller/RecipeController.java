@@ -27,11 +27,6 @@ public class RecipeController {
     private final RecipeServiceImpl recipeService;
     private final MainServerClient mainServerClient;
 
-    @GetMapping("/health")
-    public String checkHealth() {
-        return "healthy";
-    }
-
     /**
      * 메인화면 냉장고 속 레시피 / 인기 레시피
      */

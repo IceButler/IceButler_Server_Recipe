@@ -37,7 +37,6 @@ public class FoodServiceImpl implements FoodService{
     @Override
     @Transactional
     public void deleteFood(FoodReq foodReq) {
-//        Food food = this.foodRepository.findById(foodReq.getFoodIdx()).orElseThrow(FoodNotFoundException::new);
         Food food = this.foodRepository.findByUuidAndIsEnable(foodReq.getUuid(), true).orElseThrow(FoodNotFoundException::new);
         food.deleteFood();
     }
