@@ -11,7 +11,7 @@ spring:
       max-active: 8
     port: 6379
     host: 3.36.98.12
-    password: seunghak8124!
+    password: ENC(v4C3aoGSMdU54Kn8Mi7+2MzWcS1mFEV2)
 
   mvc:
     pathmatch:
